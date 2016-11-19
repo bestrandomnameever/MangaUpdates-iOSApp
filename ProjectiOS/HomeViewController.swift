@@ -8,10 +8,15 @@
 
 import UIKit
 
-class HomeViewController : UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+class HomeViewController : UIViewController {
     
     let reuseIdentifier = "mangaCoverCell"
     var items = [UIImage(named: "GECover"),UIImage(named: "nisekoi.jpg"),UIImage(named: "aracna.jpg"),UIImage(named: "blueExorcist.jpg"),UIImage(named: "kimiNoIruMachi.jpg")]
+    
+    
+}
+
+extension HomeViewController : UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout{
     
     // MARK: - UICollectionViewDataSource protocol
     
@@ -37,10 +42,19 @@ class HomeViewController : UIViewController, UICollectionViewDataSource, UIColle
         // handle tap events
         print("You selected cell #\(indexPath.item)!")
     }
+
+}
+
+extension HomeViewController : UISearchBarDelegate {
     
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(true, animated: true)
+        searchBar.becomeFirstResponder()
+    }
     
-    //func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        //
-    //}
-    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(false, animated: true)
+        searchBar.endEditing(true)
+    }
+
 }

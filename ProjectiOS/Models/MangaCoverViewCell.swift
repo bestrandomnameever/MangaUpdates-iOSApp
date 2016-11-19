@@ -11,5 +11,5 @@ import UIKit
 class MangaCoverViewCell: UICollectionViewCell {
     
     @IBOutlet weak var mangacover : UIImageView!
-
+    @IBOutlet weak var title : UILabel!
 }
