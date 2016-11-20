@@ -24,6 +24,7 @@
 		00EF093A1DE2426C00AFA3AB /* SearchResultMangaTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EF09391DE2426C00AFA3AB /* SearchResultMangaTableCell.swift */; };
 		00EF093D1DE248B600AFA3AB /* MangaDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EF093C1DE248B600AFA3AB /* MangaDetailViewController.swift */; };
 		00EF093F1DE2546F00AFA3AB /* GenreIncludeExcludeTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EF093E1DE2546F00AFA3AB /* GenreIncludeExcludeTableCell.swift */; };
+		00EF09411DE2567F00AFA3AB /* AdvancedSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EF09401DE2567F00AFA3AB /* AdvancedSearchViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 		00EF09391DE2426C00AFA3AB /* SearchResultMangaTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SearchResultMangaTableCell.swift; path = Models/SearchResultMangaTableCell.swift; sourceTree = "<group>"; };
 		00EF093C1DE248B600AFA3AB /* MangaDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MangaDetailViewController.swift; sourceTree = "<group>"; };
 		00EF093E1DE2546F00AFA3AB /* GenreIncludeExcludeTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GenreIncludeExcludeTableCell.swift; path = Views/GenreIncludeExcludeTableCell.swift; sourceTree = "<group>"; };
+		00EF09401DE2567F00AFA3AB /* AdvancedSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdvancedSearchViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +100,7 @@
 				00D564071DE098C600014F58 /* HomeViewController.swift */,
 				00EF09371DE23D0400AFA3AB /* MangaSearchResultsViewController.swift */,
 				00EF093C1DE248B600AFA3AB /* MangaDetailViewController.swift */,
+				00EF09401DE2567F00AFA3AB /* AdvancedSearchViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -213,6 +216,7 @@
 				00D563F61DE08E0200014F58 /* ViewController.swift in Sources */,
 				00EF09231DE0DFE800AFA3AB /* MangaCoverViewCell.swift in Sources */,
 				00EF09381DE23D0400AFA3AB /* MangaSearchResultsViewController.swift in Sources */,
+				00EF09411DE2567F00AFA3AB /* AdvancedSearchViewController.swift in Sources */,
 				00D563F41DE08E0200014F58 /* AppDelegate.swift in Sources */,
 				00EF093A1DE2426C00AFA3AB /* SearchResultMangaTableCell.swift in Sources */,
 				00EF09341DE1E2ED00AFA3AB /* MangaCategoryViewCell.swift in Sources */,

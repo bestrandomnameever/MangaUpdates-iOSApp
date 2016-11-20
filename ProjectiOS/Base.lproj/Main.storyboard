@@ -32,10 +32,10 @@
             </objects>
             <point key="canvasLocation" x="-633" y="135"/>
         </scene>
-        <!--View Controller-->
+        <!--Advanced Search View Controller-->
         <scene sceneID="Ai0-YT-tYY">
             <objects>
-                <viewController id="XVU-PU-SUw" sceneMemberID="viewController">
+                <viewController id="XVU-PU-SUw" customClass="AdvancedSearchViewController" customModule="ProjectiOS" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jBL-ej-LzJ"/>
                         <viewControllerLayoutGuide type="bottom" id="LsJ-CJ-36Q"/>
@@ -49,7 +49,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="dTd-La-txP">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="dTd-La-txP" customClass="GenreIncludeExcludeTableCell" customModule="ProjectiOS" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="343" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dTd-La-txP" id="zMT-z0-489">
@@ -75,6 +75,10 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="genreUILabel" destination="OUe-qC-udt" id="fOk-oC-VOv"/>
+                                            <outlet property="includeExcludeUISegmentedControl" destination="NVt-LE-O9p" id="0fx-d8-Yjj"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
@@ -263,10 +267,10 @@
             </objects>
             <point key="canvasLocation" x="151" y="137"/>
         </scene>
-        <!--View Controller-->
+        <!--Manga Detail View Controller-->
         <scene sceneID="0vD-Od-DYV">
             <objects>
-                <viewController id="pSC-s4-IEq" sceneMemberID="viewController">
+                <viewController id="pSC-s4-IEq" customClass="MangaDetailViewController" customModule="ProjectiOS" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="kP2-UL-2vL"/>
                         <viewControllerLayoutGuide type="bottom" id="W4r-NQ-ZiX"/>
@@ -372,7 +376,7 @@
                                         <rect key="frame" x="0.0" y="20.5" width="347" height="128"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MangaRecommendationCell" rowHeight="73" id="PPx-lC-jC0">
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MangaRecommendationCell" rowHeight="73" id="PPx-lC-jC0" customClass="SearchResultMangaTableCell" customModule="ProjectiOS" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="28" width="347" height="73"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="PPx-lC-jC0" id="nMx-Wy-Rue">
@@ -436,7 +440,7 @@
                                         <rect key="frame" x="0.0" y="20.5" width="347" height="128"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="73" id="Nyb-In-XUk">
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="73" id="Nyb-In-XUk" customClass="SearchResultMangaTableCell" customModule="ProjectiOS" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="28" width="347" height="73"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Nyb-In-XUk" id="vZX-zp-9rs">

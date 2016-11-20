@@ -10,4 +10,7 @@ import UIKit
 
 class GenreIncludeExcludeTableCell: UITableViewCell {
     
+    @IBOutlet weak var genreUILabel: UILabel!
+    @IBOutlet weak var includeExcludeUISegmentedControl: UISegmentedControl!
+    
 }
