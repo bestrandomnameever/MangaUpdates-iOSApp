@@ -10,6 +10,8 @@ import UIKit
 
 class MangaSearchResultsViewController: UITableViewController {
     
+    var searchString : String?
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }

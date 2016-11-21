@@ -15,6 +15,7 @@ class HomeViewController : UIViewController {
     @IBOutlet weak var categoryCollectionView : UICollectionView!
     @IBOutlet var organiserView : UIView!
     @IBOutlet weak var mangaCoverCollectionHeight : NSLayoutConstraint!
+    @IBOutlet weak var uiSearchBar: UISearchBar!
     
     let spacingTwoCollectionViews = CGFloat.init(2)
     let coverMinHeight = 230
@@ -46,6 +47,20 @@ class HomeViewController : UIViewController {
         }else {
             findIdealProportionsWith(availableSpace: availableHeightForCovers)
             print(coverHeight)
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier! {
+        case "searchSegue":
+            let destination = segue.destination as! MangaSearchResultsViewController
+            destination.searchString = uiSearchBar.text
+        case "openDetailFromHomeSegue":
+            let destination = segue.destination as! MangaDetailViewController
+            let index = mangaCoverCollectionView.indexPathsForSelectedItems!.first!.row
+            destination.image = mangaCoverItems[index]
+        default:
+            break
         }
     }
     

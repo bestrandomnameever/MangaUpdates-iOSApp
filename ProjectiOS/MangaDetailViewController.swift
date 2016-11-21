@@ -10,4 +10,12 @@ import UIKit
 
 class MangaDetailViewController: UIViewController {
     
+    var image : UIImage?
+    
+    @IBOutlet weak var uiTitle: UINavigationItem!
+    
+    @IBOutlet weak var coverUIImageView: UIImageView!
+    override func viewDidLoad() {
+        coverUIImageView.image = image!
+    }
 }
