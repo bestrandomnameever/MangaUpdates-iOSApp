@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Alamofire
+import Kanna
 
 class HomeViewController : UIViewController {
     
@@ -27,7 +29,7 @@ class HomeViewController : UIViewController {
     let reuseIdentifierCoverCell = "mangaCoverCell"
     let reuseIdentifierCategoryCell = "categoryCell"
     var categoryItems = ["Action", "Adult", "Adventure", "Comedy", "Doujinshi", "Drama", "Ecchi", "Fantasy", "Gender Bender", "Harem", "Historical", "Horror", "Josei", "Lolicon", "Martial Arts", "Mature", "Mecha", "Mystery", "Psychological", "Romance", "School life", "Sci-Fi", "Seinen", "Shotacon", "Shoujo", "Shoujo Ai", "Shounen", "Shounen Ai", "Slice Of Life", "Smut", "Sports", "Supernatural"]
-    var mangaCoverItems = [UIImage(named: "GECover"),UIImage(named: "nisekoi.jpg"),UIImage(named: "aracna.jpg"),UIImage(named: "blueExorcist.jpg"),UIImage(named: "kimiNoIruMachi.jpg")]
+    var mangaCoverItems = [UIImage(named: "loading.jpg"),UIImage(named: "loading.jpg"),UIImage(named: "loading.jpg"),UIImage(named: "loading.jpg"),UIImage(named: "loading.jpg")]
     let strokeAttributes = [
         NSStrokeColorAttributeName : UIColor.black,
         NSForegroundColorAttributeName : UIColor.white,
@@ -36,6 +38,10 @@ class HomeViewController : UIViewController {
     ] as [String : Any]
     
     // MARK: - Methods
+    
+    override func viewDidLoad() {
+        getLatestReleases(count: 5)
+    }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -47,8 +53,6 @@ class HomeViewController : UIViewController {
         }else {
             findIdealProportionsWith(availableSpace: availableHeightForCovers)
         }
-        let api = MangaUpdatesAPI.init()
-        api.getLatestReleases(count: 5)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -98,6 +102,18 @@ class HomeViewController : UIViewController {
     
     private func calculateWidthWithRatioAnd(height: CGFloat) -> CGFloat {
         return height / 353 * 250
+    }
+    
+    func getLatestReleases(count : Int) {
+        Alamofire.request(MangaUpdatesAPI.BaseUrl + MangaUpdatesAPI.ReleaseUrlExtension).response {response in
+            if let data = response.data, let utf8text = String.init(data: data, encoding: .utf8) {
+                if let doc = Kanna.HTML(html: utf8text, encoding: .utf8) {
+                    for link in doc.xpath("//a[@title='Series Info']") {
+                        
+                    }
+                }
+            }
+        }
     }
     
     

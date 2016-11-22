@@ -27,6 +27,7 @@
 		00EF093D1DE248B600AFA3AB /* MangaDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EF093C1DE248B600AFA3AB /* MangaDetailViewController.swift */; };
 		00EF093F1DE2546F00AFA3AB /* GenreIncludeExcludeTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EF093E1DE2546F00AFA3AB /* GenreIncludeExcludeTableCell.swift */; };
 		00EF09411DE2567F00AFA3AB /* AdvancedSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EF09401DE2567F00AFA3AB /* AdvancedSearchViewController.swift */; };
+		00FAF79A1DE504A800C22790 /* loading.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 00FAF7991DE504A800C22790 /* loading.jpg */; };
 		7F6D04C3E4E5E4C83652A2E4 /* Pods_ProjectiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE70F19104EC3C5BD1F49D90 /* Pods_ProjectiOS.framework */; };
 /* End PBXBuildFile section */
 
@@ -53,6 +54,7 @@
 		00EF093C1DE248B600AFA3AB /* MangaDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MangaDetailViewController.swift; sourceTree = "<group>"; };
 		00EF093E1DE2546F00AFA3AB /* GenreIncludeExcludeTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GenreIncludeExcludeTableCell.swift; path = Views/GenreIncludeExcludeTableCell.swift; sourceTree = "<group>"; };
 		00EF09401DE2567F00AFA3AB /* AdvancedSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdvancedSearchViewController.swift; sourceTree = "<group>"; };
+		00FAF7991DE504A800C22790 /* loading.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = loading.jpg; path = Resources/loading.jpg; sourceTree = "<group>"; };
 		47824CCAE63E1C9A268D33C4 /* Pods-ProjectiOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ProjectiOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-ProjectiOS/Pods-ProjectiOS.release.xcconfig"; sourceTree = "<group>"; };
 		AE70F19104EC3C5BD1F49D90 /* Pods_ProjectiOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ProjectiOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCFC3AED81D2A3490A8657A9 /* Pods-ProjectiOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ProjectiOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ProjectiOS/Pods-ProjectiOS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 		00EF09241DE0F34300AFA3AB /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				00FAF7991DE504A800C22790 /* loading.jpg */,
 				00EF09251DE0F35300AFA3AB /* blueExorcist.jpg */,
 				00EF09261DE0F35300AFA3AB /* kimiNoIruMachi.jpg */,
 				00EF09271DE0F35300AFA3AB /* GECover */,
@@ -234,6 +237,7 @@
 				00EF092A1DE0F35300AFA3AB /* blueExorcist.jpg in Resources */,
 				00EF092D1DE0F35300AFA3AB /* nisekoi.jpg in Resources */,
 				00D563FB1DE08E0200014F58 /* Assets.xcassets in Resources */,
+				00FAF79A1DE504A800C22790 /* loading.jpg in Resources */,
 				00D563F91DE08E0200014F58 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
