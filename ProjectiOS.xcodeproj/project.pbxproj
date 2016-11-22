@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		00143D121DE4CD6000AEF853 /* MangaUpdatesAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00143D111DE4CD6000AEF853 /* MangaUpdatesAPI.swift */; };
+		00143D141DE4D3ED00AEF853 /* Manga.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00143D131DE4D3ED00AEF853 /* Manga.swift */; };
 		00D563F41DE08E0200014F58 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D563F31DE08E0200014F58 /* AppDelegate.swift */; };
 		00D563F61DE08E0200014F58 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D563F51DE08E0200014F58 /* ViewController.swift */; };
 		00D563F91DE08E0200014F58 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00D563F71DE08E0200014F58 /* Main.storyboard */; };
@@ -29,6 +31,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		00143D111DE4CD6000AEF853 /* MangaUpdatesAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MangaUpdatesAPI.swift; path = Models/MangaUpdatesAPI.swift; sourceTree = "<group>"; };
+		00143D131DE4D3ED00AEF853 /* Manga.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Manga.swift; path = Models/Manga.swift; sourceTree = "<group>"; };
 		00D563F01DE08E0200014F58 /* ProjectiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProjectiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00D563F31DE08E0200014F58 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		00D563F51DE08E0200014F58 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -115,6 +119,8 @@
 		00D564061DE0989900014F58 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				00143D131DE4D3ED00AEF853 /* Manga.swift */,
+				00143D111DE4CD6000AEF853 /* MangaUpdatesAPI.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -287,11 +293,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00143D121DE4CD6000AEF853 /* MangaUpdatesAPI.swift in Sources */,
 				00EF093D1DE248B600AFA3AB /* MangaDetailViewController.swift in Sources */,
 				00D563F61DE08E0200014F58 /* ViewController.swift in Sources */,
 				00EF09231DE0DFE800AFA3AB /* MangaCoverViewCell.swift in Sources */,
 				00EF09381DE23D0400AFA3AB /* MangaSearchResultsViewController.swift in Sources */,
 				00EF09411DE2567F00AFA3AB /* AdvancedSearchViewController.swift in Sources */,
+				00143D141DE4D3ED00AEF853 /* Manga.swift in Sources */,
 				00D563F41DE08E0200014F58 /* AppDelegate.swift in Sources */,
 				00EF093A1DE2426C00AFA3AB /* SearchResultMangaTableCell.swift in Sources */,
 				00EF09341DE1E2ED00AFA3AB /* MangaCategoryViewCell.swift in Sources */,

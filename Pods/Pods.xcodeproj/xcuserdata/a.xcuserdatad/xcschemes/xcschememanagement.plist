@@ -4,12 +4,22 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Alamofire.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Kanna.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
 		<key>Pods-ProjectiOS.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>SDWebImage.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -22,7 +32,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>37B9FA7CF8B722A85CFCB1787B92D5D7</key>
+		<key>88E9EC28B8B46C3631E6B242B50F4442</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DB5ED33E688A8F5EC98C12166087B174</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FD47103D1E9AD825A545D29E2BFBACFA</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -46,8 +46,9 @@ class HomeViewController : UIViewController {
             coverWidth = coverHeight / 4 * 3
         }else {
             findIdealProportionsWith(availableSpace: availableHeightForCovers)
-            print(coverHeight)
         }
+        let api = MangaUpdatesAPI.init()
+        api.getLatestReleases(count: 5)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

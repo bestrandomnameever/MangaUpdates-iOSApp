@@ -6,5 +6,7 @@ target 'ProjectiOS' do
   use_frameworks!
 
   # Pods for ProjectiOS
-  pod 'Kanna', '~> 2.0.0'
+  pod 'Kanna'
+  pod 'Alamofire'
+  pod 'SDWebImage'
 end
