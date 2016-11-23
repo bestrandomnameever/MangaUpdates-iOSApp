@@ -15,6 +15,8 @@ class MangaUpdatesAPI {
     static let ReleaseUrlExtension = "releases.html"
     static let SeriesWithIdUrlExtension = "series.html?id="
     static let SearchTitleExtension = "series.html?stype=utf8title&search="
+    static let genresExtension = "genres.html"
+    static let genreSearchExtension = "series.html?genre="
     
     init() {
         
@@ -33,7 +35,10 @@ class MangaUpdatesAPI {
         print(url!)
         if let doc = Kanna.HTML(url: url!, encoding: .isoLatin1) {
             let title = doc.xpath("//span[@class='releasestitle tabletitle']").first!.text
-            let image = doc.xpath("//center/img").first!["src"]
+            var image = doc.xpath("//center/img").first?["src"]
+            if image == nil {
+                image = ""
+            }
             let author = doc.xpath("//div[@class='sCat'][b='Author(s)']/following-sibling::*[1]").first!.text
             let artist = doc.xpath("//div[@class='sCat'][b='Artist(s)']/following-sibling::*[1]").first!.text
             let type = doc.xpath("//div[@class='sCat'][b='Type']/following-sibling::*[1]").first!.text
@@ -44,5 +49,20 @@ class MangaUpdatesAPI {
             return manga
         }
         return nil
+    }
+    
+    static func getGenresAndUrls() -> [(String, String)]? {
+        let url = URL.init(string: BaseUrl + genresExtension)
+        var genresAndUrls : [(String, String)]? = Array.init()
+        if let doc = Kanna.HTML(url: url!, encoding: .isoLatin1) {
+            let genres = doc.xpath("//td[@class='releasestitle']/b")
+            for genre in genres {
+                var genreAndUrlTuple = (name: "", url: "")
+                genreAndUrlTuple.name = genre.text!
+                genreAndUrlTuple.url = BaseUrl + genreSearchExtension + genreAndUrlTuple.name
+                genresAndUrls?.append(genreAndUrlTuple)
+            }
+        }
+        return genresAndUrls
     }
 }

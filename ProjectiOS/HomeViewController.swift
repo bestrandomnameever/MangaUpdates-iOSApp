@@ -28,7 +28,7 @@ class HomeViewController : UIViewController {
     
     let reuseIdentifierCoverCell = "mangaCoverCell"
     let reuseIdentifierCategoryCell = "categoryCell"
-    var categoryItems = ["Action", "Adult", "Adventure", "Comedy", "Doujinshi", "Drama", "Ecchi", "Fantasy", "Gender Bender", "Harem", "Historical", "Horror", "Josei", "Lolicon", "Martial Arts", "Mature", "Mecha", "Mystery", "Psychological", "Romance", "School life", "Sci-Fi", "Seinen", "Shotacon", "Shoujo", "Shoujo Ai", "Shounen", "Shounen Ai", "Slice Of Life", "Smut", "Sports", "Supernatural"]
+    var genreItems : [(String, String)] = []
     var mangaCoverItems : [(String, String)] = []
     //var mangaCoverItems = [UIImage(named: "loading.jpg"),UIImage(named: "loading.jpg"),UIImage(named: "loading.jpg"),UIImage(named: "loading.jpg"),UIImage(named: "loading.jpg")]
     let strokeAttributes = [
@@ -46,6 +46,9 @@ class HomeViewController : UIViewController {
                 let manga = MangaUpdatesAPI.getMangaWithId(id: mangaId)
                 mangaCoverItems.append((manga!.title ,manga!.image))
             }
+        }
+        if let genres = MangaUpdatesAPI.getGenresAndUrls() {
+            genreItems = genres
         }
     }
     
@@ -124,7 +127,7 @@ extension HomeViewController : UICollectionViewDataSource, UICollectionViewDeleg
         if(collectionView == mangaCoverCollectionView) {
             return self.mangaCoverItems.count
         }else if(collectionView == categoryCollectionView){
-            return self.categoryItems.count
+            return self.genreItems.count
         }
         return 0
     }
@@ -137,13 +140,17 @@ extension HomeViewController : UICollectionViewDataSource, UICollectionViewDeleg
             // get a reference to our storyboard cell
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifierCoverCell, for: indexPath as IndexPath) as! MangaCoverViewCell
             // fill cell with appropriate data
-            let data = mangaCoverItems[indexPath.row]
-            cell.mangacover.sd_setImage(with: URL.init(string: data.1), placeholderImage: UIImage.init(named: "loading.jpg"))
+            let data = mangaCoverItems[indexPath.item]
+            if data.1 == nil {
+                cell.mangacover.image = UIImage.init(named: "loading.jpg")
+            } else{
+                cell.mangacover.sd_setImage(with: URL.init(string: data.1), placeholderImage: UIImage.init(named: "loading.jpg"))
+            }
             cell.title.attributedText = NSAttributedString.init(string: data.0, attributes: strokeAttributes)
             return cell
         }else if(collectionView == categoryCollectionView) {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifierCategoryCell, for: indexPath as IndexPath) as! MangaCategoryViewCell
-            cell.categoryName.text = self.categoryItems[indexPath.item]
+            cell.categoryName.text = self.genreItems[indexPath.item].0
             cell.categoryName.textAlignment = NSTextAlignment.center
             return cell
         }
