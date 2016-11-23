@@ -4,7 +4,7 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>Alamofire.xcscheme</key>
+		<key>AsyncSwift.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -32,17 +32,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>88E9EC28B8B46C3631E6B242B50F4442</key>
+		<key>40B95BFA6635501E5F24B23C198A605E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>DB5ED33E688A8F5EC98C12166087B174</key>
+		<key>7F45F2F21482C3777494ACE42307212D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>FD47103D1E9AD825A545D29E2BFBACFA</key>
+		<key>8AAD5F96848FD0254A9F9353020D8009</key>
 		<dict>
 			<key>primary</key>
 			<true/>

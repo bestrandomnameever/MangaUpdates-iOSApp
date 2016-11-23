@@ -7,6 +7,6 @@ target 'ProjectiOS' do
 
   # Pods for ProjectiOS
   pod 'Kanna'
-  pod 'Alamofire'
+  pod 'AsyncSwift'
   pod 'SDWebImage'
 end

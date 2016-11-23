@@ -1,20 +1,20 @@
 PODS:
-  - Alamofire (4.2.0)
+  - AsyncSwift (2.0.0)
   - Kanna (2.0.0)
   - SDWebImage (3.8.2):
     - SDWebImage/Core (= 3.8.2)
   - SDWebImage/Core (3.8.2)
 
 DEPENDENCIES:
-  - Alamofire
+  - AsyncSwift
   - Kanna
   - SDWebImage
 
 SPEC CHECKSUMS:
-  Alamofire: aa2e09d871c9160ac53c90e83c68064a94e3dfbe
+  AsyncSwift: 6ba6ed9ecb51344458063f7c86fe447ab824e313
   Kanna: 9a6637f72f5c77fe9c045b1efb2a5bb074754af8
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
 
-PODFILE CHECKSUM: 45fd02ed4f899f28ccdefd6e82146692dff9f15d
+PODFILE CHECKSUM: 55051cbb72c08c99c2a87b9aa8e80be3dfcd87d4
 
 COCOAPODS: 1.2.0.beta.1

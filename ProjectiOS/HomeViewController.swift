@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Alamofire
 import Kanna
 
 class HomeViewController : UIViewController {
@@ -25,7 +24,9 @@ class HomeViewController : UIViewController {
     let coverMaxHeight = 280
     var coverWidth : CGFloat!
     let categorysHeight = CGFloat.init(45)
-    var queue : DispatchQueue!
+    var ids : [String] = []
+    let initialLoadReleases = 7
+    let totalReleasesShownMinusInitial = 30
     
     let reuseIdentifierCoverCell = "mangaCoverCell"
     let reuseIdentifierCategoryCell = "categoryCell"
@@ -42,16 +43,28 @@ class HomeViewController : UIViewController {
     // MARK: - Methods
     
     override func viewDidLoad() {
-        queue = DispatchQueue.init(label: "com.app.queue")
         
-        queue.async {
+        DispatchQueue.global(qos: .userInitiated).async {
+            //do shit in async
             if let ids = MangaUpdatesAPI.getLatestReleasesIds() {
-                for mangaId in ids.dropLast(ids.count - 4) {
-                    let manga = MangaUpdatesAPI.getMangaWithId(id: mangaId)
-                    self.mangaCoverItems.append((manga!.title ,manga!.image))
+                self.ids = ids
+            }
+            //notify main thread that async method has finished
+            DispatchQueue.main.async {
+                self.startLoadingOtherReleases()
+            }
+        }
+    }
+    
+    func startLoadingOtherReleases() {
+        for mangaId in self.ids{
+            DispatchQueue.global(qos: .default).async {
+                let manga = MangaUpdatesAPI.getMangaWithId(id: mangaId)
+                self.mangaCoverItems.append((manga!.title ,manga!.image))
+                DispatchQueue.main.async {
+                    self.mangaCoverCollectionView.reloadData()
                 }
             }
-            self.mangaCoverCollectionView.reloadData()
         }
     }
     
@@ -144,7 +157,7 @@ extension HomeViewController : UICollectionViewDataSource, UICollectionViewDeleg
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifierCoverCell, for: indexPath as IndexPath) as! MangaCoverViewCell
             // fill cell with appropriate data
             let data = mangaCoverItems[indexPath.item]
-            if data.1 == nil {
+            if data.1 == "" {
                 cell.mangacover.image = UIImage.init(named: "loading.jpg")
             } else{
                 cell.mangacover.sd_setImage(with: URL.init(string: data.1), placeholderImage: UIImage.init(named: "loading.jpg"))

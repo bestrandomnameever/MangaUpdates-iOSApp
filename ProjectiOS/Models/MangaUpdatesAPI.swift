@@ -6,7 +6,6 @@
 //  Copyright © 2016 Anthony. All rights reserved.
 //
 import UIKit
-import Alamofire
 import Kanna
 import SDWebImage
 
