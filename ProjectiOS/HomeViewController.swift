@@ -25,10 +25,11 @@ class HomeViewController : UIViewController {
     let coverMaxHeight = 280
     var coverWidth : CGFloat!
     let categorysHeight = CGFloat.init(45)
+    var queue : DispatchQueue!
     
     let reuseIdentifierCoverCell = "mangaCoverCell"
     let reuseIdentifierCategoryCell = "categoryCell"
-    var genreItems : [(String, String)] = []
+    var genreItems = [("Action", "https://mangaupdates.com/series.html?genre=Action"), ("Adult", "https://mangaupdates.com/series.html?genre=Adult"), ("Adventure", "https://mangaupdates.com/series.html?genre=Adventure"), ("Comedy", "https://mangaupdates.com/series.html?genre=Comedy"), ("Doujinshi", "https://mangaupdates.com/series.html?genre=Doujinshi"), ("Drama", "https://mangaupdates.com/series.html?genre=Drama"), ("Ecchi", "https://mangaupdates.com/series.html?genre=Ecchi"), ("Fantasy", "https://mangaupdates.com/series.html?genre=Fantasy"), ("Gender Bender", "https://mangaupdates.com/series.html?genre=Gender Bender"), ("Harem", "https://mangaupdates.com/series.html?genre=Harem"), ("Hentai", "https://mangaupdates.com/series.html?genre=Hentai"), ("Historical", "https://mangaupdates.com/series.html?genre=Historical"), ("Horror", "https://mangaupdates.com/series.html?genre=Horror"), ("Josei", "https://mangaupdates.com/series.html?genre=Josei"), ("Lolicon", "https://mangaupdates.com/series.html?genre=Lolicon"), ("Martial Arts", "https://mangaupdates.com/series.html?genre=Martial Arts"), ("Mature", "https://mangaupdates.com/series.html?genre=Mature"), ("Mecha", "https://mangaupdates.com/series.html?genre=Mecha"), ("Mystery", "https://mangaupdates.com/series.html?genre=Mystery"), ("Psychological", "https://mangaupdates.com/series.html?genre=Psychological"), ("Romance", "https://mangaupdates.com/series.html?genre=Romance"), ("School Life", "https://mangaupdates.com/series.html?genre=School Life"), ("Sci-fi", "https://mangaupdates.com/series.html?genre=Sci-fi"), ("Seinen", "https://mangaupdates.com/series.html?genre=Seinen"), ("Shotacon", "https://mangaupdates.com/series.html?genre=Shotacon"), ("Shoujo", "https://mangaupdates.com/series.html?genre=Shoujo"), ("Shoujo Ai", "https://mangaupdates.com/series.html?genre=Shoujo Ai"), ("Shounen", "https://mangaupdates.com/series.html?genre=Shounen"), ("Shounen Ai", "https://mangaupdates.com/series.html?genre=Shounen Ai"), ("Slice of Life", "https://mangaupdates.com/series.html?genre=Slice of Life"), ("Smut", "https://mangaupdates.com/series.html?genre=Smut"), ("Sports", "https://mangaupdates.com/series.html?genre=Sports"), ("Supernatural", "https://mangaupdates.com/series.html?genre=Supernatural"), ("Tragedy", "https://mangaupdates.com/series.html?genre=Tragedy"), ("Yaoi", "https://mangaupdates.com/series.html?genre=Yaoi"), ("Yuri", "https://mangaupdates.com/series.html?genre=Yuri")]
     var mangaCoverItems : [(String, String)] = []
     //var mangaCoverItems = [UIImage(named: "loading.jpg"),UIImage(named: "loading.jpg"),UIImage(named: "loading.jpg"),UIImage(named: "loading.jpg"),UIImage(named: "loading.jpg")]
     let strokeAttributes = [
@@ -41,14 +42,16 @@ class HomeViewController : UIViewController {
     // MARK: - Methods
     
     override func viewDidLoad() {
-        if let ids = MangaUpdatesAPI.getLatestReleasesIds() {
-            for mangaId in ids.dropLast(ids.count - 10) {
-                let manga = MangaUpdatesAPI.getMangaWithId(id: mangaId)
-                mangaCoverItems.append((manga!.title ,manga!.image))
+        queue = DispatchQueue.init(label: "com.app.queue")
+        
+        queue.async {
+            if let ids = MangaUpdatesAPI.getLatestReleasesIds() {
+                for mangaId in ids.dropLast(ids.count - 4) {
+                    let manga = MangaUpdatesAPI.getMangaWithId(id: mangaId)
+                    self.mangaCoverItems.append((manga!.title ,manga!.image))
+                }
             }
-        }
-        if let genres = MangaUpdatesAPI.getGenresAndUrls() {
-            genreItems = genres
+            self.mangaCoverCollectionView.reloadData()
         }
     }
     
