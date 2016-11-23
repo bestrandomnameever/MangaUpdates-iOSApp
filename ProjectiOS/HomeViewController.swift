@@ -29,7 +29,8 @@ class HomeViewController : UIViewController {
     let reuseIdentifierCoverCell = "mangaCoverCell"
     let reuseIdentifierCategoryCell = "categoryCell"
     var categoryItems = ["Action", "Adult", "Adventure", "Comedy", "Doujinshi", "Drama", "Ecchi", "Fantasy", "Gender Bender", "Harem", "Historical", "Horror", "Josei", "Lolicon", "Martial Arts", "Mature", "Mecha", "Mystery", "Psychological", "Romance", "School life", "Sci-Fi", "Seinen", "Shotacon", "Shoujo", "Shoujo Ai", "Shounen", "Shounen Ai", "Slice Of Life", "Smut", "Sports", "Supernatural"]
-    var mangaCoverItems = [UIImage(named: "loading.jpg"),UIImage(named: "loading.jpg"),UIImage(named: "loading.jpg"),UIImage(named: "loading.jpg"),UIImage(named: "loading.jpg")]
+    var mangaCoverItems : [(String, String)] = []
+    //var mangaCoverItems = [UIImage(named: "loading.jpg"),UIImage(named: "loading.jpg"),UIImage(named: "loading.jpg"),UIImage(named: "loading.jpg"),UIImage(named: "loading.jpg")]
     let strokeAttributes = [
         NSStrokeColorAttributeName : UIColor.black,
         NSForegroundColorAttributeName : UIColor.white,
@@ -40,7 +41,12 @@ class HomeViewController : UIViewController {
     // MARK: - Methods
     
     override func viewDidLoad() {
-        getLatestReleases(count: 5)
+        if let ids = MangaUpdatesAPI.getLatestReleasesIds() {
+            for mangaId in ids.dropLast(ids.count - 10) {
+                let manga = MangaUpdatesAPI.getMangaWithId(id: mangaId)
+                mangaCoverItems.append((manga!.title ,manga!.image))
+            }
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -63,7 +69,8 @@ class HomeViewController : UIViewController {
         case "openDetailFromHomeSegue":
             let destination = segue.destination as! MangaDetailViewController
             let index = mangaCoverCollectionView.indexPathsForSelectedItems!.first!.row
-            destination.image = mangaCoverItems[index]
+            destination.image = mangaCoverItems[index].1
+            destination.viewTitle = mangaCoverItems[index].0
         default:
             break
         }
@@ -104,18 +111,6 @@ class HomeViewController : UIViewController {
         return height / 353 * 250
     }
     
-    func getLatestReleases(count : Int) {
-        Alamofire.request(MangaUpdatesAPI.BaseUrl + MangaUpdatesAPI.ReleaseUrlExtension).response {response in
-            if let data = response.data, let utf8text = String.init(data: data, encoding: .utf8) {
-                if let doc = Kanna.HTML(html: utf8text, encoding: .utf8) {
-                    for link in doc.xpath("//a[@title='Series Info']") {
-                        
-                    }
-                }
-            }
-        }
-    }
-    
     
 }
 
@@ -142,8 +137,9 @@ extension HomeViewController : UICollectionViewDataSource, UICollectionViewDeleg
             // get a reference to our storyboard cell
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifierCoverCell, for: indexPath as IndexPath) as! MangaCoverViewCell
             // fill cell with appropriate data
-            cell.mangacover.image = self.mangaCoverItems[indexPath.item]
-            cell.title.attributedText = NSAttributedString.init(string: "Title", attributes: strokeAttributes)
+            let data = mangaCoverItems[indexPath.row]
+            cell.mangacover.sd_setImage(with: URL.init(string: data.1), placeholderImage: UIImage.init(named: "loading.jpg"))
+            cell.title.attributedText = NSAttributedString.init(string: data.0, attributes: strokeAttributes)
             return cell
         }else if(collectionView == categoryCollectionView) {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifierCategoryCell, for: indexPath as IndexPath) as! MangaCategoryViewCell

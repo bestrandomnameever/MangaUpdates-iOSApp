@@ -10,12 +10,14 @@ import UIKit
 
 class MangaDetailViewController: UIViewController {
     
-    var image : UIImage?
+    var image : String?
+    var viewTitle : String?
     
     @IBOutlet weak var uiTitle: UINavigationItem!
     
     @IBOutlet weak var coverUIImageView: UIImageView!
     override func viewDidLoad() {
-        coverUIImageView.image = image!
+        uiTitle.title = viewTitle!
+        coverUIImageView.sd_setImage(with: URL.init(string: image!), placeholderImage: UIImage.init(named: "loading.jpg"))
     }
 }
