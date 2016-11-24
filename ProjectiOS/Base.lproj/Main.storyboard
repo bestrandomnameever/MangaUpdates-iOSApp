@@ -260,6 +260,7 @@
                                                 </constraints>
                                                 <connections>
                                                     <outlet property="categoryName" destination="9h7-4v-ort" id="dJr-MV-paC"/>
+                                                    <segue destination="U8Y-6k-Oag" kind="show" identifier="showGenreMangas" id="bvl-WX-eDb"/>
                                                 </connections>
                                             </collectionViewCell>
                                         </cells>
@@ -637,6 +638,9 @@
                             <outlet property="delegate" destination="U8Y-6k-Oag" id="ADB-cg-Xtj"/>
                         </connections>
                     </tableView>
+                    <connections>
+                        <outlet property="mangaResultsUITableView" destination="Zde-Gu-F9u" id="3hA-mX-ajS"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rWT-TP-V3T" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -644,7 +648,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="bDu-rN-MAR"/>
-        <segue reference="cwt-wW-7k6"/>
+        <segue reference="bvl-WX-eDb"/>
+        <segue reference="XMd-S2-4yd"/>
     </inferredMetricsTieBreakers>
 </document>

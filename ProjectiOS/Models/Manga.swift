@@ -20,10 +20,11 @@ class Manga {
     var recommendations : [Manga]?
     var categoryRecommendations : [Manga]?
     let genres : [String]
+    let score : String
     
     
     
-    init(id : String, title : String, image : String, author : String, artist : String, type : String, genres : [String]) {
+    init(id : String, title : String, image : String, author : String, artist : String, type : String, genres : [String], score : String) {
         self.id = id
         self.title = title
         self.image = image
@@ -31,6 +32,7 @@ class Manga {
         self.artist = artist
         self.type = type
         self.genres = genres
+        self.score = score
     }
 
 }

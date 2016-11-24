@@ -84,12 +84,16 @@ class HomeViewController : UIViewController {
         switch segue.identifier! {
         case "searchSegue":
             let destination = segue.destination as! MangaSearchResultsViewController
-            destination.searchString = uiSearchBar.text
+            destination.searchUrl = uiSearchBar.text
         case "openDetailFromHomeSegue":
             let destination = segue.destination as! MangaDetailViewController
             let index = mangaCoverCollectionView.indexPathsForSelectedItems!.first!.row
             destination.image = mangaCoverItems[index].1
             destination.viewTitle = mangaCoverItems[index].0
+        case "showGenreMangas":
+            let destination = segue.destination as! MangaSearchResultsViewController
+            let index = categoryCollectionView.indexPathsForSelectedItems!.first!.row
+            destination.searchUrl = genreItems[index].1
         default:
             break
         }
@@ -183,7 +187,7 @@ extension HomeViewController : UICollectionViewDataSource, UICollectionViewDeleg
         if(collectionView == mangaCoverCollectionView) {
             print("You selected cell #\(indexPath.item) from the mangaCoverUICollection")
         }else if(collectionView == categoryCollectionView) {
-            print("You selected cell #\(indexPath.item) from the categoryUICollection")
+            
         }
     }
     
