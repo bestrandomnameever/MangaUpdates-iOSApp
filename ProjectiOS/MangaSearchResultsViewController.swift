@@ -31,6 +31,12 @@ class MangaSearchResultsViewController: UITableViewController {
         }
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destination = segue.destination as! MangaDetailViewController
+        let index = mangaResultsUITableView.indexPathsForSelectedRows!.first!.row
+        destination.manga = mangas[index]
+    }
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }

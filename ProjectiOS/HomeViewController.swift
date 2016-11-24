@@ -31,7 +31,7 @@ class HomeViewController : UIViewController {
     let reuseIdentifierCoverCell = "mangaCoverCell"
     let reuseIdentifierCategoryCell = "categoryCell"
     var genreItems = [("Action", "https://mangaupdates.com/series.html?genre=Action"), ("Adult", "https://mangaupdates.com/series.html?genre=Adult"), ("Adventure", "https://mangaupdates.com/series.html?genre=Adventure"), ("Comedy", "https://mangaupdates.com/series.html?genre=Comedy"), ("Doujinshi", "https://mangaupdates.com/series.html?genre=Doujinshi"), ("Drama", "https://mangaupdates.com/series.html?genre=Drama"), ("Ecchi", "https://mangaupdates.com/series.html?genre=Ecchi"), ("Fantasy", "https://mangaupdates.com/series.html?genre=Fantasy"), ("Gender Bender", "https://mangaupdates.com/series.html?genre=Gender Bender"), ("Harem", "https://mangaupdates.com/series.html?genre=Harem"), ("Hentai", "https://mangaupdates.com/series.html?genre=Hentai"), ("Historical", "https://mangaupdates.com/series.html?genre=Historical"), ("Horror", "https://mangaupdates.com/series.html?genre=Horror"), ("Josei", "https://mangaupdates.com/series.html?genre=Josei"), ("Lolicon", "https://mangaupdates.com/series.html?genre=Lolicon"), ("Martial Arts", "https://mangaupdates.com/series.html?genre=Martial Arts"), ("Mature", "https://mangaupdates.com/series.html?genre=Mature"), ("Mecha", "https://mangaupdates.com/series.html?genre=Mecha"), ("Mystery", "https://mangaupdates.com/series.html?genre=Mystery"), ("Psychological", "https://mangaupdates.com/series.html?genre=Psychological"), ("Romance", "https://mangaupdates.com/series.html?genre=Romance"), ("School Life", "https://mangaupdates.com/series.html?genre=School Life"), ("Sci-fi", "https://mangaupdates.com/series.html?genre=Sci-fi"), ("Seinen", "https://mangaupdates.com/series.html?genre=Seinen"), ("Shotacon", "https://mangaupdates.com/series.html?genre=Shotacon"), ("Shoujo", "https://mangaupdates.com/series.html?genre=Shoujo"), ("Shoujo Ai", "https://mangaupdates.com/series.html?genre=Shoujo Ai"), ("Shounen", "https://mangaupdates.com/series.html?genre=Shounen"), ("Shounen Ai", "https://mangaupdates.com/series.html?genre=Shounen Ai"), ("Slice of Life", "https://mangaupdates.com/series.html?genre=Slice of Life"), ("Smut", "https://mangaupdates.com/series.html?genre=Smut"), ("Sports", "https://mangaupdates.com/series.html?genre=Sports"), ("Supernatural", "https://mangaupdates.com/series.html?genre=Supernatural"), ("Tragedy", "https://mangaupdates.com/series.html?genre=Tragedy"), ("Yaoi", "https://mangaupdates.com/series.html?genre=Yaoi"), ("Yuri", "https://mangaupdates.com/series.html?genre=Yuri")]
-    var mangaCoverItems : [(String, String)] = []
+    var mangaCoverItems : [(String ,String, String)] = []
     //var mangaCoverItems = [UIImage(named: "loading.jpg"),UIImage(named: "loading.jpg"),UIImage(named: "loading.jpg"),UIImage(named: "loading.jpg"),UIImage(named: "loading.jpg")]
     let strokeAttributes = [
         NSStrokeColorAttributeName : UIColor.black,
@@ -60,7 +60,7 @@ class HomeViewController : UIViewController {
         for mangaId in self.ids{
             DispatchQueue.global(qos: .default).async {
                 let manga = MangaUpdatesAPI.getMangaWithId(id: mangaId)
-                self.mangaCoverItems.append((manga!.title ,manga!.image))
+                self.mangaCoverItems.append((manga!.id, manga!.title ,manga!.image))
                 DispatchQueue.main.async {
                     self.mangaCoverCollectionView.reloadData()
                 }
@@ -87,9 +87,8 @@ class HomeViewController : UIViewController {
             destination.searchUrl = uiSearchBar.text
         case "openDetailFromHomeSegue":
             let destination = segue.destination as! MangaDetailViewController
-            let index = mangaCoverCollectionView.indexPathsForSelectedItems!.first!.row
-            destination.image = mangaCoverItems[index].1
-            destination.viewTitle = mangaCoverItems[index].0
+            let index = mangaCoverCollectionView.indexPathsForSelectedItems!.first!.item
+            destination.manga = MangaUpdatesAPI.getMangaWithId(id: mangaCoverItems[index].0)
         case "showGenreMangas":
             let destination = segue.destination as! MangaSearchResultsViewController
             let index = categoryCollectionView.indexPathsForSelectedItems!.first!.row
@@ -164,9 +163,9 @@ extension HomeViewController : UICollectionViewDataSource, UICollectionViewDeleg
             if data.1 == "" {
                 cell.mangacover.image = UIImage.init(named: "loading.jpg")
             } else{
-                cell.mangacover.sd_setImage(with: URL.init(string: data.1), placeholderImage: UIImage.init(named: "loading.jpg"))
+                cell.mangacover.sd_setImage(with: URL.init(string: data.2), placeholderImage: UIImage.init(named: "loading.jpg"))
             }
-            cell.title.attributedText = NSAttributedString.init(string: data.0, attributes: strokeAttributes)
+            cell.title.attributedText = NSAttributedString.init(string: data.1, attributes: strokeAttributes)
             return cell
         }else if(collectionView == categoryCollectionView) {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifierCategoryCell, for: indexPath as IndexPath) as! MangaCategoryViewCell

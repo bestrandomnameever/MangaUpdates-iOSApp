@@ -10,14 +10,21 @@ import UIKit
 
 class MangaDetailViewController: UIViewController {
     
-    var image : String?
-    var viewTitle : String?
+    var manga : Manga!
     
     @IBOutlet weak var uiTitle: UINavigationItem!
-    
     @IBOutlet weak var coverUIImageView: UIImageView!
+    @IBOutlet weak var authorUILabel: UILabel!
+    @IBOutlet weak var artistUILabel: UILabel!
+    @IBOutlet weak var typeUILabel: UILabel!
+    @IBOutlet weak var genresUILabel: UILabel!
+    
     override func viewDidLoad() {
-        uiTitle.title = viewTitle!
-        coverUIImageView.sd_setImage(with: URL.init(string: image!), placeholderImage: UIImage.init(named: "loading.jpg"))
+        uiTitle.title = manga.title
+        coverUIImageView.sd_setImage(with: URL.init(string: manga.image))
+        authorUILabel.text = manga.author
+        artistUILabel.text = manga.artist
+        genresUILabel.text = manga.genres.joined(separator: ", ")
+        typeUILabel.text = manga.type
     }
 }
