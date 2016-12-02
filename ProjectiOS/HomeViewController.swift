@@ -58,7 +58,7 @@ class HomeViewController : UIViewController {
     
     func startLoadingOtherReleases() {
         for mangaId in self.ids{
-            DispatchQueue.global(qos: .default).async {
+            DispatchQueue.global(qos: .background).async {
                 let manga = MangaUpdatesAPI.getMangaWithId(id: mangaId)
                 self.mangaCoverItems.append((manga!.id, manga!.title ,manga!.image))
                 DispatchQueue.main.async {

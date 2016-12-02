@@ -646,6 +646,32 @@
                                     <segue destination="pSC-s4-IEq" kind="show" id="XMd-S2-4yd"/>
                                 </connections>
                             </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="LoadMoreCell" rowHeight="58" id="lEN-sk-9Fd" customClass="LoadMoreResultsTableCell" customModule="ProjectiOS" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="144" width="375" height="58"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lEN-sk-9Fd" id="pZ1-xV-mhN">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="57"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hkr-Np-1TF">
+                                            <rect key="frame" x="125.5" y="16" width="123" height="25.5"/>
+                                            <state key="normal" title="Load more results"/>
+                                            <connections>
+                                                <action selector="loadMoreResultsBtnClicked" destination="U8Y-6k-Oag" eventType="primaryActionTriggered" id="UnA-Q3-WfQ"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="bottomMargin" secondItem="Hkr-Np-1TF" secondAttribute="bottom" constant="8" id="3Uv-w5-WMB"/>
+                                        <constraint firstItem="Hkr-Np-1TF" firstAttribute="top" secondItem="pZ1-xV-mhN" secondAttribute="topMargin" constant="8" id="EBy-cE-1fC"/>
+                                        <constraint firstItem="Hkr-Np-1TF" firstAttribute="centerY" secondItem="pZ1-xV-mhN" secondAttribute="centerY" id="OYt-YY-rtt"/>
+                                        <constraint firstItem="Hkr-Np-1TF" firstAttribute="centerX" secondItem="pZ1-xV-mhN" secondAttribute="centerX" id="eC0-xw-0LU"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="loadMoreButton" destination="Hkr-Np-1TF" id="rPe-km-jcd"/>
+                                </connections>
+                            </tableViewCell>
                         </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="U8Y-6k-Oag" id="qOm-fW-YLe"/>

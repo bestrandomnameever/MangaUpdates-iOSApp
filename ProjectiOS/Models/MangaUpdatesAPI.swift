@@ -66,15 +66,17 @@ class MangaUpdatesAPI {
         return genresAndUrls
     }
     
-    static func getMangaIdsFor(genreUrl : String) -> [String] {
+    static func getMangaIdsFor(genreUrl : String) -> (ids: [String], moreResultsUrl: String) {
         let url = URL.init(string: genreUrl)
         return getMangaIdsFrom(searchUrl: url!)
     }
     
-    static func getMangaIdsFrom(searchUrl : URL) -> [String] {
+    static func getMangaIdsFrom(searchUrl : URL) -> (ids: [String], moreResultsUrl: String) {
+        var idsAndUrl: ([String],String) = ([], "")
         if let doc = Kanna.HTML(url: searchUrl, encoding: .isoLatin1) {
-            return doc.xpath("//a[@alt='Series Info']").flatMap({$0["href"]!.substring(from: $0["href"]!.index($0["href"]!.startIndex, offsetBy: 43))})
+            idsAndUrl.0 = doc.xpath("//a[@alt='Series Info']").flatMap({$0["href"]!.substring(from: $0["href"]!.index($0["href"]!.startIndex, offsetBy: 43))})
+            idsAndUrl.1 = doc.xpath("//a[. = 'Next Page']").first!["href"]!
         }
-        return []
+        return idsAndUrl
     }
 }
