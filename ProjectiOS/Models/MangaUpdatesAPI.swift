@@ -31,7 +31,7 @@ class MangaUpdatesAPI {
     
     static func getMangaWithId(id : String) -> Manga? {
         let url = URL.init(string: BaseUrl + SeriesWithIdUrlExtension + id)
-        print(url!)
+        //print(url!)
         if let doc = Kanna.HTML(url: url!, encoding: .isoLatin1) {
             let title = doc.xpath("//span[@class='releasestitle tabletitle']").first!.text
             var image = doc.xpath("//center/img").first?["src"]
@@ -43,8 +43,13 @@ class MangaUpdatesAPI {
             let type = doc.xpath("//div[@class='sCat'][b='Type']/following-sibling::*[1]").first!.text
             let categories = doc.xpath("//div[@class='sCat'][b='Categories']/following-sibling::*[1]//li/a").flatMap({$0.text})
             let genres = Array.init(doc.xpath("//div[@class='sCat'][b='Genre']/following-sibling::*[1]//u").flatMap({$0.text}).dropLast())
-            let score = doc.xpath("//div[@class='sContent']/b").first!.text
-            let manga = Manga.init(id: id, title: title!, image: image!, author: author!, artist: artist!, type: type!, genres: genres, score: score!)
+            let score : String
+            if let scoreOptional = doc.xpath("//div[@class='sContent' and contains(text(),'Average')]/b").first {
+                score = scoreOptional.text!
+            }else {
+                score = "-"
+            }
+            let manga = Manga.init(id: id, title: title!, image: image!, author: author!, artist: artist!, type: type!, genres: genres, score: score)
             manga.categories = categories
             return manga
         }
@@ -74,7 +79,7 @@ class MangaUpdatesAPI {
     static func getMangaIdsFrom(searchUrl : URL) -> (ids: [String], moreResultsUrl: String) {
         var idsAndUrl: ([String],String) = ([], "")
         if let doc = Kanna.HTML(url: searchUrl, encoding: .isoLatin1) {
-            idsAndUrl.0 = doc.xpath("//a[@alt='Series Info']").flatMap({$0["href"]!.substring(from: $0["href"]!.index($0["href"]!.startIndex, offsetBy: 43))})
+            idsAndUrl.0 = doc.xpath("//a[@alt='Series Info']").flatMap({$0["href"]!.components(separatedBy: "id=")[1]})
             idsAndUrl.1 = doc.xpath("//a[. = 'Next Page']").first!["href"]!
         }
         return idsAndUrl

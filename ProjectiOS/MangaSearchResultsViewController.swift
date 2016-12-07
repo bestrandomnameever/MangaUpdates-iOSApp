@@ -30,7 +30,7 @@ class MangaSearchResultsViewController: UITableViewController {
         DispatchQueue.global(qos: .userInitiated).async {
             let mangaIds = MangaUpdatesAPI.getMangaIdsFrom(searchUrl: URL.init(string: url)!)
             self.nextResultsUrl = mangaIds.moreResultsUrl
-            print(mangaIds)
+            //print(mangaIds)
             DispatchQueue.main.async {
                 for mangaId in mangaIds.ids {
                     DispatchQueue.global(qos: .userInitiated).async {
