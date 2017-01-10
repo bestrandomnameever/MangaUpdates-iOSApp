@@ -23,8 +23,8 @@ class MangaUpdatesAPI {
     
     static func getLatestReleasesIds() -> [String]? {
         let url = URL.init(string: BaseUrl + ReleaseUrlExtension)
-        if let doc = Kanna.HTML(url: url!, encoding: .utf8) {
-            return doc.xpath("//a[@title='Series Info']").flatMap({$0["href"]!.substring(from: $0["href"]!.index($0["href"]!.startIndex, offsetBy: 43))})
+        if let doc = Kanna.HTML(url: url!, encoding: .isoLatin1) {
+            return doc.xpath("//a[@title='Series Info']").flatMap({$0["href"]!.components(separatedBy: "id=")[1]})
         }
         return nil
     }
