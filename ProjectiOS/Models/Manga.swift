@@ -12,27 +12,31 @@ class Manga {
     
     let id : String
     let title : String
+    let description : String
     let image : String
     let author : String
     let artist : String
     let type : String
-    var categories : [String]?
-    var recommendations : [Manga]?
-    var categoryRecommendations : [Manga]?
     let genres : [String]
+    var categories : [String]
     let score : String
+    var recommendationsIds : [String]
+    var categoryRecommendationsIds : [String]
     
     
     
-    init(id : String, title : String, image : String, author : String, artist : String, type : String, genres : [String], score : String) {
+    init(id : String, title : String, description : String ,image : String, author : String, artist : String, type : String, genres : [String], categories : [String], score : String, recommendationsIds : [String], categoryRecommendationsIds : [String]) {
         self.id = id
         self.title = title
+        self.description = description
         self.image = image
         self.author = author
         self.artist = artist
         self.type = type
         self.genres = genres
+        self.categories = categories
         self.score = score
+        self.recommendationsIds = recommendationsIds
+        self.categoryRecommendationsIds = categoryRecommendationsIds
     }
-
 }

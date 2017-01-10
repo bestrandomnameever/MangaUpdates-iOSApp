@@ -34,6 +34,7 @@ class MangaUpdatesAPI {
         //print(url!)
         if let doc = Kanna.HTML(url: url!, encoding: .isoLatin1) {
             let title = doc.xpath("//span[@class='releasestitle tabletitle']").first!.text
+            let description = doc.xpath("//div[@class='sCat'][b='Description']/following-sibling::*[1]").first!.text
             var image = doc.xpath("//center/img").first?["src"]
             if image == nil {
                 image = ""
@@ -41,16 +42,18 @@ class MangaUpdatesAPI {
             let author = doc.xpath("//div[@class='sCat'][b='Author(s)']/following-sibling::*[1]").first!.text
             let artist = doc.xpath("//div[@class='sCat'][b='Artist(s)']/following-sibling::*[1]").first!.text
             let type = doc.xpath("//div[@class='sCat'][b='Type']/following-sibling::*[1]").first!.text
-            let categories = doc.xpath("//div[@class='sCat'][b='Categories']/following-sibling::*[1]//li/a").flatMap({$0.text})
+            let categories = doc.xpath("//li[@class='tag_normal']/a[@rel='nofollow']").flatMap({$0.text})
             let genres = Array.init(doc.xpath("//div[@class='sCat'][b='Genre']/following-sibling::*[1]//u").flatMap({$0.text}).dropLast())
+            let recommendations = doc.xpath("//div[@class='sCat'][b='Recommendations']/following-sibling::*[1]//a").filter({!$0["href"]!.contains("javascript")}).flatMap({$0["href"]!.components(separatedBy: "id=")[1]})
+            let categoryRecommendations = doc.xpath("//div[@class='sCat'][b='Category Recommendations']/following-sibling::*[1]//a").flatMap({$0["href"]!.components(separatedBy: "id=")[1]})
             let score : String
             if let scoreOptional = doc.xpath("//div[@class='sContent' and contains(text(),'Average')]/b").first {
                 score = scoreOptional.text!
             }else {
                 score = "-"
             }
-            let manga = Manga.init(id: id, title: title!, image: image!, author: author!, artist: artist!, type: type!, genres: genres, score: score)
-            manga.categories = categories
+            let manga = Manga.init(id: id, title: title!, description: description! ,image: image!, author: author!, artist: artist!, type: type!, genres: genres, categories: categories,score: score, recommendationsIds: recommendations, categoryRecommendationsIds: categoryRecommendations
+            )
             return manga
         }
         return nil

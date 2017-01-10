@@ -26,5 +26,9 @@ class MangaDetailViewController: UIViewController {
         artistUILabel.text = manga.artist
         genresUILabel.text = manga.genres.joined(separator: ", ")
         typeUILabel.text = manga.type
+        print(manga.categories)
+        print(manga.description)
+        print(manga.recommendationsIds)
+        print(manga.categoryRecommendationsIds)
     }
 }
