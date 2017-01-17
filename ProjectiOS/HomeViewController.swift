@@ -14,6 +14,11 @@ class HomeViewController : UIViewController {
     // MARK: - Predefined variables and IBOutlets
     @IBOutlet weak var mangaCoverCollectionView : UICollectionView!
     @IBOutlet weak var categoryCollectionView : UICollectionView!
+    @IBOutlet weak var searchBarUITextField: UITextField!
+    
+    @IBOutlet weak var releaseCoversLoadingActivityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var genreLoadingActivityIndicator: UIActivityIndicatorView!
+    
     @IBOutlet var organiserView : UIView!
     @IBOutlet weak var mangaCoverCollectionHeight : NSLayoutConstraint!
     @IBOutlet weak var uiSearchBar: UISearchBar!
@@ -30,9 +35,9 @@ class HomeViewController : UIViewController {
     
     let reuseIdentifierCoverCell = "mangaCoverCell"
     let reuseIdentifierCategoryCell = "categoryCell"
-    var genreItems = [("Action", "https://mangaupdates.com/series.html?genre=Action"), ("Adult", "https://mangaupdates.com/series.html?genre=Adult"), ("Adventure", "https://mangaupdates.com/series.html?genre=Adventure"), ("Comedy", "https://mangaupdates.com/series.html?genre=Comedy"), ("Doujinshi", "https://mangaupdates.com/series.html?genre=Doujinshi"), ("Drama", "https://mangaupdates.com/series.html?genre=Drama"), ("Ecchi", "https://mangaupdates.com/series.html?genre=Ecchi"), ("Fantasy", "https://mangaupdates.com/series.html?genre=Fantasy"), ("Gender Bender", "https://www.mangaupdates.com/series.html?genre=Gender+Bender"), ("Harem", "https://mangaupdates.com/series.html?genre=Harem"), ("Hentai", "https://mangaupdates.com/series.html?genre=Hentai"), ("Historical", "https://mangaupdates.com/series.html?genre=Historical"), ("Horror", "https://mangaupdates.com/series.html?genre=Horror"), ("Josei", "https://mangaupdates.com/series.html?genre=Josei"), ("Lolicon", "https://mangaupdates.com/series.html?genre=Lolicon"), ("Martial Arts", "https://mangaupdates.com/series.html?genre=Martial+Arts"), ("Mature", "https://mangaupdates.com/series.html?genre=Mature"), ("Mecha", "https://mangaupdates.com/series.html?genre=Mecha"), ("Mystery", "https://mangaupdates.com/series.html?genre=Mystery"), ("Psychological", "https://mangaupdates.com/series.html?genre=Psychological"), ("Romance", "https://mangaupdates.com/series.html?genre=Romance"), ("School Life", "https://mangaupdates.com/series.html?genre=School+Life"), ("Sci-fi", "https://mangaupdates.com/series.html?genre=Sci-fi"), ("Seinen", "https://mangaupdates.com/series.html?genre=Seinen"), ("Shotacon", "https://mangaupdates.com/series.html?genre=Shotacon"), ("Shoujo", "https://mangaupdates.com/series.html?genre=Shoujo"), ("Shoujo Ai", "https://mangaupdates.com/series.html?genre=Shoujo+Ai"), ("Shounen", "https://mangaupdates.com/series.html?genre=Shounen"), ("Shounen Ai", "https://mangaupdates.com/series.html?genre=Shounen+Ai"), ("Slice of Life", "https://mangaupdates.com/series.html?genre=Slice+of+Life"), ("Smut", "https://mangaupdates.com/series.html?genre=Smut"), ("Sports", "https://mangaupdates.com/series.html?genre=Sports"), ("Supernatural", "https://mangaupdates.com/series.html?genre=Supernatural"), ("Tragedy", "https://mangaupdates.com/series.html?genre=Tragedy"), ("Yaoi", "https://mangaupdates.com/series.html?genre=Yaoi"), ("Yuri", "https://mangaupdates.com/series.html?genre=Yuri")]
-    var mangaCoverItems : [(String ,String, String)] = []
-    //var mangaCoverItems = [UIImage(named: "loading.jpg"),UIImage(named: "loading.jpg"),UIImage(named: "loading.jpg"),UIImage(named: "loading.jpg"),UIImage(named: "loading.jpg")]
+    let reuseIdentifierReleasesLoading = "releaseCoverLoadingCell"
+    var genreItems : [(String,String)] = [] 
+    var mangaCoverItems : [(id: String ,title: String, image: String)] = []
     let strokeAttributes = [
         NSStrokeColorAttributeName : UIColor.black,
         NSForegroundColorAttributeName : UIColor.white,
@@ -45,19 +50,45 @@ class HomeViewController : UIViewController {
     override func viewDidLoad() {
         
         DispatchQueue.global(qos: .userInitiated).async {
+            if let genresAndUrls = MangaUpdatesAPI.getGenresAndUrls() {
+                self.genreItems = genresAndUrls
+            }
+            DispatchQueue.main.async {
+                self.genreLoadingActivityIndicator.stopAnimating()
+                self.categoryCollectionView.reloadData()
+            }
+        }
+        
+        DispatchQueue.global(qos: .userInitiated).async {
             //do shit in async
             if let ids = MangaUpdatesAPI.getLatestReleasesIds() {
                 self.ids = ids
             }
             //notify main thread that async method has finished
             DispatchQueue.main.async {
-                self.startLoadingOtherReleases()
+                self.loadfirstReleases(amount: 50)
             }
         }
     }
     
-    func startLoadingOtherReleases() {
-        for mangaId in self.ids{
+    func loadfirstReleases(amount: Int) {
+        DispatchQueue.global(qos: .userInitiated).async {
+            for mangaId in self.ids.dropLast(self.ids.count-amount){
+                //TODO crasht soms op random id die naar een correcte manga wijst, concurrency?
+                if let manga = MangaUpdatesAPI.getMangaWithId(id: mangaId){
+                    self.mangaCoverItems.append((manga.id, manga.title ,manga.image))
+                }
+                DispatchQueue.main.async {
+                    self.releaseCoversLoadingActivityIndicator.stopAnimating()
+                    self.mangaCoverCollectionView.reloadData()
+                    //self.startLoadingOtherReleasesAfter(amount: amount)
+                }
+            }
+        }
+    }
+    
+    func startLoadingOtherReleasesAfter(amount : Int) {
+        for mangaId in self.ids.dropFirst(amount){
             DispatchQueue.global(qos: .background).async {
                 let manga = MangaUpdatesAPI.getMangaWithId(id: mangaId)
                 self.mangaCoverItems.append((manga!.id, manga!.title ,manga!.image))
@@ -82,19 +113,27 @@ class HomeViewController : UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier! {
-        case "searchSegue":
-            let destination = segue.destination as! MangaSearchResultsViewController
-            destination.searchUrl = uiSearchBar.text
-        case "openDetailFromHomeSegue":
-            let destination = segue.destination as! MangaDetailViewController
-            let index = mangaCoverCollectionView.indexPathsForSelectedItems!.first!.item
-            destination.manga = MangaUpdatesAPI.getMangaWithId(id: mangaCoverItems[index].0)
-        case "showGenreMangas":
-            let destination = segue.destination as! MangaSearchResultsViewController
-            let index = categoryCollectionView.indexPathsForSelectedItems!.first!.row
-            destination.searchUrl = genreItems[index].1
-        default:
-            break
+            case "advancedSearchSegue":
+                let destination = segue.destination as! AdvancedSearchViewController
+                destination.genres = genreItems.map({($0.0, 0)})
+//            case "searchSegue":
+//                let destination = segue.destination as! MangaSearchResultsViewController
+//                destination.searchUrl = uiSearchBar.text
+            case "openDetailFromHomeSegue":
+                let destination = segue.destination as! MangaDetailViewController
+                let index = mangaCoverCollectionView.indexPathsForSelectedItems!.first!.item
+                //destination.manga = MangaUpdatesAPI.getMangaWithId(id: mangaCoverItems[index].0)!
+                destination.mangaId = mangaCoverItems[index].0
+                destination.mangaCoverUrl = mangaCoverItems[index].image
+            case "showGenreMangas":
+                let destination = segue.destination as! MangaSearchResultsViewController
+                let index = categoryCollectionView.indexPathsForSelectedItems!.first!.row
+                destination.searchUrl = genreItems[index].1
+            case "searchByTitleSegue":
+                let destination = segue.destination as! MangaSearchResultsViewController
+                destination.searchUrl = MangaUpdatesAPI.BaseUrl+MangaUpdatesAPI.SearchTitleExtension+searchBarUITextField.text!.replacingOccurrences(of: " ", with: "+").lowercased()
+            default:
+                break
         }
     }
     
@@ -143,8 +182,15 @@ extension HomeViewController : UICollectionViewDataSource, UICollectionViewDeleg
     
     // tell the collection view how many cells to make
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        //if it is the cover collection
         if(collectionView == mangaCoverCollectionView) {
-            return self.mangaCoverItems.count
+            //only show the loading cover if there are already some covers loaded
+            if(mangaCoverItems.count > 0) {
+                return self.mangaCoverItems.count+1
+            }else{
+                return 0
+            }
+            //if it is the genrecollection
         }else if(collectionView == categoryCollectionView){
             return self.genreItems.count
         }
@@ -156,17 +202,23 @@ extension HomeViewController : UICollectionViewDataSource, UICollectionViewDeleg
         
         
         if(collectionView == mangaCoverCollectionView) {
-            // get a reference to our storyboard cell
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifierCoverCell, for: indexPath as IndexPath) as! MangaCoverViewCell
-            // fill cell with appropriate data
-            let data = mangaCoverItems[indexPath.item]
-            if data.1 == "" {
-                cell.mangacover.image = UIImage.init(named: "loading.jpg")
-            } else{
-                cell.mangacover.sd_setImage(with: URL.init(string: data.2), placeholderImage: UIImage.init(named: "loading.jpg"))
+            if(indexPath.row != mangaCoverItems.count) {
+                // get a reference to our storyboard cell
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifierCoverCell, for: indexPath as IndexPath) as! MangaCoverViewCell
+                // fill cell with appropriate data
+                let data = mangaCoverItems[indexPath.item]
+                if data.1 == "" {
+                    cell.mangacover.image = UIImage.init(named: "loading.jpg")
+                } else{
+                    cell.mangacover.sd_setImage(with: URL.init(string: data.2), placeholderImage: UIImage.init(named: "loading.jpg"))
+                }
+                cell.title.attributedText = NSAttributedString.init(string: data.1, attributes: strokeAttributes)
+                return cell
+            }else{
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifierReleasesLoading, for: indexPath as IndexPath) as! ReleaseCoverLoadingViewCell
+                cell.activityLoadingIndicator.startAnimating()
+                return cell
             }
-            cell.title.attributedText = NSAttributedString.init(string: data.1, attributes: strokeAttributes)
-            return cell
         }else if(collectionView == categoryCollectionView) {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifierCategoryCell, for: indexPath as IndexPath) as! MangaCategoryViewCell
             cell.categoryName.text = self.genreItems[indexPath.item].0
@@ -201,16 +253,18 @@ extension HomeViewController : UICollectionViewDataSource, UICollectionViewDeleg
 
 }
 
-extension HomeViewController : UISearchBarDelegate {
-    
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        searchBar.setShowsCancelButton(true, animated: true)
-        searchBar.becomeFirstResponder()
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.setShowsCancelButton(false, animated: true)
-        searchBar.endEditing(true)
-    }
-
-}
+//extension HomeViewController : UITextFieldDelegate {
+//    
+//    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+//        searchBar.setShowsCancelButton(true, animated: true)
+//        searchBar.becomeFirstResponder()
+//    }
+//    
+//    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+//        searchBar.setShowsCancelButton(false, animated: true)
+//        searchBar.endEditing(true)
+//    }
+//    
+//    
+//
+//}

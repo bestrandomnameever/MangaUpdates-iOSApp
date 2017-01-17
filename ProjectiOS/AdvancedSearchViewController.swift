@@ -9,7 +9,8 @@
 import UIKit
 
 class AdvancedSearchViewController: UIViewController {
-        var categoryItems = [("Action", 0), ("Adult", 0), ("Adventure", 0), ("Comedy", 0), ("Doujinshi", 0), ("Drama", 0), ("Ecchi", 0), ("Fantasy", 0), ("Gender Bender", 0), ("Harem", 0), ("Action", 0), ("Adult", 0), ("Adventure", 0), ("Comedy", 0), ("Doujinshi", 0), ("Drama", 0), ("Ecchi", 0), ("Fantasy", 0), ("Gender Bender", 0), ("Harem", 0)]
+    var categoryItems = [("Action", 0), ("Adult", 0), ("Adventure", 0), ("Comedy", 0), ("Doujinshi", 0), ("Drama", 0), ("Ecchi", 0), ("Fantasy", 0), ("Gender Bender", 0), ("Harem", 0), ("Action", 0), ("Adult", 0), ("Adventure", 0), ("Comedy", 0), ("Doujinshi", 0), ("Drama", 0), ("Ecchi", 0), ("Fantasy", 0), ("Gender Bender", 0), ("Harem", 0)]
+    var genres : [(genreName: String, mode: Int)]!
     
     @IBOutlet weak var genresUITableView: UITableView!
     
@@ -19,11 +20,11 @@ class AdvancedSearchViewController: UIViewController {
         let index = genresUITableView.indexPath(for: sender.superview?.superview as! GenreIncludeExcludeTableCell)?.row
         switch(chosenOption) {
             case 1:
-                categoryItems[index!].1 = 1
+                genres[index!].1 = 1
             case 2:
-                categoryItems[index!].1 = 2
+                genres[index!].1 = 2
             default:
-                categoryItems[index!].1 = 0
+                genres[index!].1 = 0
         }
         sender.tintColor = correctColorFor(segmentNr: chosenOption)
     }
@@ -38,19 +39,39 @@ class AdvancedSearchViewController: UIViewController {
                 return UIColor.darkGray
         }
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        var include : [String] = []
+        var exclude : [String] = []
+        
+        for genre in genres{
+            switch(genre.mode) {
+            case 1:
+                include.append(genre.genreName.replacingOccurrences(of: " ", with: "%2B"))
+            case 2:
+                exclude.append(genre.genreName.replacingOccurrences(of: " ", with: "%2B"))
+            default:
+                break
+            }
+        }
+        
+        let destination = segue.destination as! MangaSearchResultsViewController
+        destination.searchUrl = MangaUpdatesAPI.BaseUrl+MangaUpdatesAPI.genreSearchExtension+include.joined(separator: "_")+"&exclude_genre="+exclude.joined(separator: "_")+"&perpage=50"
+    }
+
 }
 
 extension AdvancedSearchViewController : UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categoryItems.count
+        return genres.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "genreIncludeExcludeCell", for: indexPath) as! GenreIncludeExcludeTableCell
-        cell.genreUILabel.text = categoryItems[indexPath.row].0
-        cell.includeExcludeUISegmentedControl.selectedSegmentIndex = categoryItems[indexPath.row].1
-        cell.includeExcludeUISegmentedControl.tintColor = correctColorFor(segmentNr: categoryItems[indexPath.row].1)
+        cell.genreUILabel.text = genres[indexPath.row].0
+        cell.includeExcludeUISegmentedControl.selectedSegmentIndex = genres[indexPath.row].1
+        cell.includeExcludeUISegmentedControl.tintColor = correctColorFor(segmentNr: genres[indexPath.row].1)
         return cell
     }
 }

@@ -59,6 +59,31 @@ class MangaUpdatesAPI {
         return nil
     }
     
+    static func getMangaSearchResultWithId(id : String) -> MangaSearchResult? {
+        let url = URL.init(string: BaseUrl + SeriesWithIdUrlExtension + id)
+        if let doc = Kanna.HTML(url: url!, encoding: .isoLatin1) {
+            let title = doc.xpath("//span[@class='releasestitle tabletitle']").first!.text!
+            var image = "http://otakumeme.com/wp-content/uploads/2013/01/never-fap-alone-its-dangerous_o_501668.jpg"
+            if let imageOptional = doc.xpath("//center/img").first?["src"] {
+                image = imageOptional
+            }
+            var author = "-"
+            if let authorOptional = doc.xpath("//div[@class='sCat'][b='Author(s)']/following-sibling::*[1]").first?.text {
+                author = authorOptional
+            }
+            let genres = Array.init(doc.xpath("//div[@class='sCat'][b='Genre']/following-sibling::*[1]//u").flatMap({$0.text}).dropLast())
+            let score : String
+            if let scoreOptional = doc.xpath("//div[@class='sContent' and contains(text(),'Average')]/b").first {
+                score = scoreOptional.text!
+            }else {
+                score = "-"
+            }
+            let mangaSearchResult = MangaSearchResult.init(id: id, title: title, image: image, author: author, genres: genres, score: score)
+            return mangaSearchResult
+        }
+        return nil
+    }
+    
     static func getGenresAndUrls() -> [(String, String)]? {
         let url = URL.init(string: BaseUrl + genresExtension)
         var genresAndUrls : [(String, String)]? = Array.init()
@@ -74,16 +99,16 @@ class MangaUpdatesAPI {
         return genresAndUrls
     }
     
-    static func getMangaIdsFor(genreUrl : String) -> (ids: [String], moreResultsUrl: String) {
+    static func getMangaIdsFor(genreUrl : String) -> (ids: [String], moreResultsUrl: String?) {
         let url = URL.init(string: genreUrl)
         return getMangaIdsFrom(searchUrl: url!)
     }
     
-    static func getMangaIdsFrom(searchUrl : URL) -> (ids: [String], moreResultsUrl: String) {
-        var idsAndUrl: ([String],String) = ([], "")
+    static func getMangaIdsFrom(searchUrl : URL) -> (ids: [String], moreResultsUrl: String?) {
+        var idsAndUrl: ([String],String?) = ([], "")
         if let doc = Kanna.HTML(url: searchUrl, encoding: .isoLatin1) {
             idsAndUrl.0 = doc.xpath("//a[@alt='Series Info']").flatMap({$0["href"]!.components(separatedBy: "id=")[1]})
-            idsAndUrl.1 = doc.xpath("//a[. = 'Next Page']").first!["href"]!
+            idsAndUrl.1 = doc.xpath("//a[. = 'Next Page']").first?["href"]!
         }
         return idsAndUrl
     }
