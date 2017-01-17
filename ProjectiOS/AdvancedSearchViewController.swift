@@ -13,6 +13,7 @@ class AdvancedSearchViewController: UIViewController {
     var genres : [(genreName: String, mode: Int)]!
     
     @IBOutlet weak var genresUITableView: UITableView!
+    @IBOutlet weak var onlyScanlatedRadioBtn: UISwitch!
     
 
     @IBAction func changeColorSegmented(_ sender: UISegmentedControl) {
@@ -43,7 +44,7 @@ class AdvancedSearchViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         var include : [String] = []
         var exclude : [String] = []
-        
+        var filter : String = ""
         for genre in genres{
             switch(genre.mode) {
             case 1:
@@ -54,9 +55,12 @@ class AdvancedSearchViewController: UIViewController {
                 break
             }
         }
+        if onlyScanlatedRadioBtn.isOn{
+            filter = "scanlated"
+        }
         
         let destination = segue.destination as! MangaSearchResultsViewController
-        destination.searchUrl = MangaUpdatesAPI.BaseUrl+MangaUpdatesAPI.genreSearchExtension+include.joined(separator: "_")+"&exclude_genre="+exclude.joined(separator: "_")+"&perpage=50"
+        destination.searchUrl = MangaUpdatesAPI.BaseUrl+MangaUpdatesAPI.advancedSearchExtension+MangaUpdatesAPI.advancedSearchGenre+include.joined(separator: "_")+"&exclude_genre="+exclude.joined(separator: "_")+"&perpage=50&filter="+filter
     }
 
 }

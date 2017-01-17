@@ -97,15 +97,15 @@
                                 </connections>
                             </tableView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="paY-sU-hZj">
-                                <rect key="frame" x="16" y="501.5" width="197" height="51.5"/>
+                                <rect key="frame" x="16" y="501.5" width="202" height="51.5"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Only completlly scanlated" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RL9-FL-aBb">
-                                        <rect key="frame" x="0.0" y="0.0" width="197" height="20.5"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Only completely scanlated" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RL9-FL-aBb">
+                                        <rect key="frame" x="0.0" y="0.0" width="202" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1bn-Ua-q0j">
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="1bn-Ua-q0j">
                                         <rect key="frame" x="0.0" y="20.5" width="51" height="31"/>
                                     </switch>
                                 </subviews>
@@ -141,6 +141,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="genresUITableView" destination="7hr-AA-8sN" id="46t-On-ITG"/>
+                        <outlet property="onlyScanlatedRadioBtn" destination="1bn-Ua-q0j" id="uat-iC-kGH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="i4w-U0-fWP" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -784,7 +785,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="P9Y-Rs-WtY"/>
+        <segue reference="0Yk-JZ-Jhb"/>
         <segue reference="XMd-S2-4yd"/>
     </inferredMetricsTieBreakers>
 </document>

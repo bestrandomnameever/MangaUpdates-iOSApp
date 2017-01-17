@@ -15,7 +15,9 @@ class MangaUpdatesAPI {
     static let SeriesWithIdUrlExtension = "series.html?id="
     static let SearchTitleExtension = "series.html?stype=utf8title&search="
     static let genresExtension = "genres.html"
-    static let genreSearchExtension = "series.html?genre="
+    static let advancedSearchExtension = "series.html?"
+    static let advancedSearchFilter = "filter="
+    static let advancedSearchGenre = "genre="
     
     init() {
         
@@ -92,7 +94,7 @@ class MangaUpdatesAPI {
             for genre in genres {
                 var genreAndUrlTuple = (name: "", url: "")
                 genreAndUrlTuple.name = genre.text!
-                genreAndUrlTuple.url = BaseUrl + genreSearchExtension + genreAndUrlTuple.name
+                genreAndUrlTuple.url = BaseUrl + advancedSearchExtension + advancedSearchGenre + genreAndUrlTuple.name
                 genresAndUrls?.append(genreAndUrlTuple)
             }
         }
