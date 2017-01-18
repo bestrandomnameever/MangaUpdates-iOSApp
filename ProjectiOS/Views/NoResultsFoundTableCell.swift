@@ -9,5 +9,6 @@
 import UIKit
 
 class NoResultsFoundTableCell: UITableViewCell {
-
+    
+    @IBOutlet weak var cellMesage: UILabel!
 }

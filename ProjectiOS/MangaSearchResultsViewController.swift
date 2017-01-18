@@ -16,6 +16,8 @@ class MangaSearchResultsViewController: UITableViewController {
     var allResultsLoaded = false
     var lastActivatedFilter = SortOption.Reset
     var currentPage = 1
+    let loadMangaQueue = DispatchQueue.init(label: "loadMangaQueue")
+    let loadMangaOperationQueue = OperationQueue.init()
     @IBOutlet var mangaResultsUITableView: UITableView!
     
     @IBOutlet weak var resetSortItem: UIBarButtonItem!
@@ -87,30 +89,41 @@ class MangaSearchResultsViewController: UITableViewController {
 //Methods to load results matching to searchUrl
 extension MangaSearchResultsViewController{
     func loadResultsForUrl(amountOfPages: Int) {
-        DispatchQueue.global(qos: .userInitiated).async {
+        loadMangaQueue.async {
             var page = self.currentPage
+            var hasNextPage = true
             //load 3 pages of manga's
             for _ in 1...amountOfPages{
                 let url = MangaUpdatesURLBuilder.init(customUrl: self.currentUrl).getPage(page: page).getUrl()
                 //get all id's of mangas matching this searchUrl
-                let mangaIdsAndNextPageUrl = MangaUpdatesAPI.getMangaIdsFrom(searchUrl: url)
-                //make sure that all ids are unique since 1 manga can appear more than once in search thanks to alternative names
-                var uniqueMangaIds : [String] = []
-                for id in mangaIdsAndNextPageUrl.ids{
-                    if(!uniqueMangaIds.contains(id)){
-                        uniqueMangaIds.append(id)
+                self.loadMangaOperationQueue.addOperation {
+                    let mangaIdsAndNextPageUrl = MangaUpdatesAPI.getMangaIdsFrom(searchUrl: url)
+                    OperationQueue.main.addOperation {
+                        var uniqueMangaIds : [String] = []
+                        //make sure that all ids are unique since 1 manga can appear more than once in search thanks to alternative names
+                        for id in mangaIdsAndNextPageUrl.ids{
+                            if(!uniqueMangaIds.contains(id)){
+                                uniqueMangaIds.append(id)
+                            }
+                        }
+                        for mangaId in uniqueMangaIds {
+                            self.loadMangaOperationQueue.addOperation {
+                                if let mangaResult = MangaUpdatesAPI.getMangaSearchResultWithId(id: mangaId){
+                                    self.results.append(mangaResult)
+                                    OperationQueue.main.addOperation {
+                                        self.mangaResultsUITableView.reloadData()
+                                    }
+                                }
+                            }
+                        }
+                        if mangaIdsAndNextPageUrl.hasNextPage {
+                            hasNextPage = false
+                        }
                     }
                 }
-                for mangaId in uniqueMangaIds {
-                    if let mangaResult = MangaUpdatesAPI.getMangaSearchResultWithId(id: mangaId){
-                        self.results.append(mangaResult)
-                    }
-                    DispatchQueue.main.async {
-                        self.mangaResultsUITableView.reloadData()
-                    }
-                }
+                
                 //set url to next page of results
-                if mangaIdsAndNextPageUrl.hasNextPage {
+                if hasNextPage {
                     page = page + 1
                 }else{
                     DispatchQueue.main.async {
@@ -123,7 +136,6 @@ extension MangaSearchResultsViewController{
             //update searchUrl in main if a new page has to be loaded
             DispatchQueue.main.async {
                 self.currentPage = page
-                print(self.currentPage)
             }
         }
     }

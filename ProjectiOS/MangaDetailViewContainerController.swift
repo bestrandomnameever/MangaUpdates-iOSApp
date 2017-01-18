@@ -54,6 +54,7 @@ class MangaDetailViewContainerController: UIViewController {
                         let storyBoard = UIStoryboard(name: "Main", bundle: Bundle.main)
                         var viewController = storyBoard.instantiateViewController(withIdentifier: "MangaDetailRecommendations") as! MangaDetailRecommendationsViewController
                         viewController.mangaCoverUrl = self.mangaCoverUrl
+                        viewController.manga = mangaOptional
                         self.add(asChildViewController: viewController)
                         return viewController
                     }()

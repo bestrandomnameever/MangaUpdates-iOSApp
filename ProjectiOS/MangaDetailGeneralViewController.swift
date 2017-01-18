@@ -15,6 +15,8 @@ class MangaDetailGeneralViewController: UIViewController {
     var mangaCoverUrl : String!
     
     @IBOutlet weak var uiTitle: UINavigationItem!
+    
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var coverUIImageView: UIImageView!
     @IBOutlet weak var authorUILabel: UILabel!
     @IBOutlet weak var artistUILabel: UILabel!
@@ -30,8 +32,7 @@ class MangaDetailGeneralViewController: UIViewController {
         blurredImageView.addSubview(blurEffectView)
         blurredImageView.sd_setImage(with: URL.init(string: mangaCoverUrl))
         self.blurredImageView.superview!.sendSubview(toBack: self.blurredImageView)
-        
-        self.uiTitle.title = manga.title
+        self.titleLabel.text = manga.title
         self.coverUIImageView.sd_setImage(with: URL.init(string: self.mangaCoverUrl))
         self.authorUILabel.text = manga.author
         self.artistUILabel.text = manga.artist
