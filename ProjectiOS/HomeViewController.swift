@@ -120,7 +120,7 @@ class HomeViewController : UIViewController {
 //                let destination = segue.destination as! MangaSearchResultsViewController
 //                destination.searchUrl = uiSearchBar.text
             case "openDetailFromHomeSegue":
-                let destination = segue.destination as! MangaDetailViewController
+                let destination = segue.destination as! MangaDetailViewContainerController
                 let index = mangaCoverCollectionView.indexPathsForSelectedItems!.first!.item
                 //destination.manga = MangaUpdatesAPI.getMangaWithId(id: mangaCoverItems[index].0)!
                 destination.mangaId = mangaCoverItems[index].0

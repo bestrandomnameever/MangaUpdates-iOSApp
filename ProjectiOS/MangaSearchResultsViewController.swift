@@ -48,10 +48,10 @@ class MangaSearchResultsViewController: UITableViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let destination = segue.destination as! MangaDetailViewController
-        let index = mangaResultsUITableView.indexPathsForSelectedRows!.first!.row
-        destination.mangaId = results[index].id
-        destination.mangaCoverUrl = results[index].image
+            let destination = segue.destination as! MangaDetailViewContainerController
+            let index = mangaResultsUITableView.indexPathsForSelectedRows!.first!.row
+            destination.mangaId = results[index].id
+            destination.mangaCoverUrl = results[index].image
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
