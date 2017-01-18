@@ -545,7 +545,7 @@
                             </imageView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="120" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="opR-lR-n83">
                                 <rect key="frame" x="10" y="72" width="355" height="587"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="MangaCategoryRecommendationCell" rowHeight="120" id="bUk-ve-HW5" customClass="SearchResultMangaTableCell" customModule="ProjectiOS" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="355" height="120"/>
@@ -610,7 +610,7 @@
                                                 <constraint firstAttribute="leadingMargin" secondItem="Nba-0A-Rqz" secondAttribute="leading" id="ysY-HB-laK"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" white="1" alpha="0.79668771400000005" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" white="1" alpha="0.7037136130136985" colorSpace="calibratedWhite"/>
                                         <connections>
                                             <outlet property="authorUILabel" destination="knF-Ao-WyC" id="vKH-lN-8ot"/>
                                             <outlet property="coverUIImageView" destination="Nba-0A-Rqz" id="aeu-Mn-XQD"/>
