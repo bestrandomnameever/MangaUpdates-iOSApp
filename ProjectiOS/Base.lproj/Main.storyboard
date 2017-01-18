@@ -58,7 +58,7 @@
                                         <rect key="frame" x="0.0" y="28" width="343" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dTd-La-txP" id="zMT-z0-489">
-                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="NVt-LE-O9p">
@@ -340,7 +340,9 @@
                             <constraint firstItem="rfT-dV-K4E" firstAttribute="top" secondItem="9iG-CK-8wn" secondAttribute="bottom" constant="8" symbolic="YES" id="z5d-Yc-cPa"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Home" id="WMp-O1-2E4"/>
+                    <navigationItem key="navigationItem" title="Home" id="WMp-O1-2E4">
+                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="Y2E-IE-rhu"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="categoryCollectionView" destination="oeQ-0K-M4l" id="h8f-q2-FTU"/>
                         <outlet property="genreLoadingActivityIndicator" destination="ck3-cy-TEO" id="nl1-SQ-6yf"/>
@@ -644,22 +646,22 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="DQg-K0-Hyf">
-                                            <rect key="frame" x="8" y="8" width="71" height="100"/>
+                                            <rect key="frame" x="8" y="8" width="70" height="99"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="DQg-K0-Hyf" secondAttribute="height" multiplier="250:353" id="Tmk-zi-NLF"/>
                                             </constraints>
                                         </imageView>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="qrn-Xd-B2p">
-                                            <rect key="frame" x="87" y="33" width="247" height="50"/>
+                                            <rect key="frame" x="86" y="33" width="248" height="50"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MKg-K3-lFv">
-                                                    <rect key="frame" x="0.0" y="0.0" width="247" height="29.5"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="248" height="29"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="23"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Author" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8BZ-Vg-e6i">
-                                                    <rect key="frame" x="0.0" y="29.5" width="247" height="20.5"/>
+                                                    <rect key="frame" x="0.0" y="29" width="248" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
@@ -673,7 +675,7 @@
                                             </constraints>
                                         </stackView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" semanticContentAttribute="forceRightToLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Adventure, Action, Horror" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HhI-I3-HdJ">
-                                            <rect key="frame" x="87" y="93" width="247" height="15"/>
+                                            <rect key="frame" x="86" y="93" width="248" height="14"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -783,16 +785,29 @@
                         </connections>
                     </tableView>
                     <toolbarItems>
-                        <barButtonItem systemItem="camera" id="mdI-99-e1i">
-                            <color key="tintColor" red="1" green="0.68144522839999999" blue="0.2518809005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <barButtonItem systemItem="refresh" id="e3f-Vv-aZo">
+                            <connections>
+                                <action selector="resetSort:" destination="U8Y-6k-Oag" id="oEW-Bm-GsU"/>
+                            </connections>
                         </barButtonItem>
-                        <barButtonItem title="Item" id="yRm-sM-Hus">
-                            <color key="tintColor" red="1" green="0.68144522839999999" blue="0.2518809005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <barButtonItem systemItem="flexibleSpace" id="1J0-rh-nmw"/>
+                        <barButtonItem image="sortByAlphabet.png" id="mdI-99-e1i">
+                            <connections>
+                                <action selector="alphabetSort:" destination="U8Y-6k-Oag" id="C75-gE-EVk"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem image="sortByOrder.png" id="yRm-sM-Hus">
+                            <connections>
+                                <action selector="scoreSort:" destination="U8Y-6k-Oag" id="jiZ-6a-deT"/>
+                            </connections>
                         </barButtonItem>
                     </toolbarItems>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
                     <connections>
+                        <outlet property="alphaSortItem" destination="mdI-99-e1i" id="cQu-Er-Y1D"/>
                         <outlet property="mangaResultsUITableView" destination="Zde-Gu-F9u" id="3hA-mX-ajS"/>
+                        <outlet property="resetSortItem" destination="e3f-Vv-aZo" id="g1d-8d-77J"/>
+                        <outlet property="scoreSortItem" destination="yRm-sM-Hus" id="dXg-Sz-d5G"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rWT-TP-V3T" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -800,6 +815,10 @@
             <point key="canvasLocation" x="957.60000000000002" y="133.5832083958021"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="sortByAlphabet.png" width="30" height="30"/>
+        <image name="sortByOrder.png" width="30" height="30"/>
+    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="0Yk-JZ-Jhb"/>
         <segue reference="XMd-S2-4yd"/>

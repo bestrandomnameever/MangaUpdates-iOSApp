@@ -10,11 +10,27 @@ import UIKit
 
 class MangaSearchResultsViewController: UITableViewController {
     
-    var searchUrl : String!
+    var originalSearchUrl : URL!
+    var currentUrl : URL!
     var results : [MangaSearchResult] = []
     var allResultsLoaded = false
+    var lastActivatedFilter = SortOption.Reset
+    var currentPage = 1
     @IBOutlet var mangaResultsUITableView: UITableView!
-    @IBOutlet weak var searchResultsLoadingActivityIndicator: UIActivityIndicatorView!
+    
+    @IBOutlet weak var resetSortItem: UIBarButtonItem!
+    @IBOutlet weak var alphaSortItem: UIBarButtonItem!
+    @IBOutlet weak var scoreSortItem: UIBarButtonItem!
+    @IBAction func resetSort(_ sender: Any) {
+        order(on: SortOption.Reset);
+    }
+    @IBAction func alphabetSort(_ sender: Any) {
+        order(on: SortOption.OnAlpha);
+    }
+    @IBAction func scoreSort(_ sender: Any) {
+        order(on: SortOption.OnScore);
+    }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -22,55 +38,13 @@ class MangaSearchResultsViewController: UITableViewController {
     }
     
     override func viewDidLoad() {
+        currentUrl = originalSearchUrl
         loadResultsForUrl(amountOfPages: 3)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.navigationController?.setToolbarHidden(true, animated: true)
-    }
-    
-    func loadResultsForUrl(amountOfPages: Int) {
-        DispatchQueue.global(qos: .userInitiated).async {
-            //load 3 pages of manga's
-            var url = self.searchUrl
-            for _ in 1...amountOfPages{
-                //get all id's of mangas matching this searchUrl
-                let searchUrl = URL.init(string: url!)
-                let mangaIdsAndNextPageUrl = MangaUpdatesAPI.getMangaIdsFrom(searchUrl: searchUrl!)
-                //make sure that all ids are unique since 1 manga can appear more than once in search thanks to alternative names
-                var uniqueMangaIds : [String] = []
-                for id in mangaIdsAndNextPageUrl.ids{
-                    if(!uniqueMangaIds.contains(id)){
-                        uniqueMangaIds.append(id)
-                    }
-                }
-                for mangaId in uniqueMangaIds {
-                    if let mangaResult = MangaUpdatesAPI.getMangaSearchResultWithId(id: mangaId){
-                        self.results.append(mangaResult)
-                    }
-                    DispatchQueue.main.async {
-                        self.mangaResultsUITableView.reloadData()
-                        //TODO images van uhm "questionalble" manga laden niet
-                        //print(self.results.flatMap({$0.title+" "+$0.image}))
-                    }
-                }
-                //set url to next page of results
-                if let nextPageUrl = mangaIdsAndNextPageUrl.moreResultsUrl {
-                    url = nextPageUrl
-                }else{
-                    DispatchQueue.main.async {
-                        self.allResultsLoaded = true
-                        self.mangaResultsUITableView.reloadData()
-                    }
-                    break
-                }
-            }
-            //update searchUrl in main if a new page has to be loaded
-            DispatchQueue.main.async {
-                self.searchUrl = url
-            }
-        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -107,4 +81,100 @@ class MangaSearchResultsViewController: UITableViewController {
             return cell
         }
     }
+}
+
+
+//Methods to load results matching to searchUrl
+extension MangaSearchResultsViewController{
+    func loadResultsForUrl(amountOfPages: Int) {
+        DispatchQueue.global(qos: .userInitiated).async {
+            var page = self.currentPage
+            //load 3 pages of manga's
+            for _ in 1...amountOfPages{
+                let url = MangaUpdatesURLBuilder.init(customUrl: self.currentUrl).getPage(page: page).getUrl()
+                //get all id's of mangas matching this searchUrl
+                let mangaIdsAndNextPageUrl = MangaUpdatesAPI.getMangaIdsFrom(searchUrl: url)
+                //make sure that all ids are unique since 1 manga can appear more than once in search thanks to alternative names
+                var uniqueMangaIds : [String] = []
+                for id in mangaIdsAndNextPageUrl.ids{
+                    if(!uniqueMangaIds.contains(id)){
+                        uniqueMangaIds.append(id)
+                    }
+                }
+                for mangaId in uniqueMangaIds {
+                    if let mangaResult = MangaUpdatesAPI.getMangaSearchResultWithId(id: mangaId){
+                        self.results.append(mangaResult)
+                    }
+                    DispatchQueue.main.async {
+                        self.mangaResultsUITableView.reloadData()
+                    }
+                }
+                //set url to next page of results
+                if mangaIdsAndNextPageUrl.hasNextPage {
+                    page = page + 1
+                }else{
+                    DispatchQueue.main.async {
+                        self.allResultsLoaded = true
+                        self.mangaResultsUITableView.reloadData()
+                    }
+                    break
+                }
+            }
+            //update searchUrl in main if a new page has to be loaded
+            DispatchQueue.main.async {
+                self.currentPage = page
+                print(self.currentPage)
+            }
+        }
+    }
+}
+
+
+//Handle the filters in the toolbar
+extension MangaSearchResultsViewController{
+    func order(on: SortOption){
+        getItemBy(identifier: lastActivatedFilter).tintColor = UIColor.blue
+        if(on != lastActivatedFilter){
+            getItemBy(identifier: lastActivatedFilter).tintColor = UIColor.blue
+            lastActivatedFilter = on
+            if(on != SortOption.Reset){
+                getItemBy(identifier: on).tintColor = UIColor.orange
+            }
+            results.removeAll()
+            switch(on){
+            case SortOption.OnAlpha:
+                self.currentPage = 1
+                results.removeAll()
+                currentUrl = MangaUpdatesURLBuilder.init(customUrl: originalSearchUrl).orderBy(.title).resultsPerPage(amount: 50).getUrl()
+                loadResultsForUrl(amountOfPages: 1)
+            case SortOption.OnScore:
+                self.currentPage = 1
+                results.removeAll()
+                currentUrl = MangaUpdatesURLBuilder.init(customUrl: originalSearchUrl).orderBy(.rating).resultsPerPage(amount: 50).getUrl()
+                loadResultsForUrl(amountOfPages: 1)
+            default:
+                self.currentPage = 1
+                results.removeAll()
+                currentUrl = originalSearchUrl
+                loadResultsForUrl(amountOfPages: 3)
+            }
+        }
+    }
+    
+    func getItemBy(identifier: SortOption) -> UIBarButtonItem{
+        switch(identifier){
+            case SortOption.Reset:
+                return resetSortItem
+            case SortOption.OnAlpha:
+                return alphaSortItem
+            case SortOption.OnScore:
+                return scoreSortItem
+        }
+    }
+}
+
+enum SortOption{
+    case OnScore
+    case OnAlpha
+    case Reset
 }

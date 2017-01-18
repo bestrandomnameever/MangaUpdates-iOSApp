@@ -44,23 +44,23 @@ class AdvancedSearchViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         var include : [String] = []
         var exclude : [String] = []
-        var filter : String = ""
+        var filter : ExtendedOptions = .all
         for genre in genres{
             switch(genre.mode) {
             case 1:
-                include.append(genre.genreName.replacingOccurrences(of: " ", with: "%2B"))
+                include.append(genre.genreName)
             case 2:
-                exclude.append(genre.genreName.replacingOccurrences(of: " ", with: "%2B"))
+                exclude.append(genre.genreName)
             default:
                 break
             }
         }
         if onlyScanlatedRadioBtn.isOn{
-            filter = "scanlated"
+            filter = ExtendedOptions.completeScanlated
         }
         
         let destination = segue.destination as! MangaSearchResultsViewController
-        destination.searchUrl = MangaUpdatesAPI.BaseUrl+MangaUpdatesAPI.advancedSearchExtension+MangaUpdatesAPI.advancedSearchGenre+include.joined(separator: "_")+"&exclude_genre="+exclude.joined(separator: "_")+"&perpage=50&filter="+filter
+        destination.originalSearchUrl = MangaUpdatesURLBuilder.init().includeGenres(include).excludeGenres(exclude).resultsPerPage(amount: 50).extendedOptions(filter).getUrl()
     }
 
 }

@@ -36,7 +36,7 @@ class HomeViewController : UIViewController {
     let reuseIdentifierCoverCell = "mangaCoverCell"
     let reuseIdentifierCategoryCell = "categoryCell"
     let reuseIdentifierReleasesLoading = "releaseCoverLoadingCell"
-    var genreItems : [(String,String)] = [] 
+    var genreItems : [(String,URL)] = []
     var mangaCoverItems : [(id: String ,title: String, image: String)] = []
     let strokeAttributes = [
         NSStrokeColorAttributeName : UIColor.black,
@@ -128,10 +128,10 @@ class HomeViewController : UIViewController {
             case "showGenreMangas":
                 let destination = segue.destination as! MangaSearchResultsViewController
                 let index = categoryCollectionView.indexPathsForSelectedItems!.first!.row
-                destination.searchUrl = genreItems[index].1
+                destination.originalSearchUrl = genreItems[index].1
             case "searchByTitleSegue":
                 let destination = segue.destination as! MangaSearchResultsViewController
-                destination.searchUrl = MangaUpdatesAPI.BaseUrl+MangaUpdatesAPI.SearchTitleExtension+searchBarUITextField.text!.replacingOccurrences(of: " ", with: "+").lowercased()
+                destination.originalSearchUrl = MangaUpdatesURLBuilder.init().searchTitle(searchBarUITextField.text!).getUrl()
             default:
                 break
         }
