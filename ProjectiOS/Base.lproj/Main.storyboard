@@ -16,6 +16,7 @@
         <scene sceneID="kB4-KA-SH4">
             <objects>
                 <navigationController id="deX-nb-BKK" sceneMemberID="viewController">
+                    <nil key="simulatedBottomBarMetrics"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="375" height="667"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="zEP-ui-KZP">
@@ -25,6 +26,10 @@
                             <color key="textColor" red="1" green="0.68144522835213184" blue="0.25188090045309353" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </textAttributes>
                     </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" id="Ql0-gD-UP8">
+                        <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="Ir1-6Q-ZPf" kind="relationship" relationship="rootViewController" id="eco-fI-Mcu"/>
                     </connections>
@@ -351,7 +356,7 @@
             </objects>
             <point key="canvasLocation" x="149.59999999999999" y="136.28185907046478"/>
         </scene>
-        <!--Manga Detail View Controller-->
+        <!--General-->
         <scene sceneID="0vD-Od-DYV">
             <objects>
                 <viewController id="pSC-s4-IEq" customClass="MangaDetailViewController" customModule="ProjectiOS" customModuleProvider="target" sceneMemberID="viewController">
@@ -370,19 +375,19 @@
                                 <rect key="frame" x="169" y="315" width="37" height="37"/>
                             </activityIndicatorView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="pPa-y8-bVL">
-                                <rect key="frame" x="14" y="292" width="347" height="361"/>
+                                <rect key="frame" x="14" y="292" width="347" height="312"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="HLH-5O-eZv">
-                                        <rect key="frame" x="0.0" y="0.0" width="347" height="180.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="347" height="156"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category Recommendations" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CMh-IB-d9J">
-                                                <rect key="frame" x="0.0" y="0.0" width="217.5" height="19.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="217.5" height="0.0"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="74" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="5ja-yF-7B3">
-                                                <rect key="frame" x="0.0" y="19.5" width="347" height="161"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="347" height="156"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <prototypes>
                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="MangaCategoryRecommendationCell" rowHeight="74" id="2Es-lY-A11" customClass="SearchResultMangaTableCell" customModule="ProjectiOS" customModuleProvider="target">
@@ -446,16 +451,16 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="Y0I-E0-MKF">
-                                        <rect key="frame" x="0.0" y="180.5" width="347" height="180.5"/>
+                                        <rect key="frame" x="0.0" y="156" width="347" height="156"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Recommendations" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jhU-F1-Wsb">
-                                                <rect key="frame" x="0.0" y="0.0" width="143" height="1"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="143" height="0.0"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="74" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="JiH-Kh-z5j">
-                                                <rect key="frame" x="0.0" y="1" width="347" height="179.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="347" height="156"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <prototypes>
                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="MangaCategoryRecommendationCell" rowHeight="74" id="a50-zE-1EL" customClass="SearchResultMangaTableCell" customModule="ProjectiOS" customModuleProvider="target">
@@ -604,7 +609,9 @@
                             <constraint firstItem="kaG-9N-tRo" firstAttribute="top" secondItem="kP2-UL-2vL" secondAttribute="bottom" constant="8" id="xp9-wa-Sxf"/>
                         </constraints>
                     </view>
+                    <tabBarItem key="tabBarItem" title="General" id="vzq-9c-bBW"/>
                     <navigationItem key="navigationItem" id="ycu-BM-MnY"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
                     <connections>
                         <outlet property="artistUILabel" destination="rcM-GI-txK" id="WiT-NQ-0tD"/>
                         <outlet property="authorUILabel" destination="L2F-eP-NOs" id="JSe-3g-Qvp"/>
@@ -633,7 +640,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="116"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="3vw-I4-m4m" id="MyP-qB-OdQ">
-                                    <rect key="frame" x="0.0" y="0.0" width="342" height="115.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="342" height="115"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="DQg-K0-Hyf">
@@ -727,7 +734,7 @@
                                 <rect key="frame" x="0.0" y="194" width="375" height="58"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lEN-sk-9Fd" id="pZ1-xV-mhN">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="57.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="57"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hkr-Np-1TF">
@@ -775,6 +782,15 @@
                             <outlet property="delegate" destination="U8Y-6k-Oag" id="ADB-cg-Xtj"/>
                         </connections>
                     </tableView>
+                    <toolbarItems>
+                        <barButtonItem systemItem="camera" id="mdI-99-e1i">
+                            <color key="tintColor" red="1" green="0.68144522839999999" blue="0.2518809005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </barButtonItem>
+                        <barButtonItem title="Item" id="yRm-sM-Hus">
+                            <color key="tintColor" red="1" green="0.68144522839999999" blue="0.2518809005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </barButtonItem>
+                    </toolbarItems>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
                     <connections>
                         <outlet property="mangaResultsUITableView" destination="Zde-Gu-F9u" id="3hA-mX-ajS"/>
                     </connections>

@@ -73,17 +73,17 @@ class HomeViewController : UIViewController {
     
     func loadfirstReleases(amount: Int) {
         DispatchQueue.global(qos: .userInitiated).async {
-            for mangaId in self.ids.dropLast(self.ids.count-amount){
-                //TODO crasht soms op random id die naar een correcte manga wijst, concurrency?
-                if let manga = MangaUpdatesAPI.getMangaWithId(id: mangaId){
-                    self.mangaCoverItems.append((manga.id, manga.title ,manga.image))
+                for mangaId in self.ids.dropLast(self.ids.count-amount){
+                    //TODO crasht soms op random id die naar een correcte manga wijst, concurrency?
+                    if let manga = MangaUpdatesAPI.getMangaWithId(id: mangaId){
+                        self.mangaCoverItems.append((manga.id, manga.title ,manga.image))
+                    }
+                    DispatchQueue.main.async {
+                        self.releaseCoversLoadingActivityIndicator.stopAnimating()
+                        self.mangaCoverCollectionView.reloadData()
+                        //self.startLoadingOtherReleasesAfter(amount: amount)
+                    }
                 }
-                DispatchQueue.main.async {
-                    self.releaseCoversLoadingActivityIndicator.stopAnimating()
-                    self.mangaCoverCollectionView.reloadData()
-                    //self.startLoadingOtherReleasesAfter(amount: amount)
-                }
-            }
         }
     }
     

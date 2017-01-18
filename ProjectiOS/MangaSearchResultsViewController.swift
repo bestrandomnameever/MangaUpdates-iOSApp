@@ -16,8 +16,18 @@ class MangaSearchResultsViewController: UITableViewController {
     @IBOutlet var mangaResultsUITableView: UITableView!
     @IBOutlet weak var searchResultsLoadingActivityIndicator: UIActivityIndicatorView!
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setToolbarHidden(false, animated: true)
+    }
+    
     override func viewDidLoad() {
         loadResultsForUrl(amountOfPages: 3)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.setToolbarHidden(true, animated: true)
     }
     
     func loadResultsForUrl(amountOfPages: Int) {
