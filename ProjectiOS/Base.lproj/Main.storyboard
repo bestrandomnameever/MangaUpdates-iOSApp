@@ -820,7 +820,8 @@
         <image name="sortByOrder.png" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="0Yk-JZ-Jhb"/>
+        <segue reference="cwt-wW-7k6"/>
         <segue reference="XMd-S2-4yd"/>
     </inferredMetricsTieBreakers>
+    <color key="tintColor" red="1" green="0.68144522839999999" blue="0.2518809005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
 </document>

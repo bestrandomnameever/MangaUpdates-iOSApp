@@ -29,71 +29,55 @@ class MangaUpdatesURLBuilder {
     }
     
     func searchTitle(_ title: String) -> MangaUpdatesURLBuilder{
-        if self.url.contains("&"){
-            self.url.append("&")
-        }
         self.url.append("search=")
         self.url.append(title.replacingOccurrences(of: " ", with: "+"))
+        self.url.append("&")
         return self
     }
     
     func includeGenres(_ genres: [String]) -> MangaUpdatesURLBuilder{
-        if self.url.contains("&"){
-            self.url.append("&")
-        }
         self.url.append("genre=")
         self.url.append(genres.joined(separator: "_").replacingOccurrences(of: " ", with: "%2B"))
+        self.url.append("&")
         return self
     }
     
     func excludeGenres(_ genres: [String]) -> MangaUpdatesURLBuilder{
-        if self.url.contains("&"){
-            self.url.append("&")
-        }
         self.url.append("exclude_genre=")
         self.url.append(genres.joined(separator: "_").replacingOccurrences(of: " ", with: "%2B"))
+        self.url.append("&")
         return self
     }
     
     func resultsPerPage(amount: Int) -> MangaUpdatesURLBuilder{
-        if self.url.contains("&"){
-            self.url.append("&")
-        }
         self.url.append("perpage=")
         self.url.append(String.init(amount))
+        self.url.append("&")
         return self
     }
     
     func licensed(_ license: LicenseOptions) -> MangaUpdatesURLBuilder{
-        if self.url.contains("&"){
-            self.url.append("&")
-        }
         self.url.append(license.rawValue)
+        self.url.append("&")
         return self
     }
     
     func extendedOptions(_ option: ExtendedOptions) -> MangaUpdatesURLBuilder{
-        if self.url.contains("&"){
-            self.url.append("&")
-        }
         self.url.append(option.rawValue)
+        self.url.append("&")
         return self
     }
     
     func orderBy(_ order: OrderBy) -> MangaUpdatesURLBuilder{
-        if self.url.contains("&"){
-            self.url.append("&")
-        }
         self.url.append(order.rawValue)
+        self.url.append("&")
         return self
     }
     
-    //zou leuk zijn indien hij de oude page verwijderd en nieuwe invuld maar momenteel gewoon nieuw atribuut aan URL toevoegen
+    //TODO zou leuk zijn indien hij de oude page verwijderd en nieuwe invult maar momenteel gewoon nieuw atribuut aan URL toevoegen
     func getPage(page : Int) -> MangaUpdatesURLBuilder{
-        if self.url.contains("&"){
-            self.url.append("&")
-        }
         self.url.append("page="+String.init(page))
+        self.url.append("&")
         return self
     }
     

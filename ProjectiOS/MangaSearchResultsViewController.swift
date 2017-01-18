@@ -141,21 +141,22 @@ extension MangaSearchResultsViewController{
                 getItemBy(identifier: on).tintColor = UIColor.orange
             }
             results.removeAll()
+            mangaResultsUITableView.reloadData()
             switch(on){
             case SortOption.OnAlpha:
                 self.currentPage = 1
-                results.removeAll()
                 currentUrl = MangaUpdatesURLBuilder.init(customUrl: originalSearchUrl).orderBy(.title).resultsPerPage(amount: 50).getUrl()
+                print(currentUrl.absoluteString)
                 loadResultsForUrl(amountOfPages: 1)
             case SortOption.OnScore:
                 self.currentPage = 1
-                results.removeAll()
                 currentUrl = MangaUpdatesURLBuilder.init(customUrl: originalSearchUrl).orderBy(.rating).resultsPerPage(amount: 50).getUrl()
+                print(currentUrl.absoluteString)
                 loadResultsForUrl(amountOfPages: 1)
             default:
                 self.currentPage = 1
-                results.removeAll()
                 currentUrl = originalSearchUrl
+                print(currentUrl.absoluteString)
                 loadResultsForUrl(amountOfPages: 3)
             }
         }
