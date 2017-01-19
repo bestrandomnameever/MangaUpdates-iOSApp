@@ -15,16 +15,10 @@ class MangaDetailRecommendationsViewController: UIViewController {
     var categoryRecommendations : [MangaSearchResult] = []
     var mangaCoverUrl : String!
     @IBOutlet weak var categoryRecommendationsLoading: UIActivityIndicatorView!
-    @IBOutlet weak var blurredImageView: UIImageView!
     @IBOutlet weak var recommendationsTableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = view.bounds
-        blurredImageView.addSubview(blurEffectView)
-        blurredImageView.sd_setImage(with: URL.init(string: mangaCoverUrl))
         DispatchQueue.global(qos: .default).async {
             for id in self.manga.categoryRecommendationsIds {
                 if let mangaResult = MangaUpdatesAPI.getMangaSearchResultWithId(id: id) {
@@ -57,11 +51,15 @@ extension MangaDetailRecommendationsViewController : UITableViewDelegate, UITabl
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if(manga.categoryRecommendationsIds.count+manga.recommendationsIds.count == 0){
-            return 1
-        }else if section == 0{
+        if section == 0{
+            if(manga.categoryRecommendationsIds.count == 0){
+                return 1
+            }
             return categoryRecommendations.count
         }else{
+            if(manga.recommendationsIds.count == 0){
+                return 1
+            }
             return recommendations.count
         }
     }
@@ -76,29 +74,36 @@ extension MangaDetailRecommendationsViewController : UITableViewDelegate, UITabl
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let total = manga.recommendationsIds.count+manga.categoryRecommendationsIds.count
-        if total == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "notFoundCell", for: indexPath) as! NoResultsFoundTableCell
-            if indexPath.section == 0 {
+        if(indexPath.section == 0){
+            if(manga.categoryRecommendationsIds.count == 0){
+                let cell = tableView.dequeueReusableCell(withIdentifier: "notFoundCell", for: indexPath) as! NoResultsFoundTableCell
                 cell.cellMesage.text = "No category recommendations"
+                return cell
             }else{
-                cell.cellMesage.text = "No recommendations"
+                let cell = tableView.dequeueReusableCell(withIdentifier: "MangaCategoryRecommendationCell", for: indexPath) as! SearchResultMangaTableCell
+                let mangaResult = categoryRecommendations[indexPath.row]
+                cell.titleUILabel.text = mangaResult.title
+                cell.authorUILabel.text = mangaResult.author
+                cell.coverUIImageView.sd_setImage(with: URL.init(string: mangaResult.image))
+                cell.genresUILabel.text = mangaResult.genres.joined(separator: ", ")
+                cell.scoreUILabel.text = mangaResult.score + "/10"
+                return cell
             }
-            return cell
         }else{
-            let cell = tableView.dequeueReusableCell(withIdentifier: "MangaCategoryRecommendationCell", for: indexPath) as! SearchResultMangaTableCell
-            var mangaResult : MangaSearchResult
-            if(indexPath.section == 0){
-                mangaResult = categoryRecommendations[indexPath.row]
+            if(manga.recommendationsIds.count == 0){
+                let cell = tableView.dequeueReusableCell(withIdentifier: "notFoundCell", for: indexPath) as! NoResultsFoundTableCell
+                cell.cellMesage.text = "No recommendations"
+                return cell
             }else{
-                mangaResult = recommendations[indexPath.row]
+                let cell = tableView.dequeueReusableCell(withIdentifier: "MangaCategoryRecommendationCell", for: indexPath) as! SearchResultMangaTableCell
+                let mangaResult = recommendations[indexPath.row]
+                cell.titleUILabel.text = mangaResult.title
+                cell.authorUILabel.text = mangaResult.author
+                cell.coverUIImageView.sd_setImage(with: URL.init(string: mangaResult.image))
+                cell.genresUILabel.text = mangaResult.genres.joined(separator: ", ")
+                cell.scoreUILabel.text = mangaResult.score + "/10"
+                return cell
             }
-            cell.titleUILabel.text = mangaResult.title
-            cell.authorUILabel.text = mangaResult.author
-            cell.coverUIImageView.sd_setImage(with: URL.init(string: mangaResult.image))
-            cell.genresUILabel.text = mangaResult.genres.joined(separator: ", ")
-            cell.scoreUILabel.text = mangaResult.score + "/10"
-            return cell
         }
     }
     
@@ -112,6 +117,7 @@ extension MangaDetailRecommendationsViewController : UITableViewDelegate, UITabl
         }
         container.mangaId = chosen.id
         container.mangaCoverUrl = chosen.image
+        container.segments.isHidden = true
         container.viewDidLoad()
         removeFromParentViewController()
     }

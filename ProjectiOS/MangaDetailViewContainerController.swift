@@ -14,7 +14,9 @@ class MangaDetailViewContainerController: UIViewController {
     var mangaCoverUrl : String!
     
     @IBOutlet weak var detailsLoadingActivityIndicator: UIActivityIndicatorView!
-    @IBOutlet weak var blurredImageView: UIImageView!
+    @IBOutlet weak var coverBackgroundImageView: UIImageView!
+    @IBOutlet weak var backgroundView: UIView!
+    @IBOutlet weak var subViewContainer: UIView!
     
     @IBOutlet weak var segments: UISegmentedControl!
     private var generalViewController: MangaDetailGeneralViewController!
@@ -31,20 +33,17 @@ class MangaDetailViewContainerController: UIViewController {
     }
     
     func loadManga(){
-        blurredImageView.superview!.bringSubview(toFront: blurredImageView)
+        self.detailsLoadingActivityIndicator.startAnimating()
+        coverBackgroundImageView.sd_setImage(with: URL.init(string: mangaCoverUrl))
         detailsLoadingActivityIndicator.superview!.bringSubview(toFront: detailsLoadingActivityIndicator)
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = view.bounds
-        blurredImageView.addSubview(blurEffectView)
-        blurredImageView.sd_setImage(with: URL.init(string: mangaCoverUrl))
+        backgroundView.superview!.bringSubview(toFront: backgroundView)
         
         DispatchQueue.global(qos: .userInitiated).async {
             if let mangaOptional = MangaUpdatesAPI.getMangaWithId(id: self.mangaId){
                 DispatchQueue.main.async {
                     self.generalViewController = {
                         let storyBoard = UIStoryboard(name: "Main", bundle: Bundle.main)
-                        var viewController = storyBoard.instantiateViewController(withIdentifier: "mangaDetailGeneral") as! MangaDetailGeneralViewController
+                        let viewController = storyBoard.instantiateViewController(withIdentifier: "mangaDetailGeneral") as! MangaDetailGeneralViewController
                         viewController.mangaCoverUrl = self.mangaCoverUrl
                         viewController.manga = mangaOptional
                         self.add(asChildViewController: viewController)
@@ -52,12 +51,13 @@ class MangaDetailViewContainerController: UIViewController {
                     }()
                     self.categoriesViewController = {
                         let storyBoard = UIStoryboard(name: "Main", bundle: Bundle.main)
-                        var viewController = storyBoard.instantiateViewController(withIdentifier: "MangaDetailRecommendations") as! MangaDetailRecommendationsViewController
+                        let viewController = storyBoard.instantiateViewController(withIdentifier: "MangaDetailRecommendations") as! MangaDetailRecommendationsViewController
                         viewController.mangaCoverUrl = self.mangaCoverUrl
                         viewController.manga = mangaOptional
                         self.add(asChildViewController: viewController)
                         return viewController
                     }()
+                    self.detailsLoadingActivityIndicator.stopAnimating()
                     self.setupView()
                 }
             }
@@ -71,8 +71,8 @@ class MangaDetailViewContainerController: UIViewController {
     
     func setupSegmentedControl(){
         segments.removeAllSegments()
-        segments.insertSegment(withTitle: "Summary", at: 0, animated: false)
-        segments.insertSegment(withTitle: "Recommendations", at: 1, animated: false)
+        segments.insertSegment(withTitle: "Sum", at: 0, animated: false)
+        segments.insertSegment(withTitle: "Rec", at: 1, animated: false)
         segments.isHidden = false
         segments.addTarget(self, action: #selector(selectionDidChange(_:)), for: .valueChanged)
         
@@ -96,9 +96,11 @@ class MangaDetailViewContainerController: UIViewController {
     private func add(asChildViewController viewController: UIViewController){
         addChildViewController(viewController)
         view.addSubview(viewController.view)
-        viewController.view.frame = view.bounds
+        var bounds = view.bounds
+        bounds.origin.y = (navigationController?.navigationBar.frame.maxY)!
+        bounds.size.height = bounds.height - bounds.origin.y
+        viewController.view.frame = bounds
         viewController.view.autoresizingMask = [.flexibleWidth,.flexibleHeight]
-        
         viewController.didMove(toParentViewController: self)
     }
     

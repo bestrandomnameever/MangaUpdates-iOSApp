@@ -23,15 +23,7 @@ class MangaDetailGeneralViewController: UIViewController {
     @IBOutlet weak var typeUILabel: UILabel!
     @IBOutlet weak var genresUILabel: UILabel!
     
-    @IBOutlet weak var blurredImageView: UIImageView!
-    
     override func viewDidLoad() {
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = view.bounds
-        blurredImageView.addSubview(blurEffectView)
-        blurredImageView.sd_setImage(with: URL.init(string: mangaCoverUrl))
-        self.blurredImageView.superview!.sendSubview(toBack: self.blurredImageView)
         self.titleLabel.text = manga.title
         self.coverUIImageView.sd_setImage(with: URL.init(string: self.mangaCoverUrl))
         self.authorUILabel.text = manga.author

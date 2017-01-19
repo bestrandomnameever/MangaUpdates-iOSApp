@@ -43,13 +43,34 @@ class HomeViewController : UIViewController {
         NSForegroundColorAttributeName : UIColor.white,
         NSStrokeWidthAttributeName: -2,
         NSFontAttributeName : UIFont.boldSystemFont(ofSize: 22)
-    ] as [String : Any]
+        ] as [String : Any]
     
     // MARK: - Methods
     
     override func viewDidLoad() {
         loadGenresAsync()
         loadfirstReleasesAsync(amount: batchSize)
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        mangaCoverCollectionView.collectionViewLayout.invalidateLayout()
+        categoryCollectionView.collectionViewLayout.invalidateLayout()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        let availableHeightForCovers = organiserView.bounds.size.height - categorysHeight * 4
+        if (availableHeightForCovers < CGFloat.init(coverHeight)) {
+            mangaCoverCollectionHeight.constant = availableHeightForCovers
+            coverHeight = availableHeightForCovers
+            coverWidth = coverHeight / 4 * 3
+//            mangaCoverCollectionView.collectionViewLayout.invalidateLayout()
+//            categoryCollectionView.collectionViewLayout.invalidateLayout()
+        }else {
+            findIdealProportionsWith(availableSpace: availableHeightForCovers)
+//            mangaCoverCollectionView.collectionViewLayout.invalidateLayout()
+//            categoryCollectionView.collectionViewLayout.invalidateLayout()
+        }
     }
     
     func loadGenresAsync(){
@@ -103,6 +124,29 @@ class HomeViewController : UIViewController {
         }
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier! {
+        case "advancedSearchSegue":
+            let destination = segue.destination as! AdvancedSearchViewController
+            destination.genres = genreItems.map({($0.genre, 0)})
+        case "openDetailFromHomeSegue":
+            let destination = segue.destination as! MangaDetailViewContainerController
+            let index = mangaCoverCollectionView.indexPathsForSelectedItems!.first!.item
+            destination.mangaId = mangaCoverItems[index].id
+            destination.mangaCoverUrl = mangaCoverItems[index].image
+        case "showGenreMangas":
+            let destination = segue.destination as! MangaSearchResultsViewController
+            let index = categoryCollectionView.indexPathsForSelectedItems!.first!.row
+            destination.originalSearchUrl = genreItems[index].url
+        case "searchByTitleSegue":
+            //TODO checken op niet toelaatbare karakters in zoekstring
+            let destination = segue.destination as! MangaSearchResultsViewController
+            destination.originalSearchUrl = MangaUpdatesURLBuilder.init().searchTitle(searchBarUITextField.text!).resultsPerPage(amount: 50).getUrl()
+        default:
+            break
+        }
+    }
+    
     func startLoadingOtherReleasesAfter(amount : Int) {
         self.coversAreLoading = true
         let dropFirst = self.ids.dropFirst(amount)
@@ -119,41 +163,6 @@ class HomeViewController : UIViewController {
                     }
                 }
             }
-        }
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        let availableHeightForCovers = organiserView.bounds.size.height - categorysHeight * 4
-        if (availableHeightForCovers < CGFloat.init(coverHeight)) {
-            mangaCoverCollectionHeight.constant = availableHeightForCovers
-            coverHeight = availableHeightForCovers
-            coverWidth = coverHeight / 4 * 3
-        }else {
-            findIdealProportionsWith(availableSpace: availableHeightForCovers)
-        }
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        switch segue.identifier! {
-            case "advancedSearchSegue":
-                let destination = segue.destination as! AdvancedSearchViewController
-                destination.genres = genreItems.map({($0.genre, 0)})
-            case "openDetailFromHomeSegue":
-                let destination = segue.destination as! MangaDetailViewContainerController
-                let index = mangaCoverCollectionView.indexPathsForSelectedItems!.first!.item
-                destination.mangaId = mangaCoverItems[index].id
-                destination.mangaCoverUrl = mangaCoverItems[index].image
-            case "showGenreMangas":
-                let destination = segue.destination as! MangaSearchResultsViewController
-                let index = categoryCollectionView.indexPathsForSelectedItems!.first!.row
-                destination.originalSearchUrl = genreItems[index].url
-            case "searchByTitleSegue":
-                //TODO checken op niet toelaatbare karakters in zoekstring
-                let destination = segue.destination as! MangaSearchResultsViewController
-                destination.originalSearchUrl = MangaUpdatesURLBuilder.init().searchTitle(searchBarUITextField.text!).resultsPerPage(amount: 50).getUrl()
-            default:
-                break
         }
     }
     
@@ -191,8 +200,6 @@ class HomeViewController : UIViewController {
     private func calculateWidthWithRatioAnd(height: CGFloat) -> CGFloat {
         return height / 353 * 250
     }
-    
-    
 }
 
 // MARK: - UICollectionViewDataSource protocol
@@ -261,7 +268,9 @@ extension HomeViewController : UICollectionViewDataSource, UICollectionViewDeleg
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if(collectionView === mangaCoverCollectionView) {
-            return CGSize.init(width: CGFloat.init(coverWidth), height: CGFloat.init(coverHeight))
+            var height = collectionView.bounds.size.height
+            var width = ceil(height/4*3)
+            return CGSize.init(width: width, height: height)
         }else {
             return CGSize.init(width: collectionView.bounds.size.width/2-10, height: CGFloat.init(45))
         }
