@@ -15,8 +15,10 @@ class MangaSearchResultsViewController: UITableViewController {
     var results : [MangaSearchResult] = []
     var allResultsLoaded = false
     var lastActivatedFilter = SortOption.Reset
-    var currentPage = 1
-    let loadMangaQueue = DispatchQueue.init(label: "loadMangaQueue")
+    var currentPage = 0
+    var doneLoading = true
+    var idsCount = 0
+    let amountOfResultsPerLoad = 50
     let loadMangaOperationQueue = OperationQueue.init()
     @IBOutlet var mangaResultsUITableView: UITableView!
     
@@ -41,7 +43,7 @@ class MangaSearchResultsViewController: UITableViewController {
     
     override func viewDidLoad() {
         currentUrl = originalSearchUrl
-        loadResultsForUrl(amountOfPages: 3)
+        loadResultsForUrl(amount: amountOfResultsPerLoad)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -50,10 +52,10 @@ class MangaSearchResultsViewController: UITableViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-            let destination = segue.destination as! MangaDetailViewContainerController
-            let index = mangaResultsUITableView.indexPathsForSelectedRows!.first!.row
-            destination.mangaId = results[index].id
-            destination.mangaCoverUrl = results[index].image
+        let destination = segue.destination as! MangaDetailViewContainerController
+        let index = mangaResultsUITableView.indexPathsForSelectedRows!.first!.row
+        destination.mangaId = results[index].id
+        destination.mangaCoverUrl = results[index].image
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -83,61 +85,55 @@ class MangaSearchResultsViewController: UITableViewController {
             return cell
         }
     }
+    
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if(indexPath.row > results.count-10 && doneLoading && !allResultsLoaded){
+            loadResultsForUrl(amount: amountOfResultsPerLoad)
+        }
+    }
 }
 
 
 //Methods to load results matching to searchUrl
 extension MangaSearchResultsViewController{
-    func loadResultsForUrl(amountOfPages: Int) {
-        loadMangaQueue.async {
-            var page = self.currentPage
-            var hasNextPage = true
-            //load 3 pages of manga's
-            for _ in 1...amountOfPages{
-                let url = MangaUpdatesURLBuilder.init(customUrl: self.currentUrl).getPage(page: page).getUrl()
-                //get all id's of mangas matching this searchUrl
-                self.loadMangaOperationQueue.addOperation {
-                    let mangaIdsAndNextPageUrl = MangaUpdatesAPI.getMangaIdsFrom(searchUrl: url)
-                    OperationQueue.main.addOperation {
-                        var uniqueMangaIds : [String] = []
-                        //make sure that all ids are unique since 1 manga can appear more than once in search thanks to alternative names
-                        for id in mangaIdsAndNextPageUrl.ids{
-                            if(!uniqueMangaIds.contains(id)){
-                                uniqueMangaIds.append(id)
-                            }
-                        }
-                        for mangaId in uniqueMangaIds {
-                            self.loadMangaOperationQueue.addOperation {
-                                if let mangaResult = MangaUpdatesAPI.getMangaSearchResultWithId(id: mangaId){
-                                    self.results.append(mangaResult)
-                                    OperationQueue.main.addOperation {
-                                        self.mangaResultsUITableView.reloadData()
-                                    }
+    func loadResultsForUrl(amount: Int) {
+        self.doneLoading = false
+        loadMangaOperationQueue.addOperation {
+            let page = self.currentPage + 1
+            let url = MangaUpdatesURLBuilder.init(customUrl: self.currentUrl).getPage(page: page).resultsPerPage(amount: amount).getUrl()
+            //get all id's of mangas matching this searchUrl
+            let mangaIdsAndNextPageUrl = MangaUpdatesAPI.getMangaIdsFrom(searchUrl: url)
+            OperationQueue.main.addOperation {
+                var uniqueMangaIds : [String] = []
+                //make sure that all ids are unique since 1 manga can appear more than once in search thanks to alternative names
+                for id in mangaIdsAndNextPageUrl.ids{
+                    if(!uniqueMangaIds.contains(id)){
+                        uniqueMangaIds.append(id)
+                    }
+                }
+                self.idsCount = self.idsCount + uniqueMangaIds.count
+                for mangaId in uniqueMangaIds {
+                    self.loadMangaOperationQueue.addOperation {
+                        if let mangaResult = MangaUpdatesAPI.getMangaSearchResultWithId(id: mangaId){
+                            OperationQueue.main.addOperation {
+                                self.results.append(mangaResult)
+                                self.mangaResultsUITableView.reloadData()
+                                if(self.results.count == self.idsCount){
+                                    self.doneLoading = true
                                 }
                             }
                         }
-                        if mangaIdsAndNextPageUrl.hasNextPage {
-                            hasNextPage = false
-                        }
                     }
                 }
-                
-                //set url to next page of results
-                if hasNextPage {
-                    page = page + 1
+                if mangaIdsAndNextPageUrl.hasNextPage {
+                    self.currentPage = page
                 }else{
-                    DispatchQueue.main.async {
-                        self.allResultsLoaded = true
-                        self.mangaResultsUITableView.reloadData()
-                    }
-                    break
+                    self.allResultsLoaded = true
+                    self.mangaResultsUITableView.reloadData()
                 }
-            }
-            //update searchUrl in main if a new page has to be loaded
-            DispatchQueue.main.async {
-                self.currentPage = page
             }
         }
+        
     }
 }
 
@@ -153,35 +149,34 @@ extension MangaSearchResultsViewController{
                 getItemBy(identifier: on).tintColor = UIColor.orange
             }
             results.removeAll()
+            //indien nog tijd over, zoek uit
+            loadMangaOperationQueue.cancelAllOperations()
             mangaResultsUITableView.reloadData()
             switch(on){
             case SortOption.OnAlpha:
-                self.currentPage = 1
-                currentUrl = MangaUpdatesURLBuilder.init(customUrl: originalSearchUrl).orderBy(.title).resultsPerPage(amount: 50).getUrl()
-                print(currentUrl.absoluteString)
-                loadResultsForUrl(amountOfPages: 1)
+                self.currentPage = 0
+                currentUrl = MangaUpdatesURLBuilder.init(customUrl: originalSearchUrl).orderBy(.title).getUrl()
+                loadResultsForUrl(amount: amountOfResultsPerLoad)
             case SortOption.OnScore:
-                self.currentPage = 1
-                currentUrl = MangaUpdatesURLBuilder.init(customUrl: originalSearchUrl).orderBy(.rating).resultsPerPage(amount: 50).getUrl()
-                print(currentUrl.absoluteString)
-                loadResultsForUrl(amountOfPages: 1)
+                self.currentPage = 0
+                currentUrl = MangaUpdatesURLBuilder.init(customUrl: originalSearchUrl).orderBy(.rating).getUrl()
+                loadResultsForUrl(amount: amountOfResultsPerLoad)
             default:
-                self.currentPage = 1
+                self.currentPage = 0
                 currentUrl = originalSearchUrl
-                print(currentUrl.absoluteString)
-                loadResultsForUrl(amountOfPages: 3)
+                loadResultsForUrl(amount: amountOfResultsPerLoad)
             }
         }
     }
     
     func getItemBy(identifier: SortOption) -> UIBarButtonItem{
         switch(identifier){
-            case SortOption.Reset:
-                return resetSortItem
-            case SortOption.OnAlpha:
-                return alphaSortItem
-            case SortOption.OnScore:
-                return scoreSortItem
+        case SortOption.Reset:
+            return resetSortItem
+        case SortOption.OnAlpha:
+            return alphaSortItem
+        case SortOption.OnScore:
+            return scoreSortItem
         }
     }
 }

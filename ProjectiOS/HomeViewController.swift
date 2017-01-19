@@ -21,7 +21,16 @@ class HomeViewController : UIViewController {
     
     @IBOutlet var organiserView : UIView!
     @IBOutlet weak var mangaCoverCollectionHeight : NSLayoutConstraint!
-    @IBOutlet weak var uiSearchBar: UISearchBar!
+    
+    var ids : [String] = []
+    var genreItems : [(genre: String, url: URL)] = []
+    var mangaCoverItems : [(id: String ,title: String, image: String)] = []
+    var coversAreLoading = true
+    let batchSize = 30
+    
+    let reuseIdentifierCoverCell = "mangaCoverCell"
+    let reuseIdentifierCategoryCell = "categoryCell"
+    let reuseIdentifierReleasesLoading = "releaseCoverLoadingCell"
     
     let spacingTwoCollectionViews = CGFloat.init(2)
     let coverMinHeight = 230
@@ -29,15 +38,6 @@ class HomeViewController : UIViewController {
     let coverMaxHeight = 280
     var coverWidth : CGFloat!
     let categorysHeight = CGFloat.init(45)
-    var ids : [String] = []
-    let initialLoadReleases = 7
-    let totalReleasesShownMinusInitial = 30
-    
-    let reuseIdentifierCoverCell = "mangaCoverCell"
-    let reuseIdentifierCategoryCell = "categoryCell"
-    let reuseIdentifierReleasesLoading = "releaseCoverLoadingCell"
-    var genreItems : [(String,URL)] = []
-    var mangaCoverItems : [(id: String ,title: String, image: String)] = []
     let strokeAttributes = [
         NSStrokeColorAttributeName : UIColor.black,
         NSForegroundColorAttributeName : UIColor.white,
@@ -48,52 +48,75 @@ class HomeViewController : UIViewController {
     // MARK: - Methods
     
     override func viewDidLoad() {
-        
+        loadGenresAsync()
+        loadfirstReleasesAsync(amount: batchSize)
+    }
+    
+    func loadGenresAsync(){
         DispatchQueue.global(qos: .userInitiated).async {
             if let genresAndUrls = MangaUpdatesAPI.getGenresAndUrls() {
-                self.genreItems = genresAndUrls
-            }
-            DispatchQueue.main.async {
-                self.genreLoadingActivityIndicator.stopAnimating()
-                self.categoryCollectionView.reloadData()
+                DispatchQueue.main.async {
+                    if(genresAndUrls.count == 0){
+                        self.loadGenresAsync()
+                    }else{
+                        self.genreItems = genresAndUrls
+                        self.genreLoadingActivityIndicator.stopAnimating()
+                        self.categoryCollectionView.reloadData()
+                    }
+                }
+            }else{
+                DispatchQueue.main.async {
+                    self.loadGenresAsync()
+                }
             }
         }
+    }
+    
+    func loadfirstReleasesAsync(amount: Int) {
         
         DispatchQueue.global(qos: .userInitiated).async {
             //do shit in async
             if let ids = MangaUpdatesAPI.getLatestReleasesIds() {
-                self.ids = ids
-            }
-            //notify main thread that async method has finished
-            DispatchQueue.main.async {
-                self.loadfirstReleases(amount: 50)
-            }
-        }
-    }
-    
-    func loadfirstReleases(amount: Int) {
-        DispatchQueue.global(qos: .userInitiated).async {
-                for mangaId in self.ids.dropLast(self.ids.count-amount){
-                    //TODO crasht soms op random id die naar een correcte manga wijst, concurrency?
-                    if let manga = MangaUpdatesAPI.getMangaWithId(id: mangaId){
-                        self.mangaCoverItems.append((manga.id, manga.title ,manga.image))
-                    }
-                    DispatchQueue.main.async {
-                        self.releaseCoversLoadingActivityIndicator.stopAnimating()
-                        self.mangaCoverCollectionView.reloadData()
-                        //self.startLoadingOtherReleasesAfter(amount: amount)
+                //notify main thread that async method has finished
+                DispatchQueue.main.async {
+                    self.ids = ids
+                    DispatchQueue.global(qos: .userInitiated).async {
+                        for mangaId in self.ids.dropLast(self.ids.count-amount){
+                            if let manga = MangaUpdatesAPI.getMangaWithId(id: mangaId){
+                                DispatchQueue.main.async {
+                                    self.mangaCoverItems.append((manga.id, manga.title ,manga.image))
+                                    self.releaseCoversLoadingActivityIndicator.stopAnimating()
+                                    self.mangaCoverCollectionView.reloadData()
+                                    if(self.mangaCoverItems.count % self.batchSize==0){
+                                        self.coversAreLoading = false
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
+            }else{
+                DispatchQueue.main.async {
+                    self.loadfirstReleasesAsync(amount: amount)
+                }
+            }
         }
     }
     
     func startLoadingOtherReleasesAfter(amount : Int) {
-        for mangaId in self.ids.dropFirst(amount){
+        self.coversAreLoading = true
+        let dropFirst = self.ids.dropFirst(amount)
+        let dropLast = dropFirst.dropLast(dropFirst.count-batchSize)
+        for mangaId in dropLast{
             DispatchQueue.global(qos: .background).async {
-                let manga = MangaUpdatesAPI.getMangaWithId(id: mangaId)
-                self.mangaCoverItems.append((manga!.id, manga!.title ,manga!.image))
-                DispatchQueue.main.async {
-                    self.mangaCoverCollectionView.reloadData()
+                if let manga = MangaUpdatesAPI.getMangaWithId(id: mangaId) {
+                    DispatchQueue.main.async {
+                        self.mangaCoverItems.append((manga.id, manga.title ,manga.image))
+                        self.mangaCoverCollectionView.reloadData()
+                        if(self.mangaCoverItems.count % self.batchSize==0){
+                            self.coversAreLoading = false
+                        }
+                    }
                 }
             }
         }
@@ -115,23 +138,20 @@ class HomeViewController : UIViewController {
         switch segue.identifier! {
             case "advancedSearchSegue":
                 let destination = segue.destination as! AdvancedSearchViewController
-                destination.genres = genreItems.map({($0.0, 0)})
-//            case "searchSegue":
-//                let destination = segue.destination as! MangaSearchResultsViewController
-//                destination.searchUrl = uiSearchBar.text
+                destination.genres = genreItems.map({($0.genre, 0)})
             case "openDetailFromHomeSegue":
                 let destination = segue.destination as! MangaDetailViewContainerController
                 let index = mangaCoverCollectionView.indexPathsForSelectedItems!.first!.item
-                //destination.manga = MangaUpdatesAPI.getMangaWithId(id: mangaCoverItems[index].0)!
-                destination.mangaId = mangaCoverItems[index].0
+                destination.mangaId = mangaCoverItems[index].id
                 destination.mangaCoverUrl = mangaCoverItems[index].image
             case "showGenreMangas":
                 let destination = segue.destination as! MangaSearchResultsViewController
                 let index = categoryCollectionView.indexPathsForSelectedItems!.first!.row
-                destination.originalSearchUrl = genreItems[index].1
+                destination.originalSearchUrl = genreItems[index].url
             case "searchByTitleSegue":
+                //TODO checken op niet toelaatbare karakters in zoekstring
                 let destination = segue.destination as! MangaSearchResultsViewController
-                destination.originalSearchUrl = MangaUpdatesURLBuilder.init().searchTitle(searchBarUITextField.text!).getUrl()
+                destination.originalSearchUrl = MangaUpdatesURLBuilder.init().searchTitle(searchBarUITextField.text!).resultsPerPage(amount: 50).getUrl()
             default:
                 break
         }
@@ -197,6 +217,16 @@ extension HomeViewController : UICollectionViewDataSource, UICollectionViewDeleg
         return 0
     }
     
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if(collectionView == mangaCoverCollectionView){
+            if(mangaCoverItems.count != ids.count){
+                if(coversAreLoading == false && indexPath.row > mangaCoverItems.count - 5){
+                    startLoadingOtherReleasesAfter(amount: mangaCoverItems.count)
+                }
+            }
+        }
+    }
+    
     // make a cell for each cell index path
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
@@ -207,64 +237,34 @@ extension HomeViewController : UICollectionViewDataSource, UICollectionViewDeleg
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifierCoverCell, for: indexPath as IndexPath) as! MangaCoverViewCell
                 // fill cell with appropriate data
                 let data = mangaCoverItems[indexPath.item]
-                if data.1 == "" {
+                if data.image == "" {
                     cell.mangacover.image = UIImage.init(named: "loading.jpg")
                 } else{
-                    cell.mangacover.sd_setImage(with: URL.init(string: data.2), placeholderImage: UIImage.init(named: "loading.jpg"))
+                    cell.mangacover.sd_setImage(with: URL.init(string: data.image), placeholderImage: UIImage.init(named: "loading.jpg"))
                 }
-                cell.title.attributedText = NSAttributedString.init(string: data.1, attributes: strokeAttributes)
+                cell.title.attributedText = NSAttributedString.init(string: data.title, attributes: strokeAttributes)
                 return cell
             }else{
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifierReleasesLoading, for: indexPath as IndexPath) as! ReleaseCoverLoadingViewCell
                 cell.activityLoadingIndicator.startAnimating()
                 return cell
             }
-        }else if(collectionView == categoryCollectionView) {
+            //genreCollectionView
+        }else{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifierCategoryCell, for: indexPath as IndexPath) as! MangaCategoryViewCell
-            cell.categoryName.text = self.genreItems[indexPath.item].0
-            cell.categoryName.textAlignment = NSTextAlignment.center
+            cell.categoryName.text = self.genreItems[indexPath.item].genre
             return cell
         }
-        
-        return UICollectionViewCell.init()
     }
     
     // MARK: - UICollectionViewDelegate protocol
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // handle tap events
-        
-        
-        if(collectionView == mangaCoverCollectionView) {
-            print("You selected cell #\(indexPath.item) from the mangaCoverUICollection")
-        }else if(collectionView == categoryCollectionView) {
-            
-        }
-    }
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if(collectionView === mangaCoverCollectionView) {
             return CGSize.init(width: CGFloat.init(coverWidth), height: CGFloat.init(coverHeight))
-        }else if(collectionView === categoryCollectionView) {
+        }else {
             return CGSize.init(width: collectionView.bounds.size.width/2-10, height: CGFloat.init(45))
         }
-        return CGSize.init()
     }
 
 }
-
-//extension HomeViewController : UITextFieldDelegate {
-//    
-//    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-//        searchBar.setShowsCancelButton(true, animated: true)
-//        searchBar.becomeFirstResponder()
-//    }
-//    
-//    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-//        searchBar.setShowsCancelButton(false, animated: true)
-//        searchBar.endEditing(true)
-//    }
-//    
-//    
-//
-//}
