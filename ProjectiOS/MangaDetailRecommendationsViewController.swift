@@ -101,4 +101,18 @@ extension MangaDetailRecommendationsViewController : UITableViewDelegate, UITabl
             return cell
         }
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let container = parent as! MangaDetailViewContainerController
+        var chosen : MangaSearchResult
+        if(indexPath.section == 0){
+            chosen = categoryRecommendations[indexPath.row]
+        }else{
+            chosen = recommendations[indexPath.row]
+        }
+        container.mangaId = chosen.id
+        container.mangaCoverUrl = chosen.image
+        container.viewDidLoad()
+        removeFromParentViewController()
+    }
 }
