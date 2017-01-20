@@ -11,6 +11,7 @@ import UIKit
 class MangaSearchResultsViewController: UITableViewController {
     
     var originalSearchUrl : URL!
+    var pageTitle = ""
     var currentUrl : URL!
     var results : [MangaSearchResult] = []
     var allResultsLoaded = false
@@ -34,6 +35,7 @@ class MangaSearchResultsViewController: UITableViewController {
     @IBAction func scoreSort(_ sender: Any) {
         order(on: SortOption.OnScore);
     }
+    @IBOutlet weak var searchTitle: UINavigationItem!
     
     
     override func viewWillAppear(_ animated: Bool) {
@@ -42,6 +44,9 @@ class MangaSearchResultsViewController: UITableViewController {
     }
     
     override func viewDidLoad() {
+        if(!pageTitle.isEmpty){
+            searchTitle.title = pageTitle
+        }
         currentUrl = originalSearchUrl
         loadResultsForUrl(amount: amountOfResultsPerLoad)
     }

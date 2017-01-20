@@ -125,10 +125,12 @@ class HomeViewController : UIViewController {
             let destination = segue.destination as! MangaSearchResultsViewController
             let index = categoryCollectionView.indexPathsForSelectedItems!.first!.row
             destination.originalSearchUrl = genreItems[index].url
+            destination.pageTitle = genreItems[index].genre
         case "searchByTitleSegue":
             //TODO checken op niet toelaatbare karakters in zoekstring
             let destination = segue.destination as! MangaSearchResultsViewController
             destination.originalSearchUrl = MangaUpdatesURLBuilder.init().searchTitle(searchBarUITextField.text!).resultsPerPage(amount: 50).getUrl()
+            destination.pageTitle = searchBarUITextField.text!
         default:
             break
         }
