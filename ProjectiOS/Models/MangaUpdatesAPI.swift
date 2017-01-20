@@ -41,7 +41,13 @@ class MangaUpdatesAPI {
             }else {
                 score = "-"
             }
-            let manga = Manga.init(id: id, title: title!, description: description! ,image: image!, author: author!, artist: artist!, type: type!, genres: genres, categories: categories,score: score, recommendationsIds: recommendations, categoryRecommendationsIds: categoryRecommendations
+            var alternateNames : [String]
+            if let alternateNamesOptional = doc.xpath("//div[@class='sCat'][b='Associated Names']/following-sibling::*[1]").first?.innerHTML?.components(separatedBy: "<br>").dropLast() {
+                alternateNames = Array.init(alternateNamesOptional)
+            }else{
+                alternateNames = ["No alternate names"]
+            }
+            let manga = Manga.init(id: id, title: title!, description: description! ,image: image!, author: author!, artist: artist!, type: type!, genres: genres, categories: categories,score: score, recommendationsIds: recommendations, categoryRecommendationsIds: categoryRecommendations, alternateNames: alternateNames
             )
             return manga
         }
