@@ -47,7 +47,6 @@ class HomeViewController : UIViewController {
     override func viewDidLoad() {
         loadGenresAsync()
         loadfirstReleasesAsync(amount: batchSize)
-        self.hideKeyboardWhenTappedAround()
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -263,19 +262,4 @@ extension HomeViewController : UICollectionViewDataSource, UICollectionViewDeleg
         }
     }
 
-}
-
-
-/*
- credit = http://stackoverflow.com/questions/24126678/close-ios-keyboard-by-touching-anywhere-using-swift
- */
-extension UIViewController{
-    func hideKeyboardWhenTappedAround(){
-        let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
-        view.addGestureRecognizer(tap)
-    }
-    
-    func dismissKeyboard(){
-        view.endEditing(true)
-    }
 }

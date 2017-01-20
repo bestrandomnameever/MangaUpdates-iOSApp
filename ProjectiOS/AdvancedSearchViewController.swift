@@ -15,11 +15,6 @@ class AdvancedSearchViewController: UIViewController {
     @IBOutlet weak var genresUITableView: UITableView!
     @IBOutlet weak var onlyScanlatedRadioBtn: UISwitch!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.hideKeyboardWhenTappedAround()
-    }
-    
     @IBAction func returnPressedEndEditing(_ sender: Any) {
         view.endEditing(true)
     }
