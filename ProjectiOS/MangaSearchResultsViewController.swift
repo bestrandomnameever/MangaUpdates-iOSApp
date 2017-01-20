@@ -141,12 +141,12 @@ extension MangaSearchResultsViewController{
 //Handle the filters in the toolbar
 extension MangaSearchResultsViewController{
     func order(on: SortOption){
-        getItemBy(identifier: lastActivatedFilter).tintColor = UIColor.blue
+        //getItemBy(identifier: lastActivatedFilter).tintColor = UIColor.init(red: 1.00, green: 0.60, blue: 0.20, alpha: 1.0)
         if(on != lastActivatedFilter){
-            getItemBy(identifier: lastActivatedFilter).tintColor = UIColor.blue
+            getItemBy(identifier: lastActivatedFilter).tintColor = UIColor.init(red: 1.00, green: 0.60, blue: 0.20, alpha: 1.0)
             lastActivatedFilter = on
             if(on != SortOption.Reset){
-                getItemBy(identifier: on).tintColor = UIColor.orange
+                getItemBy(identifier: on).tintColor = UIColor.init(red: 0.89, green: 0.47, blue: 0.06, alpha: 1.0)
             }
             results.removeAll()
             //indien nog tijd over, zoek uit

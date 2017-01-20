@@ -95,7 +95,7 @@ class MangaUpdatesAPI {
         var idsAndBool: ([String],Bool) = ([], false)
         if let doc = Kanna.HTML(url: searchUrl, encoding: .isoLatin1) {
             idsAndBool.0 = doc.xpath("//a[@alt='Series Info']").flatMap({$0["href"]!.components(separatedBy: "id=")[1]})
-            if doc.xpath("//a[. = 'Next Page']").first?["href"]! == nil {
+            if let nextPage = doc.xpath("//a[. = 'Next Page']").first?["href"]! {
                 idsAndBool.1 = true
             }else{
                 idsAndBool.1 = false

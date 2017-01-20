@@ -31,13 +31,9 @@ class HomeViewController : UIViewController {
     let reuseIdentifierCoverCell = "mangaCoverCell"
     let reuseIdentifierCategoryCell = "categoryCell"
     let reuseIdentifierReleasesLoading = "releaseCoverLoadingCell"
-    
-    let spacingTwoCollectionViews = CGFloat.init(2)
-    let coverMinHeight = 230
-    var coverHeight = CGFloat.init(250)
-    let coverMaxHeight = 280
-    var coverWidth : CGFloat!
-    let categorysHeight = CGFloat.init(45)
+    let coverMinHeight = 220
+    var coverHeight = 0
+    var coverWidth = 0
     let strokeAttributes = [
         NSStrokeColorAttributeName : UIColor.black,
         NSForegroundColorAttributeName : UIColor.white,
@@ -54,23 +50,14 @@ class HomeViewController : UIViewController {
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         mangaCoverCollectionView.collectionViewLayout.invalidateLayout()
+        mangaCoverCollectionView.reloadData()
         categoryCollectionView.collectionViewLayout.invalidateLayout()
+        categoryCollectionView.reloadData()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        let availableHeightForCovers = organiserView.bounds.size.height - categorysHeight * 4
-        if (availableHeightForCovers < CGFloat.init(coverHeight)) {
-            mangaCoverCollectionHeight.constant = availableHeightForCovers
-            coverHeight = availableHeightForCovers
-            coverWidth = coverHeight / 4 * 3
-//            mangaCoverCollectionView.collectionViewLayout.invalidateLayout()
-//            categoryCollectionView.collectionViewLayout.invalidateLayout()
-        }else {
-            findIdealProportionsWith(availableSpace: availableHeightForCovers)
-//            mangaCoverCollectionView.collectionViewLayout.invalidateLayout()
-//            categoryCollectionView.collectionViewLayout.invalidateLayout()
-        }
+        findIdealProportionsWith()
     }
     
     func loadGenresAsync(){
@@ -167,34 +154,24 @@ class HomeViewController : UIViewController {
     }
     
     
-    func findIdealProportionsWith(availableSpace space : CGFloat) {
-        let rows = calculateRows(space, coverHeight)
-        print(calculateRows(space, CGFloat.init(coverMinHeight)))
-        if(calculateRows(space, CGFloat.init(coverMinHeight)) > rows){
-            var testHeight = coverHeight
-            while (calculateRows(space, testHeight) < rows) {
-                testHeight = testHeight - 1
-            }
-            coverHeight = testHeight
-            coverWidth = calculateWidthWithRatioAnd(height: coverHeight)
-            mangaCoverCollectionHeight.constant = space
-        }else {
-            var testHeight = coverHeight
-            while(testHeight <= CGFloat.init(coverMaxHeight) && calculateExcess(space, testHeight) > 0){
-                testHeight = testHeight + 1
-            }
-            coverHeight = testHeight
-            coverWidth = calculateWidthWithRatioAnd(height: coverHeight)
-            mangaCoverCollectionHeight.constant = space - calculateExcess(space, coverHeight)
+    func findIdealProportionsWith() {
+        let space = Int(mangaCoverCollectionView.bounds.height)
+        let rows = calculateRows(space, coverMinHeight)
+        if(space < coverMinHeight){
+            coverHeight = space
+        }else{
+            let excess = calculateExcess(space, coverMinHeight)
+            coverHeight = coverMinHeight + ((excess - (excess % rows)) / rows)
         }
+        coverWidth = Int.init(round(Double(coverHeight/4*3)))
     }
     
-    private func calculateExcess(_ space: CGFloat, _ coverHeight: CGFloat) -> CGFloat{
-        return space.truncatingRemainder(dividingBy: coverHeight)
+    private func calculateExcess(_ space: Int, _ coverHeight: Int) -> Int{
+        return space % coverHeight
     }
     
-    private func calculateRows(_ space: CGFloat, _ coverHeight: CGFloat ) -> Int {
-        return Int.init((space - calculateExcess(space, coverHeight)).divided(by: coverHeight))
+    private func calculateRows(_ space: Int, _ coverHeight: Int ) -> Int {
+        return (space - calculateExcess(space, coverHeight)) / coverHeight
     }
     
     private func calculateWidthWithRatioAnd(height: CGFloat) -> CGFloat {
@@ -268,11 +245,10 @@ extension HomeViewController : UICollectionViewDataSource, UICollectionViewDeleg
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if(collectionView === mangaCoverCollectionView) {
-            var height = collectionView.bounds.size.height
-            var width = ceil(height/4*3)
-            return CGSize.init(width: width, height: height)
+            print(coverHeight)
+            return CGSize.init(width: coverWidth, height: coverHeight)
         }else {
-            return CGSize.init(width: collectionView.bounds.size.width/2-10, height: CGFloat.init(45))
+            return CGSize.init(width: 170, height: 45)
         }
     }
 
