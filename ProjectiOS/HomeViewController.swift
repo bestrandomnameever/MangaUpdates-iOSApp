@@ -15,6 +15,7 @@ class HomeViewController : UIViewController {
     @IBOutlet weak var mangaCoverCollectionView : UICollectionView!
     @IBOutlet weak var categoryCollectionView : UICollectionView!
     @IBOutlet weak var searchBarUITextField: UITextField!
+    @IBOutlet weak var searchButton: UIButton!
     
     @IBOutlet weak var releaseCoversLoadingActivityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var genreLoadingActivityIndicator: UIActivityIndicatorView!
@@ -46,6 +47,7 @@ class HomeViewController : UIViewController {
     override func viewDidLoad() {
         loadGenresAsync()
         loadfirstReleasesAsync(amount: batchSize)
+        self.hideKeyboardWhenTappedAround()
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -111,6 +113,13 @@ class HomeViewController : UIViewController {
         }
     }
     
+    
+    @IBAction func onReturnPressedSearchField(_ sender: Any) {
+        view.endEditing(true)
+        searchButton.sendActions(for: .touchUpInside)
+        searchBarUITextField.text = ""
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier! {
         case "advancedSearchSegue":
@@ -130,7 +139,7 @@ class HomeViewController : UIViewController {
             //TODO checken op niet toelaatbare karakters in zoekstring
             let destination = segue.destination as! MangaSearchResultsViewController
             destination.originalSearchUrl = MangaUpdatesURLBuilder.init().searchTitle(searchBarUITextField.text!).resultsPerPage(amount: 50).getUrl()
-            destination.pageTitle = searchBarUITextField.text!
+            destination.pageTitle = searchBarUITextField.text!.lowercased().capitalized
         default:
             break
         }
@@ -254,4 +263,19 @@ extension HomeViewController : UICollectionViewDataSource, UICollectionViewDeleg
         }
     }
 
+}
+
+
+/*
+ credit = http://stackoverflow.com/questions/24126678/close-ios-keyboard-by-touching-anywhere-using-swift
+ */
+extension UIViewController{
+    func hideKeyboardWhenTappedAround(){
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
+    }
+    
+    func dismissKeyboard(){
+        view.endEditing(true)
+    }
 }

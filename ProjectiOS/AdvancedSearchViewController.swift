@@ -9,12 +9,20 @@
 import UIKit
 
 class AdvancedSearchViewController: UIViewController {
-    var categoryItems = [("Action", 0), ("Adult", 0), ("Adventure", 0), ("Comedy", 0), ("Doujinshi", 0), ("Drama", 0), ("Ecchi", 0), ("Fantasy", 0), ("Gender Bender", 0), ("Harem", 0), ("Action", 0), ("Adult", 0), ("Adventure", 0), ("Comedy", 0), ("Doujinshi", 0), ("Drama", 0), ("Ecchi", 0), ("Fantasy", 0), ("Gender Bender", 0), ("Harem", 0)]
     var genres : [(genreName: String, mode: Int)]!
     
+    @IBOutlet weak var searchForTitleField: UITextField!
     @IBOutlet weak var genresUITableView: UITableView!
     @IBOutlet weak var onlyScanlatedRadioBtn: UISwitch!
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.hideKeyboardWhenTappedAround()
+    }
+    
+    @IBAction func returnPressedEndEditing(_ sender: Any) {
+        view.endEditing(true)
+    }
 
     @IBAction func changeColorSegmented(_ sender: UISegmentedControl) {
         let chosenOption = sender.selectedSegmentIndex
@@ -45,6 +53,7 @@ class AdvancedSearchViewController: UIViewController {
         var include : [String] = []
         var exclude : [String] = []
         var filter : ExtendedOptions = .all
+        let searchTitle : String = searchForTitleField.text!
         for genre in genres{
             switch(genre.mode) {
             case 1:
@@ -60,7 +69,7 @@ class AdvancedSearchViewController: UIViewController {
         }
         
         let destination = segue.destination as! MangaSearchResultsViewController
-        destination.originalSearchUrl = MangaUpdatesURLBuilder.init().includeGenres(include).excludeGenres(exclude).resultsPerPage(amount: 50).extendedOptions(filter).getUrl()
+        destination.originalSearchUrl = MangaUpdatesURLBuilder.init().searchTitle(searchTitle).includeGenres(include).excludeGenres(exclude).resultsPerPage(amount: 50).extendedOptions(filter).getUrl()
     }
 
 }

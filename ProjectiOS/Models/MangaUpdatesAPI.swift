@@ -23,6 +23,12 @@ class MangaUpdatesAPI {
         let url = MangaUpdatesURLBuilder.init().getMangaURLForId(id: id)
         if let doc = Kanna.HTML(url: url, encoding: .isoLatin1) {
             let title = doc.xpath("//span[@class='releasestitle tabletitle']").first!.text
+            var alternateNames : [String]
+            if let alternateNamesOptional = doc.xpath("//div[@class='sCat'][b='Associated Names']/following-sibling::*[1]").first?.innerHTML?.components(separatedBy: "<br>").dropLast() {
+                alternateNames = Array.init(alternateNamesOptional)
+            }else{
+                alternateNames = ["No alternate names"]
+            }
             let description = doc.xpath("//div[@class='sCat'][b='Description']/following-sibling::*[1]").first!.text
             var image = doc.xpath("//center/img").first?["src"]
             if image == nil {
@@ -31,23 +37,31 @@ class MangaUpdatesAPI {
             let author = doc.xpath("//div[@class='sCat'][b='Author(s)']/following-sibling::*[1]").first!.text
             let artist = doc.xpath("//div[@class='sCat'][b='Artist(s)']/following-sibling::*[1]").first!.text
             let type = doc.xpath("//div[@class='sCat'][b='Type']/following-sibling::*[1]").first!.text
+            
+            
             let categories = doc.xpath("//li[@class='tag_normal']/a[@rel='nofollow']").flatMap({$0.text})
             let genres = Array.init(doc.xpath("//div[@class='sCat'][b='Genre']/following-sibling::*[1]//u").flatMap({$0.text}).dropLast())
             let recommendations = doc.xpath("//div[@class='sCat'][b='Recommendations']/following-sibling::*[1]//a").filter({!$0["href"]!.contains("javascript")}).flatMap({$0["href"]!.components(separatedBy: "id=")[1]})
             let categoryRecommendations = doc.xpath("//div[@class='sCat'][b='Category Recommendations']/following-sibling::*[1]//a").flatMap({$0["href"]!.components(separatedBy: "id=")[1]})
+            let relatedSeries = doc.xpath("//div[@class='sCat'][b='Related Series']/following-sibling::*[1]//a").flatMap({$0["href"]!.components(separatedBy: "id=")[1]})
             let score : String
+            
+            
+            
             if let scoreOptional = doc.xpath("//div[@class='sContent' and contains(text(),'Average')]/b").first {
                 score = scoreOptional.text!
             }else {
                 score = "-"
             }
-            var alternateNames : [String]
-            if let alternateNamesOptional = doc.xpath("//div[@class='sCat'][b='Associated Names']/following-sibling::*[1]").first?.innerHTML?.components(separatedBy: "<br>").dropLast() {
-                alternateNames = Array.init(alternateNamesOptional)
-            }else{
-                alternateNames = ["No alternate names"]
+            var votes : [(score: Int, votes: Int)] = []
+            var votesFromWebsite = doc.xpath("//div[@class='sContent' and contains(text(),'Average')]//span").flatMap({$0.text?.components(separatedBy: " ")[1]})
+            if votesFromWebsite.count > 0{
+                for index in 0...9{
+                    votes.append((10-index, Int.init(votesFromWebsite[index].replacingOccurrences(of: "(", with: ""))!))
+                }
             }
-            let manga = Manga.init(id: id, title: title!, description: description! ,image: image!, author: author!, artist: artist!, type: type!, genres: genres, categories: categories,score: score, recommendationsIds: recommendations, categoryRecommendationsIds: categoryRecommendations, alternateNames: alternateNames
+            
+            let manga = Manga.init(id: id, title: title!, description: description! ,image: image!, author: author!, artist: artist!, type: type!, genres: genres, categories: categories,score: score, recommendationsIds: recommendations, categoryRecommendationsIds: categoryRecommendations, relatedSeriesIds: relatedSeries, alternateNames: alternateNames
             )
             return manga
         }
