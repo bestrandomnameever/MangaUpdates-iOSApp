@@ -20,21 +20,20 @@ class HomeViewController : UIViewController {
     @IBOutlet weak var releaseCoversLoadingActivityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var genreLoadingActivityIndicator: UIActivityIndicatorView!
     
-    @IBOutlet var organiserView : UIView!
-    @IBOutlet weak var mangaCoverCollectionHeight : NSLayoutConstraint!
-    
     var ids : [String] = []
     var genreItems : [(genre: String, url: URL)] = []
     var mangaCoverItems : [(id: String ,title: String, image: String)] = []
-    var coversAreLoading = true
-    let batchSize = 30
     
     let reuseIdentifierCoverCell = "mangaCoverCell"
     let reuseIdentifierCategoryCell = "categoryCell"
     let reuseIdentifierReleasesLoading = "releaseCoverLoadingCell"
+    
+    var coversAreLoading = true
+    let batchSize = 30
     let coverMinHeight = 220
     var coverHeight = 0
     var coverWidth = 0
+    
     let strokeAttributes = [
         NSStrokeColorAttributeName : UIColor.black,
         NSForegroundColorAttributeName : UIColor.white,
@@ -49,15 +48,8 @@ class HomeViewController : UIViewController {
         loadfirstReleasesAsync(amount: batchSize)
     }
     
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        mangaCoverCollectionView.collectionViewLayout.invalidateLayout()
-        mangaCoverCollectionView.reloadData()
-        categoryCollectionView.collectionViewLayout.invalidateLayout()
-        categoryCollectionView.reloadData()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
         findIdealProportionsWith()
     }
     
@@ -135,9 +127,8 @@ class HomeViewController : UIViewController {
             destination.originalSearchUrl = genreItems[index].url
             destination.pageTitle = genreItems[index].genre
         case "searchByTitleSegue":
-            //TODO checken op niet toelaatbare karakters in zoekstring
             let destination = segue.destination as! MangaSearchResultsViewController
-            destination.originalSearchUrl = MangaUpdatesURLBuilder.init().searchTitle(searchBarUITextField.text!).resultsPerPage(amount: 50).getUrl()
+            destination.originalSearchUrl = MangaUpdatesURLBuilder.init().searchTitle(searchBarUITextField.text!.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!).resultsPerPage(amount: 50).getUrl()
             destination.pageTitle = searchBarUITextField.text!.lowercased().capitalized
         default:
             break
@@ -174,6 +165,8 @@ class HomeViewController : UIViewController {
             coverHeight = coverMinHeight + ((excess - (excess % rows)) / rows)
         }
         coverWidth = Int.init(round(Double(coverHeight/4*3)))
+        mangaCoverCollectionView.reloadData()
+        mangaCoverCollectionView.collectionViewLayout.invalidateLayout()
     }
     
     private func calculateExcess(_ space: Int, _ coverHeight: Int) -> Int{
@@ -182,10 +175,6 @@ class HomeViewController : UIViewController {
     
     private func calculateRows(_ space: Int, _ coverHeight: Int ) -> Int {
         return (space - calculateExcess(space, coverHeight)) / coverHeight
-    }
-    
-    private func calculateWidthWithRatioAnd(height: CGFloat) -> CGFloat {
-        return height / 353 * 250
     }
 }
 

@@ -65,7 +65,7 @@
                                         <rect key="frame" x="0.0" y="28" width="343" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dTd-La-txP" id="zMT-z0-489">
-                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="NVt-LE-O9p">
@@ -444,7 +444,6 @@
                         <outlet property="categoryCollectionView" destination="oeQ-0K-M4l" id="h8f-q2-FTU"/>
                         <outlet property="genreLoadingActivityIndicator" destination="ck3-cy-TEO" id="nl1-SQ-6yf"/>
                         <outlet property="mangaCoverCollectionView" destination="5Pv-6y-ovR" id="lmU-bQ-lmg"/>
-                        <outlet property="organiserView" destination="2ee-gc-vPi" id="cY6-J9-YtQ"/>
                         <outlet property="releaseCoversLoadingActivityIndicator" destination="9FL-sg-hjC" id="f9y-fJ-v2L"/>
                         <outlet property="searchBarUITextField" destination="1aY-wP-Jmk" id="kvS-G6-eY8"/>
                         <outlet property="searchButton" destination="9iG-CK-8wn" id="UJb-EP-kvq"/>
@@ -617,11 +616,11 @@
                                 <exclude reference="uUh-Nx-jVx"/>
                                 <exclude reference="uwr-qD-7lk"/>
                                 <exclude reference="vws-y6-6qz"/>
-                                <exclude reference="zbt-fH-BVU"/>
                                 <exclude reference="9RD-wK-64n"/>
                                 <exclude reference="B7w-OX-KZI"/>
                                 <exclude reference="Cpj-uh-ML4"/>
                                 <exclude reference="mtj-Os-W6A"/>
+                                <exclude reference="zbt-fH-BVU"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=compact">
@@ -637,8 +636,6 @@
                                 <include reference="uUh-Nx-jVx"/>
                                 <exclude reference="uwr-qD-7lk"/>
                                 <include reference="vws-y6-6qz"/>
-                                <exclude reference="sbu-ax-ukM"/>
-                                <include reference="zbt-fH-BVU"/>
                                 <include reference="9RD-wK-64n"/>
                                 <exclude reference="Ase-4c-mkQ"/>
                                 <include reference="B7w-OX-KZI"/>
@@ -646,6 +643,8 @@
                                 <exclude reference="PKE-J9-FHz"/>
                                 <exclude reference="d8Y-BT-cHe"/>
                                 <include reference="mtj-Os-W6A"/>
+                                <exclude reference="sbu-ax-ukM"/>
+                                <include reference="zbt-fH-BVU"/>
                             </mask>
                         </variation>
                     </view>
@@ -1104,7 +1103,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="qh8-xc-N4R"/>
-        <segue reference="0Yk-JZ-Jhb"/>
+        <segue reference="cwt-wW-7k6"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="0.59999999999999998" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
 </document>

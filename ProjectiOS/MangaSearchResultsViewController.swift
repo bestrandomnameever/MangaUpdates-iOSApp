@@ -101,6 +101,7 @@ class MangaSearchResultsViewController: UITableViewController {
 
 //Methods to load results matching to searchUrl
 extension MangaSearchResultsViewController{
+    
     func loadResultsForUrl(amount: Int) {
         self.doneLoading = false
         loadMangaOperationQueue.addOperation {
@@ -145,6 +146,7 @@ extension MangaSearchResultsViewController{
 
 //Handle the filters in the toolbar
 extension MangaSearchResultsViewController{
+    
     func order(on: SortOption){
         //getItemBy(identifier: lastActivatedFilter).tintColor = UIColor.init(red: 1.00, green: 0.60, blue: 0.20, alpha: 1.0)
         if(on != lastActivatedFilter){
