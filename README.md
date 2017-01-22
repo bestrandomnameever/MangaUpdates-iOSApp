@@ -1,6 +1,4 @@
 # ProjectiOS
-
-## De app
 Mijn project iOS voor het opleidingsonderdeel Native Apps II (iOS)
 
 Voor mijn project heb ik besloten een app te maken voor een website die frequent bezoek, maar jammer genoeg nog geen app of zelfs een responsive website heeft. Deze website, [Mangaupdates](https://www.mangaupdates.com/), heeft dus ook geen API. We hebben het dus moeten stellen met HTML te parsen.
@@ -23,8 +21,11 @@ Met deze app zou ik de goudmijn aan informatie die deze website bevat proberen o
   - Aanbevelingen voor gelijkaardige manga (related, category recommendation, recommendation)
   
 ## Gebruikte Frameworks
-  [Kanna](https://cocoapods.org/pods/Kanna) : een HTML/XML-parser
-  [SDWebImage](https://github.com/rs/SDWebImage) : Een asynchrone image-loader die url's toelaat
+ - [Kanna](https://cocoapods.org/pods/Kanna) : een HTML/XML-parser
+ - [SDWebImage](https://github.com/rs/SDWebImage) : Een asynchrone image-loader die url's toelaat
 
 ##### Deze app was niet mogelijk geweest zonder de fantastische informatie beschikbaar op [mangaupdates.com](https://www.mangaupdates.com/)
+
+## De app runnen
+Haal het project binnen (downloaden als zip of clonen), open de workspace en run de app vanuit Xcode
 
