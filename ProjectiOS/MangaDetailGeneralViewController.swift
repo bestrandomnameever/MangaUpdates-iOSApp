@@ -22,6 +22,7 @@ class MangaDetailGeneralViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    
     @IBOutlet weak var titleButton: UIButton!
     @IBOutlet weak var coverUIImageView: UIImageView!
     @IBOutlet weak var authorUILabel: UILabel!
@@ -42,5 +43,14 @@ class MangaDetailGeneralViewController: UIViewController {
         self.scoreLabel.text = manga.score + "/10"
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier! {
+        case "showPopOverCover":
+            let destination = segue.destination as! CoverImagePopOverViewController
+            destination.mangaCoverUrl = mangaCoverUrl
+        default:
+            break
+        }
+    }
     
 }
