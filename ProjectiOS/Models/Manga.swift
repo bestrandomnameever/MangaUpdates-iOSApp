@@ -24,10 +24,11 @@ class Manga {
     var categoryRecommendationsIds : [String]
     var relatedSeriesIds : [String]
     var alternateNames : [String]
+    var votes : [(Int, Int)]
     
     
     
-    init(id : String, title : String, description : String ,image : String, author : String, artist : String, type : String, genres : [String], categories : [String], score : String, recommendationsIds : [String], categoryRecommendationsIds : [String], relatedSeriesIds: [String], alternateNames: [String]) {
+    init(id : String, title : String, description : String ,image : String, author : String, artist : String, type : String, genres : [String], categories : [String], score : String, recommendationsIds : [String], categoryRecommendationsIds : [String], relatedSeriesIds: [String], alternateNames: [String], votes: [(Int, Int)]) {
         self.id = id
         self.title = title
         self.description = description
@@ -42,5 +43,6 @@ class Manga {
         self.categoryRecommendationsIds = categoryRecommendationsIds
         self.relatedSeriesIds = relatedSeriesIds
         self.alternateNames = alternateNames
+        self.votes = votes
     }
 }

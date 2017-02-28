@@ -22,6 +22,7 @@
 		00201CAC1E2FC333000D3E0C /* MangaDetailViewContainerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00201CAB1E2FC333000D3E0C /* MangaDetailViewContainerController.swift */; };
 		00201CB01E2FCABA000D3E0C /* MangaDetailRecommendationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00201CAF1E2FCABA000D3E0C /* MangaDetailRecommendationsViewController.swift */; };
 		004F5D091E660B7700BF258F /* CoverImagePopOverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004F5D081E660B7700BF258F /* CoverImagePopOverViewController.swift */; };
+		004F5D0C1E66345700BF258F /* ScoresPopOverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004F5D0B1E66345700BF258F /* ScoresPopOverViewController.swift */; };
 		00D563F41DE08E0200014F58 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D563F31DE08E0200014F58 /* AppDelegate.swift */; };
 		00D563F61DE08E0200014F58 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D563F51DE08E0200014F58 /* ViewController.swift */; };
 		00D563F91DE08E0200014F58 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00D563F71DE08E0200014F58 /* Main.storyboard */; };
@@ -55,6 +56,7 @@
 		00201CAB1E2FC333000D3E0C /* MangaDetailViewContainerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MangaDetailViewContainerController.swift; sourceTree = "<group>"; };
 		00201CAF1E2FCABA000D3E0C /* MangaDetailRecommendationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MangaDetailRecommendationsViewController.swift; sourceTree = "<group>"; };
 		004F5D081E660B7700BF258F /* CoverImagePopOverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoverImagePopOverViewController.swift; sourceTree = "<group>"; };
+		004F5D0B1E66345700BF258F /* ScoresPopOverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScoresPopOverViewController.swift; sourceTree = "<group>"; };
 		00D563F01DE08E0200014F58 /* ProjectiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProjectiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00D563F31DE08E0200014F58 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		00D563F51DE08E0200014F58 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 				00201CAB1E2FC333000D3E0C /* MangaDetailViewContainerController.swift */,
 				00201CAF1E2FCABA000D3E0C /* MangaDetailRecommendationsViewController.swift */,
 				004F5D081E660B7700BF258F /* CoverImagePopOverViewController.swift */,
+				004F5D0B1E66345700BF258F /* ScoresPopOverViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -341,6 +344,7 @@
 				00143D121DE4CD6000AEF853 /* MangaUpdatesAPI.swift in Sources */,
 				00201C651E2E4E19000D3E0C /* ReleaseCoverLoadingViewCell.swift in Sources */,
 				00EF093D1DE248B600AFA3AB /* MangaDetailGeneralViewController.swift in Sources */,
+				004F5D0C1E66345700BF258F /* ScoresPopOverViewController.swift in Sources */,
 				00201C671E2E61D7000D3E0C /* MangaSearchResult.swift in Sources */,
 				00201CAC1E2FC333000D3E0C /* MangaDetailViewContainerController.swift in Sources */,
 				00D563F61DE08E0200014F58 /* ViewController.swift in Sources */,

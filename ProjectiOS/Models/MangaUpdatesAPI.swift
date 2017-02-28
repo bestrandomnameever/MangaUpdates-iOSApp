@@ -61,7 +61,7 @@ class MangaUpdatesAPI {
                 }
             }
             
-            let manga = Manga.init(id: id, title: title!, description: description! ,image: image!, author: author!, artist: artist!, type: type!, genres: genres, categories: categories,score: score, recommendationsIds: recommendations, categoryRecommendationsIds: categoryRecommendations, relatedSeriesIds: relatedSeries, alternateNames: alternateNames
+            let manga = Manga.init(id: id, title: title!, description: description! ,image: image!, author: author!, artist: artist!, type: type!, genres: genres, categories: categories,score: score, recommendationsIds: recommendations, categoryRecommendationsIds: categoryRecommendations, relatedSeriesIds: relatedSeries, alternateNames: alternateNames, votes: votes
             )
             return manga
         }

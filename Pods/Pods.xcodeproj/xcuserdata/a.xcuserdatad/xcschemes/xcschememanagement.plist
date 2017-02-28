@@ -9,6 +9,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Charts.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Kanna.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -32,7 +37,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>40B95BFA6635501E5F24B23C198A605E</key>
+		<key>1F81353F78E1805216A69DB0F1A07C13</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>6BED0A81396EB1984B64C57E8CB31652</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -42,7 +52,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8AAD5F96848FD0254A9F9353020D8009</key>
+		<key>F307B842FF76B2DE6C55DB67C0885325</key>
 		<dict>
 			<key>primary</key>
 			<true/>
