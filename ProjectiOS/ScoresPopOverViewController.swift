@@ -29,29 +29,16 @@ class ScoresPopOverViewController: UIViewController {
         }
         let dataSet = BarChartDataSet.init(values: chartData, label: nil)
         dataSet.barBorderColor = UIColor.white
-//        dataSet.setColors(<#T##colors: NSUIColor...##NSUIColor#>)
-//        dataSet.colors = [
-//            NSUIColor.init(red: 0, green: 255, blue: 0, alpha: 1),
-//            NSUIColor.init(red: 51, green: 255, blue: 0, alpha: 1),
-//            NSUIColor.init(red: 102, green: 255, blue: 0, alpha: 1),
-//            NSUIColor.init(red: 153, green: 255, blue: 0, alpha: 1),
-//            NSUIColor.init(red: 204, green: 255, blue: 0, alpha: 1),
-//            NSUIColor.init(red: 255, green: 255, blue: 0, alpha: 1),
-//            NSUIColor.init(red: 255, green: 204, blue: 0, alpha: 1),
-//            NSUIColor.init(red: 255, green: 153, blue: 0, alpha: 1),
-//            NSUIColor.init(red: 255, green: 102, blue: 0, alpha: 1),
-//            NSUIColor.init(red: 255, green: 51, blue: 0, alpha: 1)
-//        ]
-//        dataSet.setColors(NSUIColor.init(red: 0, green: 255, blue: 0, alpha: 1),
-//                          NSUIColor.init(red: 51, green: 255, blue: 0, alpha: 1),
-//                          NSUIColor.init(red: 102, green: 255, blue: 0, alpha: 1),
-//                          NSUIColor.init(red: 153, green: 255, blue: 0, alpha: 1),
-//                          NSUIColor.init(red: 204, green: 255, blue: 0, alpha: 1),
-//                          NSUIColor.init(red: 255, green: 255, blue: 0, alpha: 1),
-//                          NSUIColor.init(red: 255, green: 204, blue: 0, alpha: 1),
-//                          NSUIColor.init(red: 255, green: 153, blue: 0, alpha: 1),
-//                          NSUIColor.init(red: 255, green: 102, blue: 0, alpha: 1),
-//                          NSUIColor.init(red: 255, green: 51, blue: 0, alpha: 1))
+        dataSet.setColors(NSUIColor.init(red: 0/255, green: 255/255, blue: 0/255, alpha: 1),
+                          NSUIColor.init(red: 51/255, green: 255/255, blue: 0/255, alpha: 1),
+                          NSUIColor.init(red: 102/255, green: 255/255, blue: 0/255, alpha: 1),
+                          NSUIColor.init(red: 153/255, green: 255/255, blue: 0/255, alpha: 1),
+                          NSUIColor.init(red: 204/255, green: 255/255, blue: 0/255, alpha: 1),
+                          NSUIColor.init(red: 255/255, green: 255/255, blue: 0/255, alpha: 1),
+                          NSUIColor.init(red: 255/255, green: 204/255, blue: 0/255, alpha: 1),
+                          NSUIColor.init(red: 255/255, green: 153/255, blue: 0/255, alpha: 1),
+                          NSUIColor.init(red: 255/255, green: 102/255, blue: 0/255, alpha: 1),
+                          NSUIColor.init(red: 255/255, green: 51/255, blue: 0/255, alpha: 1))
         let data = BarChartData.init(dataSets: [dataSet]);
         scoresBarChart.data = data
         scoresBarChart.legend.enabled = false
