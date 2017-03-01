@@ -9,4 +9,5 @@ target 'ProjectiOS' do
   pod 'Kanna'
   pod 'AsyncSwift'
   pod 'SDWebImage'
+  pod 'Charts'
 end

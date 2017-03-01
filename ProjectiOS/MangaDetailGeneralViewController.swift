@@ -48,6 +48,11 @@ class MangaDetailGeneralViewController: UIViewController {
         case "showPopOverCover":
             let destination = segue.destination as! CoverImagePopOverViewController
             destination.mangaCoverUrl = mangaCoverUrl
+            break
+        case "showScoresPopOver":
+            let destination = segue.destination as! ScoresPopOverViewController
+            destination.votes = manga.votes
+            break
         default:
             break
         }

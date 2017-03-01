@@ -1,5 +1,8 @@
 PODS:
   - AsyncSwift (2.0.0)
+  - Charts (3.0.1):
+    - Charts/Core (= 3.0.1)
+  - Charts/Core (3.0.1)
   - Kanna (2.0.0)
   - SDWebImage (3.8.2):
     - SDWebImage/Core (= 3.8.2)
@@ -7,14 +10,16 @@ PODS:
 
 DEPENDENCIES:
   - AsyncSwift
+  - Charts
   - Kanna
   - SDWebImage
 
 SPEC CHECKSUMS:
   AsyncSwift: 6ba6ed9ecb51344458063f7c86fe447ab824e313
+  Charts: 0e84f4418e87dad6a9edde221fba37ebb51d3ba7
   Kanna: 9a6637f72f5c77fe9c045b1efb2a5bb074754af8
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
 
-PODFILE CHECKSUM: 55051cbb72c08c99c2a87b9aa8e80be3dfcd87d4
+PODFILE CHECKSUM: cf43bec98aa2db14e9746ac081e60673d84efb5d
 
 COCOAPODS: 1.2.0.beta.1
