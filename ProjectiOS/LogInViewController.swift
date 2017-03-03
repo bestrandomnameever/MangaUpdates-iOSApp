@@ -11,15 +11,14 @@ import UIKit
 class LogInViewController: UIViewController, UITextFieldDelegate {
     
     var isLoggedIn : Bool!
+    
     @IBOutlet weak var logInLoadingActivityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var logInButton: UIButton!
     @IBOutlet weak var errorLabel: UILabel!
     @IBOutlet weak var checkMarkImageView: UIImageView!
-    @IBAction func closeLogInScreen(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
-    }
     @IBAction func onUsernameChange(_ sender: Any) {
         clearErrorField()
     }
@@ -28,49 +27,27 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
     }
     
     
-    
-    @IBAction func logIn(_ sender: Any) {
+    @IBAction func logInButtonPressed(_ sender: Any) {
+        print(logInLoadingActivityIndicator.isAnimating.description)
         if isLoggedIn == true {
-            UserDefaults.standard.removeObject(forKey: "username")
-            usernameTextField.text = ""
-            passwordTextField.text = ""
-            checkMarkImageView.isHidden = true
-            logInButton.setTitle("Log in", for: .normal)
+            logOut()
         }else {
-            logInLoadingActivityIndicator.isHidden = false
-            view.endEditing(true)
             let username = usernameTextField.text!
             let password = passwordTextField.text!
-            if username.isEmpty {
-                errorLabel.text = "Username is empty"
-            }else if password.isEmpty {
-                errorLabel.text = "Password is empty"
-            }else {
-                MangaUpdatesAPI.logIn(username: username, password: password, completionHandler: { (succes) in
-                    self.logInLoadingActivityIndicator.isHidden = true
-                    if succes {
-                        self.errorLabel.text = ""
-                        self.checkMarkImageView.isHidden = false
-                        self.dismiss(animated: true, completion: nil)
-                    }else {
-                        self.errorLabel.text = "Incorrect login"
-                    }
-                })
-            }
+            logIn(username: username, password: password)
         }
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         usernameTextField.delegate = self
         passwordTextField.delegate = self
+        //logInLoadingActivityIndicator.stopAnimating()
         if let username = UserDefaults.standard.string(forKey: "username") {
-            isLoggedIn = true
-            usernameTextField.text = username
-            passwordTextField.text = "password"
-            logInButton.setTitle("Log out", for: .normal)
-            checkMarkImageView.isHidden = false
+            setScreenToLoggedInUser(username: username)
         } else {
             isLoggedIn = false
+            self.title = "Log in"
         }
     }
     
@@ -79,19 +56,67 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         // Dispose of any resources that can be recreated.
     }
     
+    private func logIn(username: String, password: String) {
+        logInLoadingActivityIndicator.startAnimating()
+        view.endEditing(true)
+        if username.isEmpty {
+            errorLabel.text = "Username is empty"
+        }else if password.isEmpty {
+            errorLabel.text = "Password is empty"
+        }else {
+            self.clearErrorField()
+            MangaUpdatesAPI.logIn(username: username, password: password, completionHandler: { (succes) in
+                if succes {
+                    self.setScreenToLoggedInUser(username: username)
+                    //self.dismiss(animated: true, completion: nil)
+                }else {
+                    self.errorLabel.text = "Incorrect login"
+                }
+            })
+        }
+        self.logInLoadingActivityIndicator.stopAnimating()
+    }
     
-    func clearErrorField() {
+    private func setScreenToLoggedInUser(username: String) {
+        isLoggedIn = true
+        self.title = "Log out"
+        titleLabel.text = "Hey " + username
+        usernameTextField.text = username
+        usernameTextField.textColor = UIColor.green
+        usernameTextField.isUserInteractionEnabled = false
+        passwordTextField.text = "password"
+        usernameTextField.textColor = UIColor.green
+        passwordTextField.isUserInteractionEnabled = false
+        checkMarkImageView.isHidden = false
+        logInButton.setTitle("Log out", for: .normal)
+    }
+    
+    private func logOut() {
+        isLoggedIn = false
+        UserDefaults.standard.removeObject(forKey: "username")
+        self.title = "Log In"
+        titleLabel.text = "Login MangaUpdates"
+        usernameTextField.text = ""
+        usernameTextField.textColor = UIColor.black
+        usernameTextField.isUserInteractionEnabled = true
+        passwordTextField.text = ""
+        passwordTextField.textColor = UIColor.black
+        passwordTextField.isUserInteractionEnabled = true
+        checkMarkImageView.isHidden = true
+        logInButton.setTitle("Log in", for: .normal)
+    }
+    
+    
+    private func clearErrorField() {
         errorLabel.text = ""
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if textField == passwordTextField {
-            logIn(passwordTextField)
-        }
+    internal func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         view.endEditing(true)
+        let username = usernameTextField.text!
+        let password = passwordTextField.text!
+        logIn(username: username, password: password)
         return true
     }
-    
-    
     
 }
