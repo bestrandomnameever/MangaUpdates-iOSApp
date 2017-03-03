@@ -12,12 +12,18 @@ import Alamofire
 
 class MangaUpdatesAPI {
     
-    static func getLatestReleasesIds() -> [String]? {
+    static func getLatestReleasesIds(completionHandler:@escaping ([String]?) -> ()) {
         let url = MangaUpdatesURLBuilder.init().releasesURL()
-        if let doc = Kanna.HTML(url: url, encoding: .isoLatin1) {
-            return doc.xpath("//a[@title='Series Info']").flatMap({$0["href"]!.components(separatedBy: "id=")[1]})
+//        if let doc = Kanna.HTML(url: url, encoding: .isoLatin1) {
+//            return doc.xpath("//a[@title='Series Info']").flatMap({$0["href"]!.components(separatedBy: "id=")[1]})
+//        }
+        Alamofire.request(url).response { response in
+            if let doc = Kanna.HTML(html: response.data!, encoding: .isoLatin1) {
+                completionHandler(doc.xpath("//a[@title='Series Info']").flatMap({$0["href"]!.components(separatedBy: "id=")[1]}))
+            }else {
+                completionHandler(nil)
+            }
         }
-        return nil
     }
     
     static func logIn(username: String, password: String, completionHandler:@escaping (Bool) -> ()) {

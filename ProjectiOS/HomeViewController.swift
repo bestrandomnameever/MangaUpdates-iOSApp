@@ -82,12 +82,35 @@ class HomeViewController : UIViewController {
     
     func loadfirstReleasesAsync(amount: Int) {
         
-        DispatchQueue.global(qos: .userInitiated).async {
+        //DispatchQueue.global(qos: .userInitiated).async {
             //do shit in async
-            if let ids = MangaUpdatesAPI.getLatestReleasesIds() {
-                //notify main thread that async method has finished
-                DispatchQueue.main.async {
-                    self.ids = ids
+//            if let ids = MangaUpdatesAPI.getLatestReleasesIds() {
+//                //notify main thread that async method has finished
+//                DispatchQueue.main.async {
+//                    self.ids = ids
+//                    DispatchQueue.global(qos: .userInitiated).async {
+//                        for mangaId in self.ids.dropLast(self.ids.count-amount){
+//                            if let manga = MangaUpdatesAPI.getMangaWithId(id: mangaId){
+//                                DispatchQueue.main.async {
+//                                    self.mangaCoverItems.append((manga.id, manga.title ,manga.image))
+//                                    self.releaseCoversLoadingActivityIndicator.stopAnimating()
+//                                    self.mangaCoverCollectionView.reloadData()
+//                                    if(self.mangaCoverItems.count % self.batchSize==0){
+//                                        self.coversAreLoading = false
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }else{
+//                DispatchQueue.main.async {
+//                    self.loadfirstReleasesAsync(amount: amount)
+//                }
+//            }
+            MangaUpdatesAPI.getLatestReleasesIds(completionHandler: { (ids) in
+                if ids != nil {
+                    self.ids = ids!
                     DispatchQueue.global(qos: .userInitiated).async {
                         for mangaId in self.ids.dropLast(self.ids.count-amount){
                             if let manga = MangaUpdatesAPI.getMangaWithId(id: mangaId){
@@ -102,13 +125,11 @@ class HomeViewController : UIViewController {
                             }
                         }
                     }
-                }
-            }else{
-                DispatchQueue.main.async {
+                }else {
                     self.loadfirstReleasesAsync(amount: amount)
                 }
-            }
-        }
+            })
+        //}
     }
     
     
