@@ -44,6 +44,14 @@ class HomeViewController : UIViewController {
     // MARK: - Methods
     
     override func viewDidLoad() {
+        MangaUpdatesAPI.logIn(username: "bestrandomname", password: "qVTz4rDfqDR", completionHandler: { (success) in
+            if success {
+                print("Inloggen gelukt, username is" + UserDefaults.standard.string(forKey: "username")!)
+                var cookies = HTTPCookieStorage.shared.cookies(for: URL.init(string: "https://www.mangaupdates.com")!)
+            }else {
+                print("inloggen mislukt")
+            }
+        })
         loadGenresAsync()
         loadfirstReleasesAsync(amount: batchSize)
     }
@@ -130,6 +138,8 @@ class HomeViewController : UIViewController {
             let destination = segue.destination as! MangaSearchResultsViewController
             destination.originalSearchUrl = MangaUpdatesURLBuilder.init().searchTitle(searchBarUITextField.text!.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!).resultsPerPage(amount: 50).getUrl()
             destination.pageTitle = searchBarUITextField.text!.lowercased().capitalized
+//        case "logInSegue":
+//            
         default:
             break
         }
@@ -175,6 +185,10 @@ class HomeViewController : UIViewController {
     
     private func calculateRows(_ space: Int, _ coverHeight: Int ) -> Int {
         return (space - calculateExcess(space, coverHeight)) / coverHeight
+    }
+    
+    private func loadPersistedCookiesForAccount() {
+        
     }
 }
 

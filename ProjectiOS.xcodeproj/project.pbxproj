@@ -23,6 +23,9 @@
 		00201CB01E2FCABA000D3E0C /* MangaDetailRecommendationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00201CAF1E2FCABA000D3E0C /* MangaDetailRecommendationsViewController.swift */; };
 		004F5D091E660B7700BF258F /* CoverImagePopOverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004F5D081E660B7700BF258F /* CoverImagePopOverViewController.swift */; };
 		004F5D0C1E66345700BF258F /* ScoresPopOverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004F5D0B1E66345700BF258F /* ScoresPopOverViewController.swift */; };
+		00CC79611E68C99D0070ED7E /* MULogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 00CC79601E68C99D0070ED7E /* MULogo.png */; };
+		00CC79631E68CF600070ED7E /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CC79621E68CF600070ED7E /* LogInViewController.swift */; };
+		00CC79651E68D30A0070ED7E /* transparent-green-checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 00CC79641E68D30A0070ED7E /* transparent-green-checkmark.png */; };
 		00D563F41DE08E0200014F58 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D563F31DE08E0200014F58 /* AppDelegate.swift */; };
 		00D563F61DE08E0200014F58 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D563F51DE08E0200014F58 /* ViewController.swift */; };
 		00D563F91DE08E0200014F58 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00D563F71DE08E0200014F58 /* Main.storyboard */; };
@@ -57,6 +60,9 @@
 		00201CAF1E2FCABA000D3E0C /* MangaDetailRecommendationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MangaDetailRecommendationsViewController.swift; sourceTree = "<group>"; };
 		004F5D081E660B7700BF258F /* CoverImagePopOverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoverImagePopOverViewController.swift; sourceTree = "<group>"; };
 		004F5D0B1E66345700BF258F /* ScoresPopOverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScoresPopOverViewController.swift; sourceTree = "<group>"; };
+		00CC79601E68C99D0070ED7E /* MULogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MULogo.png; path = Resources/MULogo.png; sourceTree = "<group>"; };
+		00CC79621E68CF600070ED7E /* LogInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
+		00CC79641E68D30A0070ED7E /* transparent-green-checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "transparent-green-checkmark.png"; path = "Resources/transparent-green-checkmark.png"; sourceTree = "<group>"; };
 		00D563F01DE08E0200014F58 /* ProjectiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProjectiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00D563F31DE08E0200014F58 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		00D563F51DE08E0200014F58 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -154,6 +160,7 @@
 				00201CAF1E2FCABA000D3E0C /* MangaDetailRecommendationsViewController.swift */,
 				004F5D081E660B7700BF258F /* CoverImagePopOverViewController.swift */,
 				004F5D0B1E66345700BF258F /* ScoresPopOverViewController.swift */,
+				00CC79621E68CF600070ED7E /* LogInViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -172,6 +179,8 @@
 		00EF09241DE0F34300AFA3AB /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				00CC79641E68D30A0070ED7E /* transparent-green-checkmark.png */,
+				00CC79601E68C99D0070ED7E /* MULogo.png */,
 				00201CA01E2F859E000D3E0C /* sortByOrder */,
 				00201C9F1E2F8594000D3E0C /* sortByAlphabet */,
 				00201C6E1E2EC8D7000D3E0C /* NSFW.png */,
@@ -276,11 +285,13 @@
 				00D563FE1DE08E0200014F58 /* LaunchScreen.storyboard in Resources */,
 				00201CA71E2F85B5000D3E0C /* sortByAlphabet.png in Resources */,
 				00201CA41E2F85AC000D3E0C /* sortByOrder@2x.png in Resources */,
+				00CC79651E68D30A0070ED7E /* transparent-green-checkmark.png in Resources */,
 				00201CA31E2F85AC000D3E0C /* sortByOrder.png in Resources */,
 				00D563FB1DE08E0200014F58 /* Assets.xcassets in Resources */,
 				00201C6F1E2EC8D7000D3E0C /* NSFW.png in Resources */,
 				00FAF79A1DE504A800C22790 /* loading.jpg in Resources */,
 				00D563F91DE08E0200014F58 /* Main.storyboard in Resources */,
+				00CC79611E68C99D0070ED7E /* MULogo.png in Resources */,
 				00201CA81E2F85B5000D3E0C /* sortByAlphabet@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -342,6 +353,7 @@
 			files = (
 				004F5D091E660B7700BF258F /* CoverImagePopOverViewController.swift in Sources */,
 				00143D121DE4CD6000AEF853 /* MangaUpdatesAPI.swift in Sources */,
+				00CC79631E68CF600070ED7E /* LogInViewController.swift in Sources */,
 				00201C651E2E4E19000D3E0C /* ReleaseCoverLoadingViewCell.swift in Sources */,
 				00EF093D1DE248B600AFA3AB /* MangaDetailGeneralViewController.swift in Sources */,
 				004F5D0C1E66345700BF258F /* ScoresPopOverViewController.swift in Sources */,

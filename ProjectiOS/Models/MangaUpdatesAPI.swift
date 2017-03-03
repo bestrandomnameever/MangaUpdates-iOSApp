@@ -8,6 +8,7 @@
 import UIKit
 import Kanna
 import SDWebImage
+import Alamofire
 
 class MangaUpdatesAPI {
     
@@ -17,6 +18,28 @@ class MangaUpdatesAPI {
             return doc.xpath("//a[@title='Series Info']").flatMap({$0["href"]!.components(separatedBy: "id=")[1]})
         }
         return nil
+    }
+    
+    static func logIn(username: String, password: String, completionHandler:@escaping (Bool) -> ()) {
+        let parameters = ["act": "login", "username": username, "password": password]
+        Alamofire.request("https://www.mangaupdates.com/login.html", parameters: parameters).response { response in
+            if response.response?.statusCode == 200 {
+                if let doc = Kanna.HTML(html: response.data!, encoding: .isoLatin1) {
+                    if let succes = doc.xpath("//td[contains(@class, 'text') and contains(@class, 'table_content')]").first?.text?.contains("No user found") {
+                        if !succes {
+                            let username = doc.xpath("//td[contains(@class, 'tab_middle') and contains(., 'Welcome')]").first!.text!.components(separatedBy: " ")[2]
+                            UserDefaults.standard.set(username, forKey: "username")
+                            completionHandler(true)
+                        }else {
+                            completionHandler(false)
+                        }
+                    }else {
+                        completionHandler(false)
+                    }
+                }
+            }
+        }
+
     }
     
     static func getMangaWithId(id : String) -> Manga? {
