@@ -14,9 +14,6 @@ class MangaUpdatesAPI {
     
     static func getLatestReleasesIds(completionHandler:@escaping ([String]?) -> ()) {
         let url = MangaUpdatesURLBuilder.init().releasesURL()
-//        if let doc = Kanna.HTML(url: url, encoding: .isoLatin1) {
-//            return doc.xpath("//a[@title='Series Info']").flatMap({$0["href"]!.components(separatedBy: "id=")[1]})
-//        }
         Alamofire.request(url).response { response in
             if let doc = Kanna.HTML(html: response.data!, encoding: .isoLatin1) {
                 completionHandler(doc.xpath("//a[@title='Series Info']").flatMap({$0["href"]!.components(separatedBy: "id=")[1]}))
@@ -28,6 +25,7 @@ class MangaUpdatesAPI {
     
     static func logIn(username: String, password: String, completionHandler:@escaping (Bool) -> ()) {
         let parameters = ["act": "login", "username": username, "password": password]
+        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
         Alamofire.request("https://www.mangaupdates.com/login.html", parameters: parameters).response { response in
             if response.response?.statusCode == 200 {
                 if let doc = Kanna.HTML(html: response.data!, encoding: .isoLatin1) {
@@ -45,7 +43,6 @@ class MangaUpdatesAPI {
                 }
             }
         }
-
     }
     
     static func getMangaWithId(id : String) -> Manga? {
@@ -97,29 +94,56 @@ class MangaUpdatesAPI {
         return nil
     }
     
-    static func getMangaSearchResultWithId(id : String) -> MangaSearchResult? {
+    static func getMangaSearchResultWithId(id : String, completionHandler:@escaping (MangaSearchResult?) -> ()) {
         let url = MangaUpdatesURLBuilder.init().getMangaURLForId(id: id)
-        if let doc = Kanna.HTML(url: url, encoding: .isoLatin1) {
-            let title = doc.xpath("//span[@class='releasestitle tabletitle']").first!.text!
-            var image = "http://otakumeme.com/wp-content/uploads/2013/01/never-fap-alone-its-dangerous_o_501668.jpg"
-            if let imageOptional = doc.xpath("//center/img").first?["src"] {
-                image = imageOptional
+//        if let doc = Kanna.HTML(url: url, encoding: .isoLatin1) {
+//            let title = doc.xpath("//span[@class='releasestitle tabletitle']").first!.text!
+//            var image = "http://otakumeme.com/wp-content/uploads/2013/01/never-fap-alone-its-dangerous_o_501668.jpg"
+//            if let imageOptional = doc.xpath("//center/img").first?["src"] {
+//                image = imageOptional
+//            }
+//            var author = "-"
+//            if let authorOptional = doc.xpath("//div[@class='sCat'][b='Author(s)']/following-sibling::*[1]").first?.text {
+//                author = authorOptional
+//            }
+//            let genres = Array.init(doc.xpath("//div[@class='sCat'][b='Genre']/following-sibling::*[1]//u").flatMap({$0.text}).dropLast())
+//            let score : String
+//            if let scoreOptional = doc.xpath("//div[@class='sContent' and contains(text(),'Average')]/b").first {
+//                score = scoreOptional.text!
+//            }else {
+//                score = "-"
+//            }
+//            let mangaSearchResult = MangaSearchResult.init(id: id, title: title, image: image, author: author, genres: genres, score: score)
+//            return mangaSearchResult
+//        }
+//        return nil
+        print(HTTPCookieStorage.shared.cookies!)
+        Alamofire.request(url).response { response in
+            if response.response?.statusCode == 200 {
+                if let doc = Kanna.HTML(html: response.data!, encoding: .isoLatin1) {
+                    let title = doc.xpath("//span[@class='releasestitle tabletitle']").first!.text!
+                    var image = "http://otakumeme.com/wp-content/uploads/2013/01/never-fap-alone-its-dangerous_o_501668.jpg"
+                    if let imageOptional = doc.xpath("//center/img").first?["src"] {
+                        image = imageOptional
+                    }
+                    var author = "-"
+                    if let authorOptional = doc.xpath("//div[@class='sCat'][b='Author(s)']/following-sibling::*[1]").first?.text {
+                        author = authorOptional
+                    }
+                    let genres = Array.init(doc.xpath("//div[@class='sCat'][b='Genre']/following-sibling::*[1]//u").flatMap({$0.text}).dropLast())
+                    let score : String
+                    if let scoreOptional = doc.xpath("//div[@class='sContent' and contains(text(),'Average')]/b").first {
+                        score = scoreOptional.text!
+                    }else {
+                        score = "-"
+                    }
+                    let mangaSearchResult = MangaSearchResult.init(id: id, title: title, image: image, author: author, genres: genres, score: score)
+                    completionHandler(mangaSearchResult)
+                }else {
+                    completionHandler(nil)
+                }
             }
-            var author = "-"
-            if let authorOptional = doc.xpath("//div[@class='sCat'][b='Author(s)']/following-sibling::*[1]").first?.text {
-                author = authorOptional
-            }
-            let genres = Array.init(doc.xpath("//div[@class='sCat'][b='Genre']/following-sibling::*[1]//u").flatMap({$0.text}).dropLast())
-            let score : String
-            if let scoreOptional = doc.xpath("//div[@class='sContent' and contains(text(),'Average')]/b").first {
-                score = scoreOptional.text!
-            }else {
-                score = "-"
-            }
-            let mangaSearchResult = MangaSearchResult.init(id: id, title: title, image: image, author: author, genres: genres, score: score)
-            return mangaSearchResult
         }
-        return nil
     }
     
     static func getGenresAndUrls() -> [(String, URL)]? {

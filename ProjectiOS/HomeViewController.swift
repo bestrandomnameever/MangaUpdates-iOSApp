@@ -50,9 +50,9 @@ class HomeViewController : UIViewController {
             }else {
                 print("inloggen mislukt")
             }
+            self.loadGenresAsync()
+            self.loadfirstReleasesAsync(amount: self.batchSize)
         })
-        loadGenresAsync()
-        loadfirstReleasesAsync(amount: batchSize)
     }
     
     override func viewWillLayoutSubviews() {

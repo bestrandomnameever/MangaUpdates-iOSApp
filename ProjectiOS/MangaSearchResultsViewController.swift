@@ -119,17 +119,26 @@ extension MangaSearchResultsViewController{
                 }
                 self.idsCount = self.idsCount + uniqueMangaIds.count
                 for mangaId in uniqueMangaIds {
-                    self.loadMangaOperationQueue.addOperation {
-                        if let mangaResult = MangaUpdatesAPI.getMangaSearchResultWithId(id: mangaId){
-                            OperationQueue.main.addOperation {
-                                self.results.append(mangaResult)
-                                self.mangaResultsUITableView.reloadData()
-                                if(self.results.count == self.idsCount){
-                                    self.doneLoading = true
-                                }
+//                    self.loadMangaOperationQueue.addOperation {
+//                        if let mangaResult = MangaUpdatesAPI.getMangaSearchResultWithId(id: mangaId){
+//                            OperationQueue.main.addOperation {
+//                                self.results.append(mangaResult)
+//                                self.mangaResultsUITableView.reloadData()
+//                                if(self.results.count == self.idsCount){
+//                                    self.doneLoading = true
+//                                }
+//                            }
+//                        }
+//                    }
+                    MangaUpdatesAPI.getMangaSearchResultWithId(id: mangaId, completionHandler: { (mangaResult) in
+                        if mangaResult != nil {
+                            self.results.append(mangaResult!)
+                            self.mangaResultsUITableView.reloadData()
+                            if(self.results.count == self.idsCount){
+                                self.doneLoading = true
                             }
                         }
-                    }
+                    })
                 }
                 if mangaIdsAndNextPageUrl.hasNextPage {
                     self.currentPage = page

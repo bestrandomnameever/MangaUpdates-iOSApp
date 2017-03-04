@@ -19,31 +19,49 @@ class MangaDetailRecommendationsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        DispatchQueue.global(qos: .default).async {
-            for id in self.manga.relatedSeriesIds {
-                if let mangaResult = MangaUpdatesAPI.getMangaSearchResultWithId(id: id) {
-                    DispatchQueue.main.async {
-                        self.relatedSeries.append(mangaResult)
-                        self.recommendationsTableView.reloadData()
-                    }
-                }
-            }
-            for id in self.manga.categoryRecommendationsIds {
-                if let mangaResult = MangaUpdatesAPI.getMangaSearchResultWithId(id: id) {
-                    DispatchQueue.main.async {
-                        self.categoryRecommendations.append(mangaResult)
-                        self.recommendationsTableView.reloadData()
-                    }
-                }
-            }
-            for id in self.manga.recommendationsIds {
-                if let mangaResult = MangaUpdatesAPI.getMangaSearchResultWithId(id: id) {
-                    DispatchQueue.main.async {
-                        self.recommendations.append(mangaResult)
-                        self.recommendationsTableView.reloadData()
-                    }
-                }
-            }
+//        DispatchQueue.global(qos: .default).async {
+//            for id in self.manga.relatedSeriesIds {
+//                if let mangaResult = MangaUpdatesAPI.getMangaSearchResultWithId(id: id) {
+//                    DispatchQueue.main.async {
+//                        self.relatedSeries.append(mangaResult)
+//                        self.recommendationsTableView.reloadData()
+//                    }
+//                }
+//            }
+//            for id in self.manga.categoryRecommendationsIds {
+//                if let mangaResult = MangaUpdatesAPI.getMangaSearchResultWithId(id: id) {
+//                    DispatchQueue.main.async {
+//                        self.categoryRecommendations.append(mangaResult)
+//                        self.recommendationsTableView.reloadData()
+//                    }
+//                }
+//            }
+//            for id in self.manga.recommendationsIds {
+//                if let mangaResult = MangaUpdatesAPI.getMangaSearchResultWithId(id: id) {
+//                    DispatchQueue.main.async {
+//                        self.recommendations.append(mangaResult)
+//                        self.recommendationsTableView.reloadData()
+//                    }
+//                }
+//            }
+//        }
+        for id in self.manga.relatedSeriesIds {
+            MangaUpdatesAPI.getMangaSearchResultWithId(id: id, completionHandler: { (mangaResult) in
+                self.relatedSeries.append(mangaResult!)
+                self.recommendationsTableView.reloadData()
+            })
+        }
+        for id in self.manga.categoryRecommendationsIds {
+            MangaUpdatesAPI.getMangaSearchResultWithId(id: id, completionHandler: { (mangaResult) in
+                self.categoryRecommendations.append(mangaResult!)
+                self.recommendationsTableView.reloadData()
+            })
+        }
+        for id in self.manga.recommendationsIds {
+            MangaUpdatesAPI.getMangaSearchResultWithId(id: id, completionHandler: { (mangaResult) in
+                self.recommendations.append(mangaResult!)
+                self.recommendationsTableView.reloadData()
+            })
         }
     }
     
