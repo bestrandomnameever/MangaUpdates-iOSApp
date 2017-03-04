@@ -38,30 +38,55 @@ class MangaDetailViewContainerController: UIViewController {
         detailsLoadingActivityIndicator.superview!.bringSubview(toFront: detailsLoadingActivityIndicator)
         backgroundView.superview!.bringSubview(toFront: backgroundView)
         
-        DispatchQueue.global(qos: .userInitiated).async {
-            if let mangaOptional = MangaUpdatesAPI.getMangaWithId(id: self.mangaId){
-                DispatchQueue.main.async {
-                    self.generalViewController = {
-                        let storyBoard = UIStoryboard(name: "Main", bundle: Bundle.main)
-                        let viewController = storyBoard.instantiateViewController(withIdentifier: "mangaDetailGeneral") as! MangaDetailGeneralViewController
-                        viewController.mangaCoverUrl = self.mangaCoverUrl
-                        viewController.manga = mangaOptional
-                        self.add(asChildViewController: viewController)
-                        return viewController
-                    }()
-                    self.categoriesViewController = {
-                        let storyBoard = UIStoryboard(name: "Main", bundle: Bundle.main)
-                        let viewController = storyBoard.instantiateViewController(withIdentifier: "MangaDetailRecommendations") as! MangaDetailRecommendationsViewController
-                        viewController.mangaCoverUrl = self.mangaCoverUrl
-                        viewController.manga = mangaOptional
-                        self.add(asChildViewController: viewController)
-                        return viewController
-                    }()
-                    self.detailsLoadingActivityIndicator.stopAnimating()
-                    self.setupView()
-                }
+//        DispatchQueue.global(qos: .userInitiated).async {
+//            if let mangaOptional = MangaUpdatesAPI.getMangaWithId(id: self.mangaId){
+//                DispatchQueue.main.async {
+//                    self.generalViewController = {
+//                        let storyBoard = UIStoryboard(name: "Main", bundle: Bundle.main)
+//                        let viewController = storyBoard.instantiateViewController(withIdentifier: "mangaDetailGeneral") as! MangaDetailGeneralViewController
+//                        viewController.mangaCoverUrl = self.mangaCoverUrl
+//                        viewController.manga = mangaOptional
+//                        self.add(asChildViewController: viewController)
+//                        return viewController
+//                    }()
+//                    self.categoriesViewController = {
+//                        let storyBoard = UIStoryboard(name: "Main", bundle: Bundle.main)
+//                        let viewController = storyBoard.instantiateViewController(withIdentifier: "MangaDetailRecommendations") as! MangaDetailRecommendationsViewController
+//                        viewController.mangaCoverUrl = self.mangaCoverUrl
+//                        viewController.manga = mangaOptional
+//                        self.add(asChildViewController: viewController)
+//                        return viewController
+//                    }()
+//                    self.detailsLoadingActivityIndicator.stopAnimating()
+//                    self.setupView()
+//                }
+//            }
+//        }
+        MangaUpdatesAPI.getMangaWithId(id: self.mangaId, completionHandler: { manga in
+            if let mangaOptional = manga {
+                self.generalViewController = {
+                    let storyBoard = UIStoryboard(name: "Main", bundle: Bundle.main)
+                    let viewController = storyBoard.instantiateViewController(withIdentifier: "mangaDetailGeneral") as! MangaDetailGeneralViewController
+                    viewController.mangaCoverUrl = self.mangaCoverUrl
+                    viewController.manga = mangaOptional
+                    self.add(asChildViewController: viewController)
+                    return viewController
+                }()
+                self.categoriesViewController = {
+                    let storyBoard = UIStoryboard(name: "Main", bundle: Bundle.main)
+                    let viewController = storyBoard.instantiateViewController(withIdentifier: "MangaDetailRecommendations") as! MangaDetailRecommendationsViewController
+                    viewController.mangaCoverUrl = self.mangaCoverUrl
+                    viewController.manga = mangaOptional
+                    self.add(asChildViewController: viewController)
+                    return viewController
+                }()
+                self.detailsLoadingActivityIndicator.stopAnimating()
+                self.setupView()
+            }else {
+                //TODO something went wrong, provide GUI to reload
+                print("something went wrong")
             }
-        }
+        })
     }
     
     func setupView(){
