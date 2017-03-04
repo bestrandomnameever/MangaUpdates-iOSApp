@@ -108,36 +108,77 @@ extension MangaSearchResultsViewController{
             let page = self.currentPage + 1
             let url = MangaUpdatesURLBuilder.init(customUrl: self.currentUrl).getPage(page: page).resultsPerPage(amount: amount).getUrl()
             //get all id's of mangas matching this searchUrl
-            let mangaIdsAndNextPageUrl = MangaUpdatesAPI.getMangaIdsFrom(searchUrl: url)
-            OperationQueue.main.addOperation {
+//            let mangaIdsAndNextPageUrl = MangaUpdatesAPI.getMangaIdsFrom(searchUrl: url)
+//            OperationQueue.main.addOperation {
+//                var uniqueMangaIds : [String] = []
+//                //make sure that all ids are unique since 1 manga can appear more than once in search thanks to alternative names
+//                for id in mangaIdsAndNextPageUrl.ids{
+//                    if(!uniqueMangaIds.contains(id)){
+//                        uniqueMangaIds.append(id)
+//                    }
+//                }
+//                self.idsCount = self.idsCount + uniqueMangaIds.count
+//                for mangaId in uniqueMangaIds {
+////                    self.loadMangaOperationQueue.addOperation {
+////                        if let mangaResult = MangaUpdatesAPI.getMangaSearchResultWithId(id: mangaId){
+////                            OperationQueue.main.addOperation {
+////                                self.results.append(mangaResult)
+////                                self.mangaResultsUITableView.reloadData()
+////                                if(self.results.count == self.idsCount){
+////                                    self.doneLoading = true
+////                                }
+////                            }
+////                        }
+////                    }
+//                    MangaUpdatesAPI.getMangaSearchResultWithId(id: mangaId, completionHandler: { (mangaResult) in
+//                        if mangaResult != nil {
+//                            self.results.append(mangaResult!)
+//                            self.mangaResultsUITableView.reloadData()
+//                            if(self.results.count == self.idsCount){
+//                                self.doneLoading = true
+//                            }
+//                        }
+//                    })
+//                }
+//                if mangaIdsAndNextPageUrl.hasNextPage {
+//                    self.currentPage = page
+//                }else{
+//                    self.allResultsLoaded = true
+//                    self.mangaResultsUITableView.reloadData()
+//                }
+//            }
+            MangaUpdatesAPI.getMangaIdsFrom(searchUrl: url, completionHandler: { (ids, hasNextPage) in
                 var uniqueMangaIds : [String] = []
                 //make sure that all ids are unique since 1 manga can appear more than once in search thanks to alternative names
-                for id in mangaIdsAndNextPageUrl.ids{
-                    if(!uniqueMangaIds.contains(id)){
-                        uniqueMangaIds.append(id)
+                if (ids != nil && hasNextPage != nil) {
+                    for id in ids!{
+                        if(!uniqueMangaIds.contains(id)){
+                            uniqueMangaIds.append(id)
+                        }
                     }
-                }
-                self.idsCount = self.idsCount + uniqueMangaIds.count
-                for mangaId in uniqueMangaIds {
-                    self.loadMangaOperationQueue.addOperation {
-                        if let mangaResult = MangaUpdatesAPI.getMangaSearchResultWithId(id: mangaId){
-                            OperationQueue.main.addOperation {
-                                self.results.append(mangaResult)
+                    self.idsCount = self.idsCount + uniqueMangaIds.count
+                    for mangaId in uniqueMangaIds {
+                        MangaUpdatesAPI.getMangaSearchResultWithId(id: mangaId, completionHandler: { (mangaResult) in
+                            if mangaResult != nil {
+                                self.results.append(mangaResult!)
                                 self.mangaResultsUITableView.reloadData()
                                 if(self.results.count == self.idsCount){
                                     self.doneLoading = true
                                 }
                             }
-                        }
+                        })
                     }
+                    if hasNextPage! {
+                        self.currentPage = page
+                    }else{
+                        self.allResultsLoaded = true
+                        self.mangaResultsUITableView.reloadData()
+                    }
+                }else {
+                    //TODO create GUI to refresh
+                    print("something went wrong")
                 }
-                if mangaIdsAndNextPageUrl.hasNextPage {
-                    self.currentPage = page
-                }else{
-                    self.allResultsLoaded = true
-                    self.mangaResultsUITableView.reloadData()
-                }
-            }
+            })
         }
         
     }

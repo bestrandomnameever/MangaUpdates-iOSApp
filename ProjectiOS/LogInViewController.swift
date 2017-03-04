@@ -67,6 +67,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
             self.clearErrorField()
             MangaUpdatesAPI.logIn(username: username, password: password, completionHandler: { (succes) in
                 if succes {
+                    self.setCorrectCookie()
                     self.setScreenToLoggedInUser(username: username)
                     //self.dismiss(animated: true, completion: nil)
                 }else {
@@ -117,6 +118,22 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         let password = passwordTextField.text!
         logIn(username: username, password: password)
         return true
+    }
+    
+    private func setCorrectCookie() {
+        let cookies = HTTPCookieStorage.shared.cookies!
+        for cookie in cookies {
+            if cookie.name == "secure_session" {
+                let properties = [
+                    HTTPCookiePropertyKey.name: cookie.name,
+                    HTTPCookiePropertyKey.value: cookie.value,
+                    HTTPCookiePropertyKey.domain: "www.mangaupdates.com",
+                    HTTPCookiePropertyKey.path: cookie.path
+                    ] as [HTTPCookiePropertyKey : Any]
+                HTTPCookieStorage.shared.setCookie(HTTPCookie.init(properties: properties)!)
+                print("cookie toegevoegd")
+            }
+        }
     }
     
 }

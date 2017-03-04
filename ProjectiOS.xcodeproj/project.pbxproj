@@ -23,6 +23,7 @@
 		00201CB01E2FCABA000D3E0C /* MangaDetailRecommendationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00201CAF1E2FCABA000D3E0C /* MangaDetailRecommendationsViewController.swift */; };
 		004F5D091E660B7700BF258F /* CoverImagePopOverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004F5D081E660B7700BF258F /* CoverImagePopOverViewController.swift */; };
 		004F5D0C1E66345700BF258F /* ScoresPopOverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004F5D0B1E66345700BF258F /* ScoresPopOverViewController.swift */; };
+		006D71C41E6AE11100412E02 /* UserListType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006D71C31E6AE11100412E02 /* UserListType.swift */; };
 		00CC79611E68C99D0070ED7E /* MULogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 00CC79601E68C99D0070ED7E /* MULogo.png */; };
 		00CC79631E68CF600070ED7E /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CC79621E68CF600070ED7E /* LogInViewController.swift */; };
 		00CC79651E68D30A0070ED7E /* transparent-green-checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 00CC79641E68D30A0070ED7E /* transparent-green-checkmark.png */; };
@@ -60,6 +61,7 @@
 		00201CAF1E2FCABA000D3E0C /* MangaDetailRecommendationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MangaDetailRecommendationsViewController.swift; sourceTree = "<group>"; };
 		004F5D081E660B7700BF258F /* CoverImagePopOverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoverImagePopOverViewController.swift; sourceTree = "<group>"; };
 		004F5D0B1E66345700BF258F /* ScoresPopOverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScoresPopOverViewController.swift; sourceTree = "<group>"; };
+		006D71C31E6AE11100412E02 /* UserListType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserListType.swift; path = Models/UserListType.swift; sourceTree = "<group>"; };
 		00CC79601E68C99D0070ED7E /* MULogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MULogo.png; path = Resources/MULogo.png; sourceTree = "<group>"; };
 		00CC79621E68CF600070ED7E /* LogInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		00CC79641E68D30A0070ED7E /* transparent-green-checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "transparent-green-checkmark.png"; path = "Resources/transparent-green-checkmark.png"; sourceTree = "<group>"; };
@@ -172,6 +174,7 @@
 				00143D111DE4CD6000AEF853 /* MangaUpdatesAPI.swift */,
 				00201C661E2E61D7000D3E0C /* MangaSearchResult.swift */,
 				00201CA91E2F97A5000D3E0C /* MangaUpdatesURLBuilder.swift */,
+				006D71C31E6AE11100412E02 /* UserListType.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -358,6 +361,7 @@
 				00EF093D1DE248B600AFA3AB /* MangaDetailGeneralViewController.swift in Sources */,
 				004F5D0C1E66345700BF258F /* ScoresPopOverViewController.swift in Sources */,
 				00201C671E2E61D7000D3E0C /* MangaSearchResult.swift in Sources */,
+				006D71C41E6AE11100412E02 /* UserListType.swift in Sources */,
 				00201CAC1E2FC333000D3E0C /* MangaDetailViewContainerController.swift in Sources */,
 				00D563F61DE08E0200014F58 /* ViewController.swift in Sources */,
 				00EF09231DE0DFE800AFA3AB /* MangaCoverViewCell.swift in Sources */,
