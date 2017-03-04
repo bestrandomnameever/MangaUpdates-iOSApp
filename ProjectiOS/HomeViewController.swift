@@ -50,6 +50,7 @@ class HomeViewController : UIViewController {
             }else {
                 print("inloggen mislukt")
             }
+            
             self.loadGenresAsync()
             self.loadfirstReleasesAsync(amount: self.batchSize)
         })
@@ -60,24 +61,38 @@ class HomeViewController : UIViewController {
         findIdealProportionsWith()
     }
     
+    //TODO hernoem
     func loadGenresAsync(){
-        DispatchQueue.global(qos: .userInitiated).async {
-            if let genresAndUrls = MangaUpdatesAPI.getGenresAndUrls() {
-                DispatchQueue.main.async {
-                    if(genresAndUrls.count == 0){
-                        self.loadGenresAsync()
-                    }else{
-                        self.genreItems = genresAndUrls
-                        self.genreLoadingActivityIndicator.stopAnimating()
-                        self.categoryCollectionView.reloadData()
-                    }
-                }
-            }else{
-                DispatchQueue.main.async {
+//        DispatchQueue.global(qos: .userInitiated).async {
+//            if let genresAndUrls = MangaUpdatesAPI.getGenresAndUrls() {
+//                DispatchQueue.main.async {
+//                    if(genresAndUrls.count == 0){
+//                        self.loadGenresAsync()
+//                    }else{
+//                        self.genreItems = genresAndUrls
+//                        self.genreLoadingActivityIndicator.stopAnimating()
+//                        self.categoryCollectionView.reloadData()
+//                    }
+//                }
+//            }else{
+//                DispatchQueue.main.async {
+//                    self.loadGenresAsync()
+//                }
+//            }
+//        }
+        MangaUpdatesAPI.getGenresAndUrls(completionHandler: { genresAndUrlsOptional in
+            if let genresAndUrls = genresAndUrlsOptional {
+                if(genresAndUrls.count == 0){
                     self.loadGenresAsync()
+                }else{
+                    self.genreItems = genresAndUrls
+                    self.genreLoadingActivityIndicator.stopAnimating()
+                    self.categoryCollectionView.reloadData()
                 }
+            }else {
+                self.loadGenresAsync()
             }
-        }
+        })
     }
     
     func loadfirstReleasesAsync(amount: Int) {
@@ -111,19 +126,34 @@ class HomeViewController : UIViewController {
             MangaUpdatesAPI.getLatestReleasesIds(completionHandler: { (ids) in
                 if ids != nil {
                     self.ids = ids!
-                    DispatchQueue.global(qos: .userInitiated).async {
-                        for mangaId in self.ids.dropLast(self.ids.count-amount){
-                            if let manga = MangaUpdatesAPI.getMangaWithId(id: mangaId){
-                                DispatchQueue.main.async {
-                                    self.mangaCoverItems.append((manga.id, manga.title ,manga.image))
-                                    self.releaseCoversLoadingActivityIndicator.stopAnimating()
-                                    self.mangaCoverCollectionView.reloadData()
-                                    if(self.mangaCoverItems.count % self.batchSize==0){
-                                        self.coversAreLoading = false
-                                    }
+//                    DispatchQueue.global(qos: .userInitiated).async {
+//                        for mangaId in self.ids.dropLast(self.ids.count-amount){
+//                            if let manga = MangaUpdatesAPI.getMangaWithId(id: mangaId){
+//                                DispatchQueue.main.async {
+//                                    self.mangaCoverItems.append((manga.id, manga.title ,manga.image))
+//                                    self.releaseCoversLoadingActivityIndicator.stopAnimating()
+//                                    self.mangaCoverCollectionView.reloadData()
+//                                    if(self.mangaCoverItems.count % self.batchSize==0){
+//                                        self.coversAreLoading = false
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+                    for mangaId in self.ids.dropLast(self.ids.count-amount){
+                        MangaUpdatesAPI.getMangaWithId(id: mangaId, completionHandler: { mangaOptional in
+                            if let manga = mangaOptional {
+                                self.mangaCoverItems.append((manga.id, manga.title, manga.image))
+                                self.releaseCoversLoadingActivityIndicator.stopAnimating()
+                                self.mangaCoverCollectionView.reloadData()
+                                if self.mangaCoverItems.count % self.batchSize == 00 {
+                                    self.coversAreLoading = false
                                 }
+                            }else {
+                                //TODO Manga didnt load, create GUI optionally to refresh
+                                print("Manga could not be loaded")
                             }
-                        }
+                        })
                     }
                 }else {
                     self.loadfirstReleasesAsync(amount: amount)
@@ -170,17 +200,29 @@ class HomeViewController : UIViewController {
         let dropFirst = self.ids.dropFirst(amount)
         let dropLast = dropFirst.dropLast(dropFirst.count-batchSize)
         for mangaId in dropLast{
-            DispatchQueue.global(qos: .background).async {
-                if let manga = MangaUpdatesAPI.getMangaWithId(id: mangaId) {
-                    DispatchQueue.main.async {
-                        self.mangaCoverItems.append((manga.id, manga.title ,manga.image))
-                        self.mangaCoverCollectionView.reloadData()
-                        if(self.mangaCoverItems.count % self.batchSize==0){
-                            self.coversAreLoading = false
-                        }
+//            DispatchQueue.global(qos: .background).async {
+//                if let manga = MangaUpdatesAPI.getMangaWithId(id: mangaId) {
+//                    DispatchQueue.main.async {
+//                        self.mangaCoverItems.append((manga.id, manga.title ,manga.image))
+//                        self.mangaCoverCollectionView.reloadData()
+//                        if(self.mangaCoverItems.count % self.batchSize==0){
+//                            self.coversAreLoading = false
+//                        }
+//                    }
+//                }
+//            }
+            MangaUpdatesAPI.getMangaWithId(id: mangaId, completionHandler: { mangaOptional in
+                if let manga = mangaOptional {
+                    self.mangaCoverItems.append((manga.id, manga.title, manga.image))
+                    self.mangaCoverCollectionView.reloadData()
+                    if(self.mangaCoverItems.count % self.batchSize==0){
+                        self.coversAreLoading = false
                     }
+                }else {
+                    //TODO manga didnt load optionally give GUI to refresh
+                    print("Manga didnt load")
                 }
-            }
+            })
         }
     }
     
@@ -278,7 +320,6 @@ extension HomeViewController : UICollectionViewDataSource, UICollectionViewDeleg
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if(collectionView === mangaCoverCollectionView) {
-            print(coverHeight)
             return CGSize.init(width: coverWidth, height: coverHeight)
         }else {
             return CGSize.init(width: 170, height: 45)
