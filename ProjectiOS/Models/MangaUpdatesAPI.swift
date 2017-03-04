@@ -12,6 +12,10 @@ import Alamofire
 
 class MangaUpdatesAPI {
     
+    ///////////////////
+    /////Covers and genres
+    ////////////////////
+    
     static func getLatestReleasesIds(completionHandler:@escaping ([String]?) -> ()) {
         let url = MangaUpdatesURLBuilder.init().releasesURL()
         Alamofire.request(url).response { response in
@@ -23,6 +27,64 @@ class MangaUpdatesAPI {
         }
     }
     
+    static func getGenresAndUrls(completionHandler:@escaping ([(String, URL)]?) -> ()) {
+        let url = URL.init(string: "https://www.mangaupdates.com/genres.html")
+        Alamofire.request(url!).response { response in
+            if let doc = Kanna.HTML(html: response.data!, encoding: .isoLatin1) {
+                var genresAndUrls : [(String, URL)]? = Array.init()
+                let genres = doc.xpath("//td[@class='releasestitle']/b")
+                for genre in genres {
+                    let genreAndUrlTuple = (name: genre.text!, url: MangaUpdatesURLBuilder.init().includeGenres([genre.text!]).getUrl())
+                    genresAndUrls?.append(genreAndUrlTuple)
+                }
+                completionHandler(genresAndUrls)
+            }
+            completionHandler(nil)
+        }
+    }
+    
+    ///////////////////
+    //Get ID's
+    ///////////////////
+    
+    //TODO update naar Alamo
+    static func getMangaIdsFor(genreUrl : String, completionHandler:@escaping ([String]?, Bool?) -> ()) {
+        let url = URL.init(string: genreUrl)
+        return getMangaIdsFrom(searchUrl: url!, completionHandler: completionHandler)
+    }
+    
+    
+    //TODO update naar Alamo
+    static func getMangaIdsFrom(searchUrl : URL, completionHandler:@escaping ([String]?, Bool?) -> ()) {
+        //        var idsAndBool: ([String],Bool) = ([], false)
+        //        if let doc = Kanna.HTML(url: searchUrl, encoding: .isoLatin1) {
+        //            idsAndBool.0 = doc.xpath("//a[@alt='Series Info']").flatMap({$0["href"]!.components(separatedBy: "id=")[1]})
+        //            if let nextPage = doc.xpath("//a[. = 'Next Page']").first?["href"]! {
+        //                idsAndBool.1 = true
+        //            }else{
+        //                idsAndBool.1 = false
+        //            }
+        //        }
+        //        return idsAndBool
+        Alamofire.request(searchUrl).response{ response in
+            if let doc = Kanna.HTML(html: response.data!, encoding: .isoLatin1) {
+                var hasNextPage: Bool? = nil
+                let ids = doc.xpath("//a[@alt='Series Info']").flatMap({$0["href"]!.components(separatedBy: "id=")[1]})
+                if let nextPage = doc.xpath("//a[. = 'Next Page']").first?["href"]! {
+                    hasNextPage = true
+                }else{
+                    hasNextPage = false
+                }
+                completionHandler(ids, hasNextPage)
+            }
+            completionHandler(nil,nil)
+        }
+    }
+    
+    
+    //////////////////
+    ///Get manga from ID
+    /////////////////
     
     static func getMangaWithId(id : String, completionHandler:@escaping (Manga?) -> ()) {
         let url = MangaUpdatesURLBuilder.init().getMangaURLForId(id: id)
@@ -107,55 +169,30 @@ class MangaUpdatesAPI {
         }
     }
     
+    ////////////////////////
+    ////Categories
+    ////////////////////////
     
-    static func getGenresAndUrls(completionHandler:@escaping ([(String, URL)]?) -> ()) {
-        let url = URL.init(string: "https://www.mangaupdates.com/genres.html")
-        Alamofire.request(url!).response { response in
-            if let doc = Kanna.HTML(html: response.data!, encoding: .isoLatin1) {
-                var genresAndUrls : [(String, URL)]? = Array.init()
-                let genres = doc.xpath("//td[@class='releasestitle']/b")
-                for genre in genres {
-                    let genreAndUrlTuple = (name: genre.text!, url: MangaUpdatesURLBuilder.init().includeGenres([genre.text!]).getUrl())
-                    genresAndUrls?.append(genreAndUrlTuple)
-                }
-                completionHandler(genresAndUrls)
-            }
-            completionHandler(nil)
-        }
+    
+    static func getAllCategories(completionHandler:@escaping (CategorySearchResult) -> ()) {
+        getCategoriesFor(categorySearchTerm: "", page: 1, completionHandler: completionHandler)
     }
     
-    
-    //TODO update naar Alamo
-    static func getMangaIdsFor(genreUrl : String, completionHandler:@escaping ([String]?, Bool?) -> ()) {
-        let url = URL.init(string: genreUrl)
-        return getMangaIdsFrom(searchUrl: url!, completionHandler: completionHandler)
-    }
-    
-    
-    //TODO update naar Alamo
-    static func getMangaIdsFrom(searchUrl : URL, completionHandler:@escaping ([String]?, Bool?) -> ()) {
-//        var idsAndBool: ([String],Bool) = ([], false)
-//        if let doc = Kanna.HTML(url: searchUrl, encoding: .isoLatin1) {
-//            idsAndBool.0 = doc.xpath("//a[@alt='Series Info']").flatMap({$0["href"]!.components(separatedBy: "id=")[1]})
-//            if let nextPage = doc.xpath("//a[. = 'Next Page']").first?["href"]! {
-//                idsAndBool.1 = true
-//            }else{
-//                idsAndBool.1 = false
-//            }
-//        }
-//        return idsAndBool
-        Alamofire.request(searchUrl).response{ response in
-            if let doc = Kanna.HTML(html: response.data!, encoding: .isoLatin1) {
-                var hasNextPage: Bool? = nil
-                let ids = doc.xpath("//a[@alt='Series Info']").flatMap({$0["href"]!.components(separatedBy: "id=")[1]})
-                if let nextPage = doc.xpath("//a[. = 'Next Page']").first?["href"]! {
-                    hasNextPage = true
-                }else{
-                    hasNextPage = false
+    static func getCategoriesFor(categorySearchTerm: String, page: Int,completionHandler:@escaping (CategorySearchResult) -> ()) {
+        let url = "https://www.mangaupdates.com/categories.html?page=\(page)&perpage=100&search=\(categorySearchTerm)"
+        Alamofire.request(url).response{ response in
+            if response.response?.statusCode == 200 {
+                if let doc = Kanna.HTML(html: response.data!, encoding: .isoLatin1) {
+                    let categories = doc.xpath("//td[contains(@class, 'text') and contains(@class, 'pad')]/a").flatMap({($0.innerHTML!, $0["href"]!)})
+                    if let nextPage = doc.xpath("//a[. = 'Next Page']").first?["href"]! {
+                        completionHandler(CategorySearchResult.init(categoryDictionaryAsArray: categories, hasNextPage: true))
+                    }else{
+                        completionHandler(CategorySearchResult.init(categoryDictionaryAsArray: categories, hasNextPage: false))
+                    }
+                }else {
+                    completionHandler(CategorySearchResult.init(categoryDictionary: nil, hasNextPage: false))
                 }
-                completionHandler(ids, hasNextPage)
             }
-            completionHandler(nil,nil)
         }
     }
     

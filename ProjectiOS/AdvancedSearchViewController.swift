@@ -45,27 +45,34 @@ class AdvancedSearchViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        var include : [String] = []
-        var exclude : [String] = []
-        var filter : ExtendedOptions = .all
-        let searchTitle : String = searchForTitleField.text!.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
-        for genre in genres{
-            switch(genre.mode) {
-            case 1:
-                include.append(genre.genreName)
-            case 2:
-                exclude.append(genre.genreName)
-            default:
-                break
+        switch segue.identifier! {
+        case "search":
+            var include : [String] = []
+            var exclude : [String] = []
+            var filter : ExtendedOptions = .all
+            let searchTitle : String = searchForTitleField.text!.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
+            for genre in genres{
+                switch(genre.mode) {
+                case 1:
+                    include.append(genre.genreName)
+                case 2:
+                    exclude.append(genre.genreName)
+                default:
+                    break
+                }
             }
+            if onlyScanlatedRadioBtn.isOn{
+                filter = ExtendedOptions.completeScanlated
+            }
+            
+            let destination = segue.destination as! MangaSearchResultsViewController
+            destination.originalSearchUrl = MangaUpdatesURLBuilder.init().searchTitle(searchTitle).includeGenres(include).excludeGenres(exclude).resultsPerPage(amount: 50).extendedOptions(filter).getUrl()
+            destination.searchTitle.title = searchForTitleField.text!
+        case "categories":
+            break
+        default:
+            break
         }
-        if onlyScanlatedRadioBtn.isOn{
-            filter = ExtendedOptions.completeScanlated
-        }
-        
-        let destination = segue.destination as! MangaSearchResultsViewController
-        destination.originalSearchUrl = MangaUpdatesURLBuilder.init().searchTitle(searchTitle).includeGenres(include).excludeGenres(exclude).resultsPerPage(amount: 50).extendedOptions(filter).getUrl()
-        destination.searchTitle.title = searchForTitleField.text!
     }
 
 }

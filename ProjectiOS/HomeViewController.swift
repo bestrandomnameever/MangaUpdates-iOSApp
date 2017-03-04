@@ -50,7 +50,19 @@ class HomeViewController : UIViewController {
             }else {
                 print("inloggen mislukt")
             }
-            
+            MangaUpdatesAPI.getCategoriesFor(categorySearchTerm: "test", page: 1, completionHandler: { resultOptional in
+                if let result = resultOptional.categoryDictionary {
+                    if resultOptional.hasNextPage {
+                        
+                    } else {
+                        print("doesnt have a next page")
+                    }
+                    print(result)
+                }else {
+                    //TODO went wrong
+                    print("getting categorys went wrong")
+                }
+            })
             self.loadGenresAsync()
             self.loadfirstReleasesAsync(amount: self.batchSize)
         })
