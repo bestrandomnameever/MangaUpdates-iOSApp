@@ -21,6 +21,9 @@ class CategoriesSelectViewController: UIViewController {
     
     
     @IBAction func cancelSelectingCategories(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    @IBAction func applySelectedCategories(_ sender: Any) {
         delegate.sendChosenCategorys(categorys: selectedCategorys)
         self.dismiss(animated: true, completion: nil)
     }

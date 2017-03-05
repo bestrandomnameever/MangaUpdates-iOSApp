@@ -75,6 +75,8 @@ class AdvancedSearchViewController: UIViewController {
             //set delegate to send back categorys
             destination.delegate = self
             break
+        case "options":
+            break
         default:
             break
         }
