@@ -33,6 +33,8 @@ class AdvancedSearchViewController: UIViewController {
         sender.tintColor = correctColorFor(segmentNr: chosenOption)
     }
     
+    var categorys: [String] = []
+    
     func correctColorFor(segmentNr : Int) -> UIColor{
         switch(segmentNr) {
             case 1:
@@ -69,6 +71,9 @@ class AdvancedSearchViewController: UIViewController {
             destination.originalSearchUrl = MangaUpdatesURLBuilder.init().searchTitle(searchTitle).includeGenres(include).excludeGenres(exclude).resultsPerPage(amount: 50).extendedOptions(filter).getUrl()
             destination.searchTitle.title = searchForTitleField.text!
         case "categories":
+            let destination = segue.destination as! CategoriesSelectViewController
+            //set delegate to send back categorys
+            destination.delegate = self
             break
         default:
             break
@@ -89,5 +94,12 @@ extension AdvancedSearchViewController : UITableViewDataSource, UITableViewDeleg
         cell.includeExcludeUISegmentedControl.selectedSegmentIndex = genres[indexPath.row].1
         cell.includeExcludeUISegmentedControl.tintColor = correctColorFor(segmentNr: genres[indexPath.row].1)
         return cell
+    }
+}
+
+extension AdvancedSearchViewController : CategoriesSelectViewControllerDelegate {
+    func sendChosenCategorys(categorys: [String]) {
+        self.categorys = categorys
+        print(self.categorys)
     }
 }

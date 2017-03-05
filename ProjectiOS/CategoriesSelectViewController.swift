@@ -9,16 +9,28 @@
 import UIKit
 import TagListView
 
-class CategoriesSelectViewController: UIViewController, UISearchBarDelegate {
+protocol CategoriesSelectViewControllerDelegate {
+    func sendChosenCategorys(categorys: [String])
+}
+
+class CategoriesSelectViewController: UIViewController {
 
     @IBOutlet weak var uiSearchBar: UISearchBar!
     @IBOutlet weak var categoriesTableView: UITableView!
     @IBOutlet weak var selectedCategoryTagListView: TagListView!
+    
+    
     @IBAction func cancelSelectingCategories(_ sender: Any) {
+        delegate.sendChosenCategorys(categorys: selectedCategorys)
         self.dismiss(animated: true, completion: nil)
     }
+    
+    
     var categorys : [String] = []
     var selectedCategorys : [String] = []
+    var delegate: CategoriesSelectViewControllerDelegate!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         uiSearchBar.delegate = self
@@ -37,6 +49,19 @@ class CategoriesSelectViewController: UIViewController, UISearchBarDelegate {
     }
     
     
+}
+
+extension CategoriesSelectViewController : UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        categorys.removeAll()
+        MangaUpdatesAPI.getCategoriesFor(categorySearchTerm: searchBar.text!, page: 1, completionHandler: { result in
+            if let categorys = result.categoryDictionary?.keys {
+                self.categorys.append(contentsOf: categorys)
+                self.categoriesTableView.reloadData()
+            }
+        })
+        self.view.endEditing(true)
+    }
 }
 
 extension CategoriesSelectViewController : UITableViewDelegate, UITableViewDataSource{
