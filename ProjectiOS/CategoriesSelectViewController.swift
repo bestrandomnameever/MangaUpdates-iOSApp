@@ -29,6 +29,7 @@ class CategoriesSelectViewController: UIViewController {
     var categorys : [String] = []
     var selectedCategorys : [String] = []
     var delegate: CategoriesSelectViewControllerDelegate!
+    var currentCategoryResult: CategorySearchResult? = nil
     
     
     override func viewDidLoad() {
@@ -38,6 +39,7 @@ class CategoriesSelectViewController: UIViewController {
         MangaUpdatesAPI.getAllCategories(completionHandler: { result in
             if let categories = result.categoryDictionary?.keys {
                 self.categorys.append(contentsOf: categories)
+                self.currentCategoryResult = result
                 self.categoriesTableView.reloadData()
             }
         })
@@ -54,9 +56,12 @@ class CategoriesSelectViewController: UIViewController {
 extension CategoriesSelectViewController : UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         categorys.removeAll()
+        currentCategoryResult = nil
+        self.categoriesTableView.reloadData()
         MangaUpdatesAPI.getCategoriesFor(categorySearchTerm: searchBar.text!, page: 1, completionHandler: { result in
             if let categorys = result.categoryDictionary?.keys {
                 self.categorys.append(contentsOf: categorys)
+                self.currentCategoryResult = result
                 self.categoriesTableView.reloadData()
             }
         })
@@ -69,21 +74,53 @@ extension CategoriesSelectViewController : UITableViewDelegate, UITableViewDataS
         return 1
     }
     
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == categorys.count - 20 {
+            if let current = currentCategoryResult {
+                if current.hasNextPage {
+                    MangaUpdatesAPI.getCategoriesFor(categorySearchTerm: uiSearchBar.text!, page: current.currentPage+1, completionHandler: { result in
+                        if let categories = result.categoryDictionary?.keys {
+                            self.categorys.append(contentsOf: categories)
+                            self.currentCategoryResult = current
+                            self.categoriesTableView.reloadData()
+                        }
+                    })
+                }
+            }
+        }
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categorys.count
+        if currentCategoryResult != nil {
+            if currentCategoryResult!.hasNextPage {
+                return categorys.count + 1
+            }else {
+                return categorys.count
+            }
+        }else {
+            return 1
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "categoryCell", for: indexPath) as! CategoryCell
-        cell.categoryNameLabel.text = categorys[indexPath.row]
-        return cell
+        if indexPath.row == categorys.count {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "categorysLoadingCell", for: indexPath) as! CategorysLoadingCell
+            cell.categorysLoadingIndicator.startAnimating()
+            return cell
+        }else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "categoryCell", for: indexPath) as! CategoryCell
+            cell.categoryNameLabel.text = categorys[indexPath.row]
+            return cell
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let category = categorys[indexPath.row]
-        if !selectedCategorys.contains(category) {
-            selectedCategorys.append(category)
-            selectedCategoryTagListView.addTag(category)
+        if indexPath.row != categorys.count {
+            let category = categorys[indexPath.row]
+            if !selectedCategorys.contains(category) {
+                selectedCategorys.append(category)
+                selectedCategoryTagListView.addTag(category)
+            }
         }
     }
 }

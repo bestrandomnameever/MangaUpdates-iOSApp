@@ -185,12 +185,12 @@ class MangaUpdatesAPI {
                 if let doc = Kanna.HTML(html: response.data!, encoding: .isoLatin1) {
                     let categories = doc.xpath("//td[contains(@class, 'text') and contains(@class, 'pad')]/a").flatMap({($0.innerHTML!, $0["href"]!)})
                     if let nextPage = doc.xpath("//a[. = 'Next Page']").first?["href"]! {
-                        completionHandler(CategorySearchResult.init(categoryDictionaryAsArray: categories, hasNextPage: true))
+                        completionHandler(CategorySearchResult.init(categoryDictionaryAsArray: categories, hasNextPage: true, currentPage: page))
                     }else{
-                        completionHandler(CategorySearchResult.init(categoryDictionaryAsArray: categories, hasNextPage: false))
+                        completionHandler(CategorySearchResult.init(categoryDictionaryAsArray: categories, hasNextPage: false, currentPage: page))
                     }
                 }else {
-                    completionHandler(CategorySearchResult.init(categoryDictionary: nil, hasNextPage: false))
+                    completionHandler(CategorySearchResult.init(categoryDictionary: nil, hasNextPage: false, currentPage: page))
                 }
             }
         }

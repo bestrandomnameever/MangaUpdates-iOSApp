@@ -12,14 +12,15 @@ class CategorySearchResult {
     
     var categoryDictionary : Dictionary<String, String>?
     var hasNextPage : Bool
-    var currentPage : String?
+    var currentPage : Int
     
-    init(categoryDictionary: Dictionary<String, String>?, hasNextPage: Bool) {
+    init(categoryDictionary: Dictionary<String, String>?, hasNextPage: Bool, currentPage: Int) {
         self.categoryDictionary = categoryDictionary
         self.hasNextPage = hasNextPage
+        self.currentPage = currentPage
     }
     
-    init(categoryDictionaryAsArray: [(category: String, url: String)]?, hasNextPage: Bool) {
+    init(categoryDictionaryAsArray: [(category: String, url: String)]?, hasNextPage: Bool, currentPage: Int) {
         if let categorysAndUrls = categoryDictionaryAsArray {
             categoryDictionary = [:]
             for categoryAndUrl in categorysAndUrls {
@@ -27,5 +28,6 @@ class CategorySearchResult {
             }
         }
         self.hasNextPage = hasNextPage
+        self.currentPage = currentPage
     }
 }

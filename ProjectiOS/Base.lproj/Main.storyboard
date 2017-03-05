@@ -357,6 +357,26 @@
                                             <outlet property="categorySelectButton" destination="WCm-QH-ie0" id="Wv4-ih-7xw"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="categorysLoadingCell" id="IE5-Th-02D" customClass="CategorysLoadingCell" customModule="ProjectiOS" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="72" width="343" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IE5-Th-02D" id="WpH-ko-Jn6">
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="rEC-Uc-HZy">
+                                                    <rect key="frame" x="161" y="11" width="20" height="20"/>
+                                                </activityIndicatorView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="rEC-Uc-HZy" firstAttribute="centerY" secondItem="WpH-ko-Jn6" secondAttribute="centerY" id="Hin-k6-Kwe"/>
+                                                <constraint firstItem="rEC-Uc-HZy" firstAttribute="centerX" secondItem="WpH-ko-Jn6" secondAttribute="centerX" id="mBh-lL-kl6"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="categorysLoadingIndicator" destination="rEC-Uc-HZy" id="pPw-27-Vgc"/>
+                                        </connections>
+                                    </tableViewCell>
                                 </prototypes>
                                 <connections>
                                     <outlet property="dataSource" destination="IZl-p2-Mvq" id="Avz-Uy-2Im"/>
