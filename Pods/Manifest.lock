@@ -8,6 +8,7 @@ PODS:
   - SDWebImage (4.0.0):
     - SDWebImage/Core (= 4.0.0)
   - SDWebImage/Core (4.0.0)
+  - TagListView (1.1.0)
 
 DEPENDENCIES:
   - Alamofire
@@ -15,6 +16,7 @@ DEPENDENCIES:
   - Charts
   - Kanna
   - SDWebImage
+  - TagListView
 
 SPEC CHECKSUMS:
   Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
@@ -22,7 +24,8 @@ SPEC CHECKSUMS:
   Charts: 0e84f4418e87dad6a9edde221fba37ebb51d3ba7
   Kanna: 9b4b086c218703f2b94f5b21a466217dd2f9332e
   SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
+  TagListView: d0267a71393f3c73db5c9ea2f979ac1125fcab56
 
-PODFILE CHECKSUM: e065d9b5e8d49b43617fc27bceb5699878afbb95
+PODFILE CHECKSUM: 1b8ac7805651147afb09d3bfb27ffdbf456944d9
 
 COCOAPODS: 1.2.0.beta.1

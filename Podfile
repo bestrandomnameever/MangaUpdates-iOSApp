@@ -10,5 +10,6 @@ target 'ProjectiOS' do
   pod 'AsyncSwift'
   pod 'SDWebImage'
   pod 'Charts'
-	pod 'Alamofire'
+  pod 'Alamofire'
+  pod 'TagListView'
 end
