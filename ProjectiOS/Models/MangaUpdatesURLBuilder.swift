@@ -49,6 +49,19 @@ class MangaUpdatesURLBuilder {
         return self
     }
     
+    func withCategories(_ categories: [String]) -> MangaUpdatesURLBuilder{
+        if categories.count > 0 {
+            self.url.append("category=")
+            var variableCategorys = categories
+            for (index, category) in variableCategorys.enumerated() {
+                variableCategorys[index] = category.replacingOccurrences(of: " ", with: "%2B").replacingOccurrences(of: "/", with: "%252F").replacingOccurrences(of: "'", with: "%27")
+            }
+            self.url.append(variableCategorys.joined(separator: "_"))
+            self.url.append("&")
+        }
+        return self
+    }
+    
     func resultsPerPage(amount: Int) -> MangaUpdatesURLBuilder{
         self.url.append("perpage=")
         self.url.append(String.init(amount))
@@ -57,14 +70,26 @@ class MangaUpdatesURLBuilder {
     }
     
     func licensed(_ license: LicenseOptions) -> MangaUpdatesURLBuilder{
-        self.url.append(license.rawValue)
-        self.url.append("&")
+        if license != .all {
+            self.url.append(license.rawValue)
+            self.url.append("&")
+        }
         return self
     }
     
     func extendedOptions(_ option: ExtendedOptions) -> MangaUpdatesURLBuilder{
-        self.url.append(option.rawValue)
-        self.url.append("&")
+        if option != .all {
+            self.url.append(option.rawValue)
+            self.url.append("&")
+        }
+        return self
+    }
+    
+    func typeOptions(_ type: TypeOptions) -> MangaUpdatesURLBuilder{
+        if type != .all {
+            self.url.append(type.rawValue)
+            self.url.append("&")
+        }
         return self
     }
     
@@ -88,6 +113,7 @@ class MangaUpdatesURLBuilder {
 }
 
 enum LicenseOptions: String{
+    case all = ""
     case onlyLicensed = "licensed=yes"
     case onlyUnlicensed = "licensed=no"
 }
@@ -95,11 +121,24 @@ enum LicenseOptions: String{
 enum ExtendedOptions: String{
     case all = ""
     case completeScanlated = "filter=scanlated"
-    case complete = "filter=completed"
+    case completeScanlatedIncludingOneShots = "filter=completed"
     case oneShot = "filter=oneshots"
     case excludeOneShot = "filter=no_oneshots"
     case atLeastOneRelease = "filter=some_releases"
     case noRelease = "filter=no_releases"
+}
+enum TypeOptions: String{
+    case all = ""
+    case artbook = "type=artbook"
+    case doujinshi = "type=doujinshi"
+    case dramaCd = "type=drama_cd"
+    case manga = "type=manga"
+    case manhwa = "type=manhwa"
+    case manhua = "type=manhua"
+    case thai = "type=thai"
+    case indonesian = "type=indonesian"
+    case novel = "type=novel"
+    case oel = "type=oel"
 }
 
 enum OrderBy: String{

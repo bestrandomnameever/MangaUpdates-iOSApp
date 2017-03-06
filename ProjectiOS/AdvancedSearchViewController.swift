@@ -11,7 +11,7 @@ import UIKit
 class AdvancedSearchViewController: UIViewController {
     var genres : [(genreName: String, mode: Int)]!
     
-    @IBOutlet weak var searchForTitleField: UITextField!
+    @IBOutlet weak var searchForTitleField: UITextField!//TODO moet weg
     @IBOutlet weak var genresUITableView: UITableView!
     @IBOutlet weak var onlyScanlatedRadioBtn: UISwitch!
     
@@ -34,6 +34,9 @@ class AdvancedSearchViewController: UIViewController {
     }
     
     var categorys: [String] = []
+    var licenseOption = LicenseOptions.all
+    var extendedOption = ExtendedOptions.all
+    var typeOption = TypeOptions.all
     
     func correctColorFor(segmentNr : Int) -> UIColor{
         switch(segmentNr) {
@@ -51,7 +54,6 @@ class AdvancedSearchViewController: UIViewController {
         case "search":
             var include : [String] = []
             var exclude : [String] = []
-            var filter : ExtendedOptions = .all
             let searchTitle : String = searchForTitleField.text!.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
             for genre in genres{
                 switch(genre.mode) {
@@ -63,19 +65,23 @@ class AdvancedSearchViewController: UIViewController {
                     break
                 }
             }
-            if onlyScanlatedRadioBtn.isOn{
-                filter = ExtendedOptions.completeScanlated
-            }
             
             let destination = segue.destination as! MangaSearchResultsViewController
-            destination.originalSearchUrl = MangaUpdatesURLBuilder.init().searchTitle(searchTitle).includeGenres(include).excludeGenres(exclude).resultsPerPage(amount: 50).extendedOptions(filter).getUrl()
+            destination.originalSearchUrl = MangaUpdatesURLBuilder.init().includeGenres(include).excludeGenres(exclude).withCategories(categorys).resultsPerPage(amount: 50).licensed(licenseOption).extendedOptions(extendedOption).typeOptions(typeOption).getUrl()
+            print(destination.originalSearchUrl.absoluteString)
             destination.searchTitle.title = searchForTitleField.text!
         case "categories":
             let destination = segue.destination as! CategoriesSelectViewController
+            destination.selectedCategorys = categorys
             //set delegate to send back categorys
             destination.delegate = self
             break
         case "options":
+            let destination = segue.destination as! AdvancedSearchOptionsViewController
+            destination.delegate = self
+            destination.selectedLicenseOption = licenseOption
+            destination.selectedExtendedOption = extendedOption
+            destination.selectedTypeOption = typeOption
             break
         default:
             break
@@ -99,9 +105,16 @@ extension AdvancedSearchViewController : UITableViewDataSource, UITableViewDeleg
     }
 }
 
-extension AdvancedSearchViewController : CategoriesSelectViewControllerDelegate {
+extension AdvancedSearchViewController : CategoriesSelectViewControllerDelegate, AdvancedSearchOptionsDelegate {
     func sendChosenCategorys(categorys: [String]) {
         self.categorys = categorys
         print(self.categorys)
+    }
+    
+    func sendOptions(licenseOption: LicenseOptions, extendedOption: ExtendedOptions, typeOption: TypeOptions) {
+        self.licenseOption = licenseOption
+        self.extendedOption = extendedOption
+        self.typeOption = typeOption
+        print(self.licenseOption, self.extendedOption, self.typeOption)
     }
 }

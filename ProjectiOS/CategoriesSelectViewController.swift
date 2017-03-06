@@ -28,7 +28,6 @@ class CategoriesSelectViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
-    
     var categorys : [String] = []
     var selectedCategorys : [String] = []
     var delegate: CategoriesSelectViewControllerDelegate!
@@ -40,12 +39,15 @@ class CategoriesSelectViewController: UIViewController {
         uiSearchBar.delegate = self
         selectedCategoryTagListView.delegate = self
         MangaUpdatesAPI.getAllCategories(completionHandler: { result in
-            if let categories = result.categoryDictionary?.keys {
+            if let categories = result.categoryDictionary?.keys.sorted() {
                 self.categorys.append(contentsOf: categories)
                 self.currentCategoryResult = result
                 self.categoriesTableView.reloadData()
             }
         })
+        for category in selectedCategorys {
+            selectedCategoryTagListView.addTag(category)
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -62,7 +64,7 @@ extension CategoriesSelectViewController : UISearchBarDelegate {
         currentCategoryResult = nil
         self.categoriesTableView.reloadData()
         MangaUpdatesAPI.getCategoriesFor(categorySearchTerm: searchBar.text!, page: 1, completionHandler: { result in
-            if let categorys = result.categoryDictionary?.keys {
+            if let categorys = result.categoryDictionary?.keys.sorted() {
                 self.categorys.append(contentsOf: categorys)
                 self.currentCategoryResult = result
                 self.categoriesTableView.reloadData()
@@ -82,7 +84,7 @@ extension CategoriesSelectViewController : UITableViewDelegate, UITableViewDataS
             if let current = currentCategoryResult {
                 if current.hasNextPage {
                     MangaUpdatesAPI.getCategoriesFor(categorySearchTerm: uiSearchBar.text!, page: current.currentPage+1, completionHandler: { result in
-                        if let categories = result.categoryDictionary?.keys {
+                        if let categories = result.categoryDictionary?.keys.sorted() {
                             self.categorys.append(contentsOf: categories)
                             self.currentCategoryResult = current
                             self.categoriesTableView.reloadData()
