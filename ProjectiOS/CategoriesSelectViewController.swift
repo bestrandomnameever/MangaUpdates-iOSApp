@@ -86,7 +86,7 @@ extension CategoriesSelectViewController : UITableViewDelegate, UITableViewDataS
                     MangaUpdatesAPI.getCategoriesFor(categorySearchTerm: uiSearchBar.text!, page: current.currentPage+1, completionHandler: { result in
                         if let categories = result.categoryDictionary?.keys.sorted() {
                             self.categorys.append(contentsOf: categories)
-                            self.currentCategoryResult = current
+                            self.currentCategoryResult = result
                             self.categoriesTableView.reloadData()
                         }
                     })
