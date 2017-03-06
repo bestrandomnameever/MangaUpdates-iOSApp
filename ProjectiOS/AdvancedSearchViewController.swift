@@ -7,17 +7,16 @@
 //
 
 import UIKit
+import TagListView
 
 class AdvancedSearchViewController: UIViewController {
     var genres : [(genreName: String, mode: Int)]!
     
-    @IBOutlet weak var searchForTitleField: UITextField!//TODO moet weg
     @IBOutlet weak var genresUITableView: UITableView!
-    @IBOutlet weak var onlyScanlatedRadioBtn: UISwitch!
-    
-    @IBAction func returnPressedEndEditing(_ sender: Any) {
-        view.endEditing(true)
-    }
+    @IBOutlet weak var licenseLabel: UILabel!
+    @IBOutlet weak var extendedLabel: UILabel!
+    @IBOutlet weak var typeLabel: UILabel!
+    @IBOutlet weak var tagListView: TagListView!
 
     @IBAction func changeColorSegmented(_ sender: UISegmentedControl) {
         let chosenOption = sender.selectedSegmentIndex
@@ -54,7 +53,6 @@ class AdvancedSearchViewController: UIViewController {
         case "search":
             var include : [String] = []
             var exclude : [String] = []
-            let searchTitle : String = searchForTitleField.text!.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
             for genre in genres{
                 switch(genre.mode) {
                 case 1:
@@ -69,7 +67,7 @@ class AdvancedSearchViewController: UIViewController {
             let destination = segue.destination as! MangaSearchResultsViewController
             destination.originalSearchUrl = MangaUpdatesURLBuilder.init().includeGenres(include).excludeGenres(exclude).withCategories(categorys).resultsPerPage(amount: 50).licensed(licenseOption).extendedOptions(extendedOption).typeOptions(typeOption).getUrl()
             print(destination.originalSearchUrl.absoluteString)
-            destination.searchTitle.title = searchForTitleField.text!
+            destination.searchTitle.title = "Results"
         case "categories":
             let destination = segue.destination as! CategoriesSelectViewController
             destination.selectedCategorys = categorys
