@@ -106,13 +106,18 @@ extension AdvancedSearchViewController : UITableViewDataSource, UITableViewDeleg
 extension AdvancedSearchViewController : CategoriesSelectViewControllerDelegate, AdvancedSearchOptionsDelegate {
     func sendChosenCategorys(categorys: [String]) {
         self.categorys = categorys
-        print(self.categorys)
+        tagListView.removeAllTags()
+        for category in self.categorys {
+            tagListView.addTag(category)
+        }
     }
     
     func sendOptions(licenseOption: LicenseOptions, extendedOption: ExtendedOptions, typeOption: TypeOptions) {
         self.licenseOption = licenseOption
+        licenseLabel.text = self.licenseOption.rawValue
         self.extendedOption = extendedOption
+        extendedLabel.text = self.extendedOption.rawValue
         self.typeOption = typeOption
-        print(self.licenseOption, self.extendedOption, self.typeOption)
+        typeLabel.text = self.typeOption.rawValue
     }
 }
