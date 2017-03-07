@@ -14,10 +14,10 @@ protocol CategoriesSelectViewControllerDelegate {
 }
 
 class CategoriesSelectViewController: UIViewController {
-
+    
     @IBOutlet weak var uiSearchBar: UISearchBar!
     @IBOutlet weak var categoriesTableView: UITableView!
-    @IBOutlet weak var selectedCategoryTagListView: TagListView!
+    //    @IBOutlet weak var selectedCategoryTagListView: TagListView!
     
     
     @IBAction func cancelSelectingCategories(_ sender: Any) {
@@ -37,7 +37,7 @@ class CategoriesSelectViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         uiSearchBar.delegate = self
-        selectedCategoryTagListView.delegate = self
+        //        selectedCategoryTagListView.delegate = self
         MangaUpdatesAPI.getAllCategories(completionHandler: { result in
             if let categories = result.categoryDictionary?.keys.sorted() {
                 self.categorys.append(contentsOf: categories)
@@ -45,15 +45,30 @@ class CategoriesSelectViewController: UIViewController {
                 self.categoriesTableView.reloadData()
             }
         })
-        for category in selectedCategorys {
-            selectedCategoryTagListView.addTag(category)
-        }
+        //        for category in selectedCategorys {
+        //            selectedCategoryTagListView.addTag(category)
+        //        }
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier! {
+        case "searchWithCategory":
+            let destination = segue.destination as! MangaSearchResultsViewController
+            let button = sender as! UIButton
+            let category = (button.superview!.superview! as! CategoryCell).categoryNameLabel.text!
+            destination.originalSearchUrl = MangaUpdatesURLBuilder.init().withCategories([category]).getUrl()
+            break
+        default:
+            break
+        }
+    }
+    
+    
     
     
 }
@@ -124,7 +139,7 @@ extension CategoriesSelectViewController : UITableViewDelegate, UITableViewDataS
             let category = categorys[indexPath.row]
             if !selectedCategorys.contains(category) {
                 selectedCategorys.append(category)
-                selectedCategoryTagListView.addTag(category)
+                //                selectedCategoryTagListView.addTag(category)
             }
         }
     }
@@ -132,7 +147,7 @@ extension CategoriesSelectViewController : UITableViewDelegate, UITableViewDataS
 
 extension CategoriesSelectViewController : TagListViewDelegate {
     func tagRemoveButtonPressed(_ title: String, tagView: TagView, sender: TagListView) {
-        selectedCategoryTagListView.removeTag(title)
+        //        selectedCategoryTagListView.removeTag(title)
         selectedCategorys.remove(at: selectedCategorys.index(of: title)!)
     }
 }

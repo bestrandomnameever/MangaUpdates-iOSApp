@@ -11,6 +11,4 @@ import UIKit
 class CategoryCell: UITableViewCell {
     @IBOutlet weak var categoryNameLabel: UILabel!
     @IBOutlet weak var categorySelectButton: UIButton!
-    
-    
 }
