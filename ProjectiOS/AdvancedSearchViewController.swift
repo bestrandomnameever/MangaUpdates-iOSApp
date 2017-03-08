@@ -33,9 +33,9 @@ class AdvancedSearchViewController: UIViewController {
     }
     
     var categorys: [String] = []
-    var licenseOption = LicenseOptions.all
-    var extendedOption = ExtendedOptions.all
-    var typeOption = TypeOptions.all
+    var licenseOption = ""
+    var extendedOption = ""
+    var typeOption = ""
     
     func correctColorFor(segmentNr : Int) -> UIColor{
         switch(segmentNr) {
@@ -74,13 +74,21 @@ class AdvancedSearchViewController: UIViewController {
             //set delegate to send back categorys
             destination.delegate = self
             break
-        case "options":
+        case "licenseOptions":
             let destination = segue.destination as! AdvancedSearchOptionsViewController
             destination.delegate = self
-            destination.selectedLicenseOption = licenseOption
-            destination.selectedExtendedOption = extendedOption
-            destination.selectedTypeOption = typeOption
-            break
+            destination.selectedOption = ("",licenseOption)
+            destination.optionType = OptionType.licenseType
+        case "extendedOptions":
+            let destination = segue.destination as! AdvancedSearchOptionsViewController
+            destination.delegate = self
+            destination.selectedOption = ("",extendedOption)
+            destination.optionType = OptionType.extendedType
+        case "typeOptions":
+            let destination = segue.destination as! AdvancedSearchOptionsViewController
+            destination.delegate = self
+            destination.selectedOption = ("",typeOption)
+            destination.optionType = OptionType.typeType
         default:
             break
         }
@@ -104,20 +112,25 @@ extension AdvancedSearchViewController : UITableViewDataSource, UITableViewDeleg
 }
 
 extension AdvancedSearchViewController : CategoriesSelectViewControllerDelegate, AdvancedSearchOptionsDelegate {
+    internal func sendOptions(optionType: OptionType, selectedOption: (String, String)) {
+        switch optionType {
+            case OptionType.licenseType:
+            licenseLabel.text = selectedOption.0
+            licenseOption = selectedOption.1
+            case OptionType.extendedType:
+            extendedLabel.text = selectedOption.0
+            extendedOption = selectedOption.1
+            case OptionType.typeType:
+            typeLabel.text = selectedOption.0
+            typeOption = selectedOption.1
+        }
+    }
+
     func sendChosenCategorys(categorys: [String]) {
         self.categorys = categorys
         tagListView.removeAllTags()
         for category in self.categorys {
             tagListView.addTag(category)
         }
-    }
-    
-    func sendOptions(licenseOption: LicenseOptions, extendedOption: ExtendedOptions, typeOption: TypeOptions) {
-        self.licenseOption = licenseOption
-        licenseLabel.text = self.licenseOption.rawValue
-        self.extendedOption = extendedOption
-        extendedLabel.text = self.extendedOption.rawValue
-        self.typeOption = typeOption
-        typeLabel.text = self.typeOption.rawValue
     }
 }

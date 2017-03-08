@@ -231,7 +231,6 @@ class MangaUpdatesAPI {
                 if let doc = Kanna.HTML(html: response.data!, encoding: .isoLatin1) {
                     for element in doc.xpath("//tr[contains(@class, 'lrow')]") {
                         let id = element.xpath("td")[1].at_xpath("a")?["href"]?.components(separatedBy: "id=")[1]
-                        print(id)
                     }
                 }
             }

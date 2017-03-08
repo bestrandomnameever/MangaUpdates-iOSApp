@@ -69,25 +69,25 @@ class MangaUpdatesURLBuilder {
         return self
     }
     
-    func licensed(_ license: LicenseOptions) -> MangaUpdatesURLBuilder{
-        if license != .all {
-            self.url.append(license.rawValue)
+    func licensed(_ license: String) -> MangaUpdatesURLBuilder{
+        if license != "" {
+            self.url.append("licensed= " + license)
             self.url.append("&")
         }
         return self
     }
     
-    func extendedOptions(_ option: ExtendedOptions) -> MangaUpdatesURLBuilder{
-        if option != .all {
-            self.url.append(option.rawValue)
+    func extendedOptions(_ option: String) -> MangaUpdatesURLBuilder{
+        if option != "" {
+            self.url.append("filter=" + option)
             self.url.append("&")
         }
         return self
     }
     
-    func typeOptions(_ type: TypeOptions) -> MangaUpdatesURLBuilder{
-        if type != .all {
-            self.url.append(type.rawValue)
+    func typeOptions(_ type: String) -> MangaUpdatesURLBuilder{
+        if type != "" {
+            self.url.append("type="+type)
             self.url.append("&")
         }
         return self
@@ -110,35 +110,6 @@ class MangaUpdatesURLBuilder {
         return URL.init(string: self.url)!
     }
     
-}
-
-enum LicenseOptions: String{
-    case all = ""
-    case onlyLicensed = "licensed=yes"
-    case onlyUnlicensed = "licensed=no"
-}
-
-enum ExtendedOptions: String{
-    case all = ""
-    case completeScanlated = "filter=scanlated"
-    case completeScanlatedIncludingOneShots = "filter=completed"
-    case oneShot = "filter=oneshots"
-    case excludeOneShot = "filter=no_oneshots"
-    case atLeastOneRelease = "filter=some_releases"
-    case noRelease = "filter=no_releases"
-}
-enum TypeOptions: String{
-    case all = ""
-    case artbook = "type=artbook"
-    case doujinshi = "type=doujinshi"
-    case dramaCd = "type=drama_cd"
-    case manga = "type=manga"
-    case manhwa = "type=manhwa"
-    case manhua = "type=manhua"
-    case thai = "type=thai"
-    case indonesian = "type=indonesian"
-    case novel = "type=novel"
-    case oel = "type=oel"
 }
 
 enum OrderBy: String{
