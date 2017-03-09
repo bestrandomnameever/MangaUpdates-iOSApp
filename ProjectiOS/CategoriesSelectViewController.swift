@@ -21,17 +21,26 @@ class CategoriesSelectViewController: UIViewController {
     
     
     @IBAction func cancelSelectingCategories(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
+        self.navigationController?.popViewController(animated: true)
     }
     @IBAction func applySelectedCategories(_ sender: Any) {
         delegate.sendChosenCategorys(categorys: selectedCategorys)
-        self.dismiss(animated: true, completion: nil)
+        self.navigationController?.popViewController(animated: true)
     }
     
     var categorys : [String] = []
     var selectedCategorys : [String] = []
     var delegate: CategoriesSelectViewControllerDelegate!
     var currentCategoryResult: CategorySearchResult? = nil
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
+    }
     
     
     override func viewDidLoad() {
