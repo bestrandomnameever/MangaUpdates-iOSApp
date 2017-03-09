@@ -17,6 +17,10 @@ class AdvancedSearchViewController: UIViewController {
     @IBOutlet weak var extendedLabel: UILabel!
     @IBOutlet weak var typeLabel: UILabel!
     @IBOutlet weak var tagListView: TagListView!
+    
+    override func viewDidLoad() {
+        tagListView.delegate = self
+    }
 
     @IBAction func changeColorSegmented(_ sender: UISegmentedControl) {
         let chosenOption = sender.selectedSegmentIndex
@@ -132,5 +136,12 @@ extension AdvancedSearchViewController : CategoriesSelectViewControllerDelegate,
         for category in self.categorys {
             tagListView.addTag(category)
         }
+    }
+}
+
+extension AdvancedSearchViewController : TagListViewDelegate {
+    func tagRemoveButtonPressed(_ title: String, tagView: TagView, sender: TagListView) {
+        categorys.remove(at: categorys.index(where: {$0 == title})!)
+        tagListView.removeTagView(tagView);
     }
 }

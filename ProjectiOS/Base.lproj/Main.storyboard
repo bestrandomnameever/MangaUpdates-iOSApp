@@ -442,7 +442,7 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
-                                            <segue destination="IZl-p2-Mvq" kind="show" identifier="categories" id="ZvV-M5-Gr4"/>
+                                            <segue destination="IZl-p2-Mvq" kind="show" identifier="categories" animates="NO" id="ZvV-M5-Gr4"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -516,7 +516,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="hXz-HB-Lfq">
-                                <rect key="frame" x="16" y="108" width="343" height="513"/>
+                                <rect key="frame" x="16" y="108" width="343" height="388"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="categoryCell" id="aW7-P3-0iB" customClass="CategoryCell" customModule="ProjectiOS" customModuleProvider="target">
@@ -585,6 +585,43 @@
                                     <outlet property="delegate" destination="IZl-p2-Mvq" id="gAU-da-kdc"/>
                                 </connections>
                             </tableView>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MKB-9R-TLm">
+                                <rect key="frame" x="16" y="504" width="343" height="100"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6bC-Z9-Jxg" customClass="TagListView" customModule="TagListView">
+                                        <rect key="frame" x="2" y="2" width="263" height="54"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="tagBackgroundColor">
+                                                <color key="value" red="1" green="0.68144522839999999" blue="0.2518809005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="paddingY">
+                                                <real key="value" value="7"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="paddingX">
+                                                <real key="value" value="12"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="enableRemoveButton" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="0.20000000000000001" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="6bC-Z9-Jxg" firstAttribute="leading" secondItem="MKB-9R-TLm" secondAttribute="leading" constant="2" id="IPC-Zm-Foh"/>
+                                    <constraint firstAttribute="bottom" secondItem="6bC-Z9-Jxg" secondAttribute="bottom" constant="2" id="JDH-II-7XQ"/>
+                                    <constraint firstItem="6bC-Z9-Jxg" firstAttribute="top" secondItem="MKB-9R-TLm" secondAttribute="top" constant="2" id="YaU-MO-csN"/>
+                                    <constraint firstAttribute="height" constant="100" id="yR8-fE-LWk"/>
+                                    <constraint firstAttribute="trailing" secondItem="6bC-Z9-Jxg" secondAttribute="trailing" constant="2" id="yT3-kF-wch"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </scrollView>
                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9xB-0e-FEZ">
                                 <rect key="frame" x="16" y="629" width="343" height="30"/>
                                 <subviews>
@@ -612,25 +649,29 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="i4v-k3-wd4" firstAttribute="top" secondItem="5gD-WD-XUY" secondAttribute="bottom" id="4gd-DU-wAW"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="MKB-9R-TLm" secondAttribute="trailing" id="7bJ-Fo-L9y"/>
                             <constraint firstItem="i4v-k3-wd4" firstAttribute="width" secondItem="s8Z-sc-KGo" secondAttribute="width" id="9Oa-KA-f4E"/>
                             <constraint firstAttribute="leadingMargin" secondItem="hXz-HB-Lfq" secondAttribute="leading" id="X69-sg-ia6"/>
                             <constraint firstAttribute="trailingMargin" secondItem="9xB-0e-FEZ" secondAttribute="trailing" id="YS8-1X-bAv"/>
                             <constraint firstItem="hXz-HB-Lfq" firstAttribute="top" secondItem="i4v-k3-wd4" secondAttribute="bottom" symbolic="YES" id="YbB-tE-g23"/>
-                            <constraint firstItem="p83-mT-fry" firstAttribute="top" secondItem="hXz-HB-Lfq" secondAttribute="bottom" constant="8" id="bWk-RJ-8Mv"/>
                             <constraint firstAttribute="trailingMargin" secondItem="hXz-HB-Lfq" secondAttribute="trailing" id="dBi-OB-7Pd"/>
+                            <constraint firstItem="MKB-9R-TLm" firstAttribute="top" secondItem="hXz-HB-Lfq" secondAttribute="bottom" constant="8" id="eeC-ku-Vnc"/>
+                            <constraint firstItem="MKB-9R-TLm" firstAttribute="leading" secondItem="s8Z-sc-KGo" secondAttribute="leadingMargin" id="iDS-1P-5Vs"/>
                             <constraint firstItem="i4v-k3-wd4" firstAttribute="centerX" secondItem="s8Z-sc-KGo" secondAttribute="centerX" id="kr1-Uq-TwD"/>
+                            <constraint firstItem="C2h-L6-krJ" firstAttribute="top" secondItem="MKB-9R-TLm" secondAttribute="bottom" constant="63" id="osK-l0-3fG"/>
                             <constraint firstItem="9xB-0e-FEZ" firstAttribute="leading" secondItem="s8Z-sc-KGo" secondAttribute="leadingMargin" id="qjN-Pj-CRT"/>
                             <constraint firstItem="C2h-L6-krJ" firstAttribute="top" secondItem="9xB-0e-FEZ" secondAttribute="bottom" constant="8" symbolic="YES" id="tEt-tE-JfV"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="categoriesTableView" destination="hXz-HB-Lfq" id="f3k-Q7-3RH"/>
+                        <outlet property="tagListView" destination="6bC-Z9-Jxg" id="9qS-Cb-txG"/>
                         <outlet property="uiSearchBar" destination="i4v-k3-wd4" id="p4W-qM-CyP"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hXr-zY-bZc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1769" y="-688"/>
+            <point key="canvasLocation" x="1768.8" y="-688.60569715142435"/>
         </scene>
         <!--Home-->
         <scene sceneID="fjJ-am-wNP">
@@ -1752,8 +1793,8 @@
         <image name="transparent-green-checkmark.png" width="570" height="594"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Y26-CO-OVI"/>
-        <segue reference="0Yk-JZ-Jhb"/>
+        <segue reference="CZz-o6-1jF"/>
+        <segue reference="cIl-8Z-akF"/>
         <segue reference="m0U-ss-teH"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="0.59999999999999998" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>

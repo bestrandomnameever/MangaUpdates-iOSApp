@@ -17,15 +17,16 @@ class CategoriesSelectViewController: UIViewController {
     
     @IBOutlet weak var uiSearchBar: UISearchBar!
     @IBOutlet weak var categoriesTableView: UITableView!
-    //    @IBOutlet weak var selectedCategoryTagListView: TagListView!
+    @IBOutlet weak var tagListView: TagListView!
+    
     
     
     @IBAction func cancelSelectingCategories(_ sender: Any) {
-        self.navigationController?.popViewController(animated: true)
+        self.navigationController?.popViewController(animated: false)
     }
     @IBAction func applySelectedCategories(_ sender: Any) {
         delegate.sendChosenCategorys(categorys: selectedCategorys)
-        self.navigationController?.popViewController(animated: true)
+        self.navigationController?.popViewController(animated: false)
     }
     
     var categorys : [String] = []
@@ -46,7 +47,7 @@ class CategoriesSelectViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         uiSearchBar.delegate = self
-        //        selectedCategoryTagListView.delegate = self
+        tagListView.delegate = self
         MangaUpdatesAPI.getAllCategories(completionHandler: { result in
             if let categories = result.categoryDictionary?.keys.sorted() {
                 self.categorys.append(contentsOf: categories)
@@ -54,9 +55,9 @@ class CategoriesSelectViewController: UIViewController {
                 self.categoriesTableView.reloadData()
             }
         })
-        //        for category in selectedCategorys {
-        //            selectedCategoryTagListView.addTag(category)
-        //        }
+        for category in selectedCategorys {
+            tagListView.addTag(category)
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -148,7 +149,7 @@ extension CategoriesSelectViewController : UITableViewDelegate, UITableViewDataS
             let category = categorys[indexPath.row]
             if !selectedCategorys.contains(category) {
                 selectedCategorys.append(category)
-                //                selectedCategoryTagListView.addTag(category)
+                tagListView.addTag(category)
             }
         }
     }
@@ -156,7 +157,7 @@ extension CategoriesSelectViewController : UITableViewDelegate, UITableViewDataS
 
 extension CategoriesSelectViewController : TagListViewDelegate {
     func tagRemoveButtonPressed(_ title: String, tagView: TagView, sender: TagListView) {
-        //        selectedCategoryTagListView.removeTag(title)
+        tagListView.removeTag(title)
         selectedCategorys.remove(at: selectedCategorys.index(of: title)!)
     }
 }
